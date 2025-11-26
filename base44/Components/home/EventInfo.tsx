@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Clock, Trophy, Music, Utensils, Award, MapPin, Calendar, Users, Sparkles } from 'lucide-react';
-import { Card } from "@/components/ui/card";
+import { Card } from "@/base44/Components/ui/card";
 
 const schedule = [
   { time: "7:00 AM", event: "Registration & Check-in", icon: Users, description: "Team registration and welcome packets" },

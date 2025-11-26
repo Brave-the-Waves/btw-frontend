@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from "@/components/ui/button";
+import { Button } from "@/base44/Components/ui/button";
 import { Heart, Users, ExternalLink, Waves, Trophy, Shield } from 'lucide-react';
 
 export default function Donate() {

@@ -1,13 +1,13 @@
 import React from 'react';
-import Navbar from '@/components/Navbar';
-import Hero from '@/components/home/Hero';
-import About from '@/components/home/About';
-import EventInfo from '@/components/home/EventInfo';
-import PastEvents from '@/components/home/PastEvents';
-import Team from '@/components/home/Team';
-import Donate from '@/components/home/Donate';
-import Contact from '@/components/home/Contact';
-import Footer from '@/components/home/Footer';
+import Navbar from '@/base44/Components/Navbar';
+import Hero from '@/base44/Components/home/Hero';
+import About from '@/base44/Components/home/About';
+import EventInfo from '@/base44/Components/home/EventInfo';
+import PastEvents from '@/base44/Components/home/PastEvents';
+import Team from '@/base44/Components/home/Team';
+import Donate from '@/base44/Components/home/Donate';
+import Contact from '@/base44/Components/home/Contact';
+import Footer from '@/base44/Components/home/Footer';
 
 export default function Home() {
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from "@/components/ui/button";
+import { Button } from "@/base44/Components/ui/button";
 import { ChevronDown, Heart, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 

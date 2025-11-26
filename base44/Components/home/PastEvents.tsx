@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Users, DollarSign, Heart, Calendar } from 'lucide-react';
-import { Button } from "@/components/ui/button";
+import { Button } from "@/base44/Components/ui/button";
 
 const pastEvents = [
   {
