@@ -23,7 +23,7 @@ const footerLinks = {
 };
 
 export default function Footer() {
-  const scrollToSection = (href) => {
+  const scrollToSection = (href: string) => {
     if (href.startsWith('#')) {
       document.getElementById(href.slice(1))?.scrollIntoView({ behavior: 'smooth' });
     }

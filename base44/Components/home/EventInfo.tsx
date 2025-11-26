@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Trophy, Music, Utensils, Award, MapPin, Calendar, Users } from 'lucide-react';
+import { Clock, Trophy, Music, Utensils, Award, MapPin, Calendar, Users, Sparkles } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 
 const schedule = [
@@ -178,7 +178,7 @@ export default function EventInfo() {
             width="100%"
             height="400"
             style={{ border: 0 }}
-            allowFullScreen=""
+            allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             title="Event Location Map"
@@ -188,6 +188,3 @@ export default function EventInfo() {
     </section>
   );
 }
-
-// Add missing import
-import { Sparkles } from 'lucide-react';

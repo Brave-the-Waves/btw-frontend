@@ -4,7 +4,7 @@ import { ChevronDown, Heart, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Hero() {
-  const scrollToSection = (id) => {
+  const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
