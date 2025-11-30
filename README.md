@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Brave the Waves — Frontend
 
-## Getting Started
+This adds a Vite + React scaffold and copies the existing components into `src/` so you can build and deploy the site.
 
-First, run the development server:
+Quick start
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. Install dependencies:
+
+```powershell
+cd c:/Users/antho/Downloads/btw-frontend
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Run the dev server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```powershell
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Build for production:
 
-## Learn More
+```powershell
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- For Vercel: create a new Vercel project pointing to this repo — Vercel will run `npm run build` and deploy the `dist` output.
+- For Netlify: set build command to `npm run build` and publish directory to `dist`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Notes
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- This scaffold includes Tailwind CSS (basic setup) so the existing utility classes will work.
+- I created minimal `ui` wrappers (Button, Input, Textarea, Card, Label) to satisfy imports; you can replace them with your design system later.
