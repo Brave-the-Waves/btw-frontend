@@ -116,7 +116,7 @@ export default function Navbar() {
                   ))}
                 </div>
                 <div className="mt-8">
-                  <Button onClick={() => scrollToSection('donate')} className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl py-6">
+                  <Button onClick={() => scrollToSection('donate')} className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl py-4">
                     <Heart className="w-5 h-5 mr-2" />
                     Donate Now
                   </Button>
