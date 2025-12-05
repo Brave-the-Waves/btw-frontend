@@ -4,33 +4,35 @@ export default function Media() {
     return (
         <>
             <div className="space-y-6 mb-12 lg:mb-0">
-                <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center flex-shrink-0">
-                        <Mail className="w-5 h-5 text-pink-600" />
+                <div className="grid sm:grid-cols-3 gap-6">
+                    <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center flex-shrink-0">
+                            <Mail className="w-5 h-5 text-pink-600" />
+                        </div>
+                        <div>
+                            <p className="font-semibold text-slate-900">Email</p>
+                            <p className="text-slate-600">info@bravethewaves.org</p>
+                        </div>
                     </div>
-                    <div>
-                        <p className="font-semibold text-slate-900">Email</p>
-                        <p className="text-slate-600">info@bravethewaves.org</p>
-                    </div>
-                </div>
 
-                <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center flex-shrink-0">
-                        <Phone className="w-5 h-5 text-pink-600" />
+                    <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center flex-shrink-0">
+                            <Phone className="w-5 h-5 text-pink-600" />
+                        </div>
+                        <div>
+                            <p className="font-semibold text-slate-900">Phone</p>
+                            <p className="text-slate-600">(555) 123-4567</p>
+                        </div>
                     </div>
-                    <div>
-                        <p className="font-semibold text-slate-900">Phone</p>
-                        <p className="text-slate-600">(555) 123-4567</p>
-                    </div>
-                </div>
 
-                <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center flex-shrink-0">
-                        <MapPin className="w-5 h-5 text-pink-600" />
-                    </div>
-                    <div>
-                        <p className="font-semibold text-slate-900">Address</p>
-                        <p className="text-slate-600">22Dragons<br/>5524 Rue Saint-Patrick</p>
+                    <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center flex-shrink-0">
+                            <MapPin className="w-5 h-5 text-pink-600" />
+                        </div>
+                        <div>
+                            <p className="font-semibold text-slate-900">Address</p>
+                            <p className="text-slate-600">22Dragons<br/>5524 Rue Saint-Patrick</p>
+                        </div>
                     </div>
                 </div>
             </div>
