@@ -7,7 +7,7 @@ export default function Button({ children, className = '', size, variant, ...pro
   }
   const sizeClass = size ? sizes[size] : ''
   return (
-    <button {...props} className={`${sizeClass} ${className}`.trim()}>
+    <button {...props} className={`flex items-center justify-center ${sizeClass} ${className}`.trim()}>
       {children}
     </button>
   )
