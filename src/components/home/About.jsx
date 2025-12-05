@@ -17,8 +17,8 @@ export default function About() {
             <div className="aspect-[4/5] rounded-4xl overflow-hidden relative z-10">
               <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80" alt="Team paddling together" className="w-full h-full object-cover" />
             </div>
-            <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-pink-100 to-pink-200 rounded-3xl -z-10" />
-            <div className="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl -z-10" />
+            <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-pink-100 to-pink-200 rounded-3xl z-0" />
+            <div className="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl z-0" />
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}>
