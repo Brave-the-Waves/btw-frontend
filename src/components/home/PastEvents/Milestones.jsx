@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { DollarSign, Users, Heart, Calendar } from 'lucide-react'
-import CountUpNumber from '../../animations/CountUpNumbers'
+import CountUpNumber from './CountUpNumbers'
 
 const milestones = [
   { icon: DollarSign, value: 450, label: 'Total Raised', prefix: '$', suffix: 'K+' },

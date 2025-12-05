@@ -29,7 +29,7 @@ export default function Donate() {
                 <li className="flex items-center gap-3 text-slate-600"><Heart className="w-5 h-5 text-pink-500" /><span>Support survivor programs</span></li>
               </ul>
 
-              <Button size="lg" className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl py-6 text-lg shadow-lg shadow-pink-200 transition-all hover:scale-[1.02]" onClick={() => window.open('https://example.com/donate', '_blank')}>
+              <Button size="lg" className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl py-3 text-lg shadow-lg shadow-pink-200 transition-all hover:scale-[1.02]" onClick={() => window.open('https://example.com/donate', '_blank')}>
                 <Heart className="w-5 h-5 mr-2" />
                 Donate Now
                 <ExternalLink className="w-4 h-4 ml-2" />
@@ -52,7 +52,7 @@ export default function Donate() {
                 <li className="flex items-center gap-3 text-slate-300"><Users className="w-5 h-5 text-pink-400" /><span>Training sessions provided</span></li>
               </ul>
 
-              <Button size="lg" variant="outline" className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-6 text-lg transition-all hover:scale-[1.02]" onClick={() => window.open('https://example.com/raceroster', '_blank')}>
+              <Button size="lg" variant="outline" className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02]" onClick={() => window.open('https://example.com/raceroster', '_blank')}>
                 <Users className="w-5 h-5 mr-2" />
                 Register on Race Roster
                 <ExternalLink className="w-4 h-4 ml-2" />
