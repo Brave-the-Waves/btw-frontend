@@ -1,0 +1,211 @@
+import React, { useState, useEffect } from 'react'
+import Navbar from '@/components/Navbar'
+import { useAuth0 } from '@auth0/auth0-react'
+import Button from '@/components/ui/button'
+import { Search, Users, Trophy, ArrowRight, Lock } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+
+const handleFetchTeams = async () => {
+  try{ 
+    const response = await fetch('http://localhost:8000/api/public/teams', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    if (!response.ok) {
+      throw new Error('Error fetching teams')
+    }
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error('Failed to fetch teams', error)
+    return []
+  } 
+}
+
+export default function Teams() {
+  const { isAuthenticated, loginWithRedirect, getAccessTokenSilently } = useAuth0()
+  const [teams, setTeams] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showJoinModal, setShowJoinModal] = useState(false)
+  const [inviteCode, setInviteCode] = useState('')
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const loadTeams = async () => {
+      const data = await handleFetchTeams()
+      setTeams(data.map((team) => ({
+        id: team._id,
+        name: team.name,
+        division: team.division,
+        members: team.memberCount,
+        raised: team.totalRaised,
+        description: team.description,
+      })))
+    }
+    loadTeams()
+  }, [])
+
+  const handleJoinClick = () => {
+    if (!isAuthenticated) {
+      loginWithRedirect({
+        appState: { returnTo: '/teams' }
+      })
+    } else {
+      setShowJoinModal(true)
+    }
+  }
+
+  const handleJoinSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const token = await getAccessTokenSilently()
+      // Call API to join team
+      console.log('Joining team with code:', inviteCode, 'Token:', token)
+      // const response = await fetch('http://localhost:8000/api/registrations/join', {
+      //   method: 'POST',
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify({ inviteCode })
+      // })
+      setShowJoinModal(false)
+      alert('Request sent! (Mock)')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const filteredTeams = teams.filter(team => 
+    team.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <Navbar />
+      <div className="pt-32 px-6 max-w-7xl mx-auto pb-20">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+          <div>
+            <h1 className="text-4xl font-bold text-slate-900 mb-4">All Teams</h1>
+            <p className="text-slate-600 max-w-2xl">Find a team to join or support. Together we are making waves for women's health.</p>
+          </div>
+          
+          <div className="flex gap-4 w-full md:w-auto">
+             <div className="relative flex-1 md:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <input 
+                type="text" 
+                placeholder="Search teams..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
+              />
+            </div>
+            <Button onClick={handleJoinClick} className="bg-slate-900 text-white hover:bg-slate-800 shadow-lg">
+              Join a Team
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredTeams.map((team) => (
+            <motion.div 
+              key={team.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  team.division === 'Corporate' ? 'bg-blue-100 text-blue-600' :
+                  team.division === 'Survivor' ? 'bg-pink-100 text-pink-600' :
+                  'bg-green-100 text-green-600'
+                }`}>
+                  {team.division}
+                </span>
+                <Trophy className="w-5 h-5 text-yellow-500" />
+              </div>
+              
+              <h3 className="text-xl font-bold text-slate-900 mb-2">{team.name}</h3>
+              <p className="text-slate-500 text-sm mb-6 line-clamp-2">{team.description}</p>
+              
+              <div className="flex items-center gap-6 text-sm text-slate-600 mb-6">
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  <span>{team.members} Members</span>
+                </div>
+                <div className="font-medium text-slate-900">
+                  ${team.raised.toLocaleString()} Raised
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => navigate(`/teams/${team.name}`)} // Assuming name is unique or use ID
+                >
+                  View Details
+                </Button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Join Team Modal */}
+      <AnimatePresence>
+        {showJoinModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setShowJoinModal(false)}
+            />
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl z-10"
+            >
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Join a Team</h2>
+              <p className="text-slate-600 mb-6">Enter the invite code provided by your team captain.</p>
+              
+              <form onSubmit={handleJoinSubmit}>
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Invite Code</label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input 
+                      type="text" 
+                      value={inviteCode}
+                      onChange={(e) => setInviteCode(e.target.value)}
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none uppercase tracking-widest"
+                      placeholder="ABC-123"
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex gap-3">
+                  <Button type="button" variant="outline" className="flex-1" onClick={() => setShowJoinModal(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="flex-1 bg-pink-500 text-white hover:bg-pink-600">
+                    Join Team
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
