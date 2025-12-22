@@ -1,47 +1,103 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Button from './ui/button'
-import { Menu, X, Heart, Waves } from 'lucide-react'
+import { Menu, X, Heart, Waves, User } from 'lucide-react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const navLinks = [
   { label: 'Home', href: 'home' },
   { label: 'About', href: 'about' },
   { label: 'Event', href: 'event' },
   { label: 'Past Events', href: 'past-events' },
-  { label: 'Team', href: 'team' },
+  { label: 'The Crew', href: 'team' },
   { label: 'Donate', href: 'donate' },
   { label: 'Contact', href: 'contact' },
+  { label: 'Teams', href: '/teams', isRoute: true },
+  { label: 'Leaderboard', href: '/leaderboard', isRoute: true },
+  { label: 'Participants', href: '/participants', isRoute: true },
 ]
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState('home')
+  const [isWindowScrolled, setIsWindowScrolled] = useState(false)
+  const [activeSection, setActiveSection] = useState(null)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0()
+
+  const isScrolled = isWindowScrolled || location.pathname !== '/'
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-      const sections = navLinks.map((link) => link.href)
-      for (const section of sections.reverse()) {
-        const element = document.getElementById(section)
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          if (rect.top <= 100) {
-            setActiveSection(section)
-            break
+      setIsWindowScrolled(window.scrollY > 50)
+      // Only check sections if we are on the home page
+      if (location.pathname === '/') {
+        const sections = navLinks.filter(l => !l.isRoute).map((link) => link.href)
+
+        // First try: find the deepest section whose top is <= threshold
+        let found = null
+        for (const section of sections.slice().reverse()) {
+          const element = document.getElementById(section)
+          if (element) {
+            const rect = element.getBoundingClientRect()
+            if (rect.top <= 150) {
+              found = section
+              break
+            }
           }
         }
+
+        // Fallback: if none are above the threshold, pick the first section that exists in the DOM
+        if (!found) {
+          for (const section of sections) {
+            if (document.getElementById(section)) {
+              found = section
+              break
+            }
+          }
+        }
+
+        if (found){
+          setActiveSection(found)
+        } else {
+          setActiveSection(null)
+        }
+      } else {
+        setActiveSection(null)
       }
     }
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [location.pathname])
 
-  const scrollToSection = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  const handleNavigation = (link) => {
+    if (link.isRoute) {
+      navigate(link.href)
+    } else {
+      if (location.pathname !== '/') {
+        navigate('/', { state: { scrollTo: link.href } })
+      } else {
+        document.getElementById(link.href)?.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
     setIsOpen(false)
   }
+
+  // Handle scroll after navigation from another page
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const element = document.getElementById(location.state.scrollTo)
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }, 100) // Small delay to ensure DOM is ready
+        // Clear state
+        window.history.replaceState({}, document.title)
+      }
+    }
+  }, [location])
 
   return (
     <>
@@ -53,9 +109,9 @@ export default function Navbar() {
           isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg shadow-slate-100/50' : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-[95%] mx-auto px-6">
           <div className="flex items-center justify-between h-20">
-            <button onClick={() => scrollToSection('home')} className="flex items-center gap-3 group">
+            <button onClick={() => navigate('/')} className="flex items-center gap-3 group">
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
                   isScrolled ? 'bg-gradient-to-br from-pink-500 to-pink-600' : 'bg-white/20 backdrop-blur'
@@ -63,33 +119,73 @@ export default function Navbar() {
               >
                 <Waves className="w-5 h-5 text-white" />
               </div>
-              <span className={`text-lg font-bold transition-colors ${isScrolled ? 'text-slate-900' : 'text-white'}`}>
+              <span className={`text-lg font-bold whitespace-nowrap transition-colors ${isScrolled ? 'text-slate-900' : 'text-white'}`}>
                 Brave the Waves
               </span>
             </button>
 
-            <div className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <button
-                  key={link.href}
-                  onClick={() => scrollToSection(link.href)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    activeSection === link.href
-                      ? isScrolled
-                        ? 'bg-pink-100 text-pink-600'
-                        : 'bg-white/20 text-white'
-                      : isScrolled
-                      ? 'text-slate-600 hover:text-pink-600 hover:bg-pink-50'
-                      : 'text-white/80 hover:text-white hover:bg-white/10'
-                  }`}
-                >
-                  {link.label}
-                </button>
-              ))}
+            <div className="hidden xl:flex items-center gap-2">
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.href && !link.isRoute
+                const activeClass = isScrolled ? 'bg-pink-100 text-pink-600' : 'bg-white/20 text-white'
+                const inactiveClass = isScrolled ? 'text-slate-600 hover:text-pink-600 hover:bg-pink-50' : 'text-white/80 hover:text-white hover:bg-white/10'
+
+                return (
+                  <button
+                    key={link.label}
+                    onClick={() => handleNavigation(link)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      isActive ? activeClass : inactiveClass
+                    }`}
+                  >
+                    {link.label}
+                  </button>
+                )
+              })}
             </div>
 
-            <div className="hidden lg:block">
-              <Button onClick={() => scrollToSection('donate')} className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-full px-6 shadow-lg shadow-pink-200/50">
+            <div className="hidden lg:flex items-center gap-3 ml-6">
+              {isAuthenticated ? (
+                <div className="flex items-center gap-3">
+                  <button onClick={() => navigate('/profile')} className={`flex items-center gap-2 text-sm font-medium ${isScrolled ? 'text-slate-700 hover:text-pink-500' : 'text-white hover:text-pink-200'}`}>
+                    {user.picture ? (
+                      <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full border border-slate-200" />
+                    ) : (
+                      <User className="w-5 h-5" />
+                    )}
+                    <span>{user.name}</span>
+                  </button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                    className={`text-xs ${!isScrolled && 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+                  >
+                    Log Out
+                  </Button>
+                </div>
+              ) : (
+                <Button 
+                  onClick={() => loginWithRedirect()}
+                  className={`shadow-lg whitespace-nowrap ${isScrolled ? 'bg-slate-600 text-white hover:bg-slate-700 rounded-full px-5' : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur border border-white/20 rounded-full px-5'}`}
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Log In
+                </Button>
+              )}
+              
+              <Button 
+                onClick={() => {
+                  if (location.pathname !== '/') {
+                    console.log('navigating to home to donate if statement')
+                    navigate('/', { state: { scrollTo: 'donate' } })
+                  } else {
+                    console.log('navigating to home to donate else statement')
+                    document.getElementById('donate')?.scrollIntoView({ behavior: 'smooth' })
+                  }
+                }}
+                className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-full px-6 shadow-lg shadow-pink-200/50"
+              >
                 <Heart className="w-4 h-4 mr-2" />
                 Donate
               </Button>
@@ -110,13 +206,48 @@ export default function Navbar() {
               <div className="p-6 pt-24">
                 <div className="space-y-2">
                   {navLinks.map((link) => (
-                    <button key={link.href} onClick={() => scrollToSection(link.href)} className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-colors ${activeSection === link.href ? 'bg-pink-100 text-pink-600' : 'text-slate-700 hover:bg-slate-100'}`}>
+                    <button key={link.label} onClick={() => handleNavigation(link)} className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-colors ${activeSection === link.href && !link.isRoute ? 'bg-pink-100 text-pink-600' : 'text-slate-700 hover:bg-slate-100'}`}>
                       {link.label}
                     </button>
                   ))}
                 </div>
-                <div className="mt-8">
-                  <Button onClick={() => scrollToSection('donate')} className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl py-4">
+                
+                <div className="mt-8 space-y-3">
+                  {isAuthenticated ? (
+                    <>
+                      <button onClick={() => { navigate('/profile'); setIsOpen(false); }} className="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium text-slate-700 hover:bg-slate-100">
+                        {user.picture ? (
+                          <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full" />
+                        ) : (
+                          <User className="w-5 h-5" />
+                        )}
+                        My Profile
+                      </button>
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-center"
+                        onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                      >
+                        Log Out
+                      </Button>
+                    </>
+                  ) : (
+                    <Button 
+                      className="w-full justify-center bg-slate-900 text-white"
+                      onClick={() => loginWithRedirect()}
+                    ><User className="w-4 h-4 mr-2" />
+                      Log In
+                    </Button>
+                  )}
+                  
+                  <Button onClick={() => {
+                    if (location.pathname !== '/') {
+                      navigate('/', { state: { scrollTo: 'donate' } })
+                    } else {
+                      document.getElementById('donate')?.scrollIntoView({ behavior: 'smooth' })
+                    }
+                    setIsOpen(false)
+                  }} className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl py-4">
                     <Heart className="w-5 h-5 mr-2" />
                     Donate Now
                   </Button>
