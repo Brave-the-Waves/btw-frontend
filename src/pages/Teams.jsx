@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '@/components/ui/button'
-import { Search, Users, Trophy, ArrowRight, Lock } from 'lucide-react'
+import { Search, Users, Trophy, ArrowRight, Lock, Plus } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import CreateTeamOverlay from '@/components/teams/CreateTeamOverlay'
 
 const handleFetchTeams = async () => {
   try{ 
@@ -25,11 +26,14 @@ const handleFetchTeams = async () => {
   } 
 }
 
+
 export default function Teams() {
-  const { isAuthenticated, loginWithRedirect, getAccessTokenSilently } = useAuth()
+  const { isAuthenticated, loginWithRedirect, getAccessTokenSilently, user, refreshUser } = useAuth()
   const [teams, setTeams] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [showJoinModal, setShowJoinModal] = useState(false)
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [isCreating, setIsCreating] = useState(false)
   const [inviteCode, setInviteCode] = useState('')
   const navigate = useNavigate()
 
@@ -47,6 +51,48 @@ export default function Teams() {
     }
     loadTeams()
   }, [])
+
+  const handleCreateTeam = async (teamData) => {
+    setIsCreating(true)
+    const token = await getAccessTokenSilently()
+    try {
+      const response = await fetch('http://localhost:8000/api/registrations/team', {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(teamData)
+      })
+      if (!response.ok) {
+        throw new Error('Error creating team')
+      }
+      const newTeam = await response.json()
+      
+      // Refresh teams list
+      const data = await handleFetchTeams()
+      setTeams(data.map((team) => ({
+        id: team._id,
+        name: team.name,
+        division: team.division,
+        members: team.memberCount,
+        raised: team.totalRaised,
+        description: team.description,
+      })))
+      
+      // Refresh user data to update "Create Team" button state
+      await refreshUser()
+
+      setShowCreateModal(false)
+      // Optionally navigate to the new team page
+      // navigate(`/teams/${newTeam.name}`)
+    } catch (error) {
+      console.error('Failed to create team', error)
+      alert('Failed to create team. Please try again.')
+    } finally {
+      setIsCreating(false)
+    }
+  }
 
   const handleJoinClick = () => {
     if (!isAuthenticated) {
@@ -104,9 +150,24 @@ export default function Teams() {
                 className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
               />
             </div>
-            <Button onClick={handleJoinClick} className="bg-slate-900 text-white hover:bg-slate-800 shadow-lg">
-              Join a Team
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => setShowCreateModal(true)} 
+                disabled={!isAuthenticated || !user?.hasPaid || user?.team}
+                className="bg-pink-600 text-white hover:bg-pink-700 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                title={
+                  !isAuthenticated ? "Log in to create a team" :
+                  !user?.hasPaid ? "Pay registration fee to create a team" :
+                  user?.team ? "You are already in a team" : "Create a new team"
+                }
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Create Team
+              </Button>
+              <Button onClick={handleJoinClick} className="bg-slate-900 text-white hover:bg-slate-800 shadow-lg">
+                Join a Team
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -205,6 +266,14 @@ export default function Teams() {
           </div>
         )}
       </AnimatePresence>
+
+      {showCreateModal && (
+        <CreateTeamOverlay 
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreateTeam}
+          isLoading={isCreating}
+        />
+      )}
     </div>
   )
 }

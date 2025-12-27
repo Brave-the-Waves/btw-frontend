@@ -174,6 +174,13 @@ export default function AuthProvider({ children }) {
     throw new Error('No user logged in')
   }
 
+  const refreshUser = async () => {
+    if (auth.currentUser) {
+      const backendData = await fetchBackendUser(auth.currentUser)
+      setUser(prev => ({ ...prev, ...backendData }))
+    }
+  }
+
   const value = {
     user,
     isAuthenticated,
@@ -184,7 +191,8 @@ export default function AuthProvider({ children }) {
     initiateRegistrationPayment,
     isPaymentLoading,
     showPaymentModal,
-    dismissPaymentModal
+    dismissPaymentModal,
+    refreshUser
   }
 
   return (
