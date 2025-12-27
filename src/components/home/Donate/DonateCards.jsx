@@ -2,12 +2,16 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Heart, Shield, Trophy, Users, Waves, DollarSign } from 'lucide-react'
 import Button from '@/components/ui/button'
+import { useAuth } from '../../../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 export default function DonateCards() {
   const [amount, setAmount] = useState(25)
   const [isCustom, setIsCustom] = useState(false)
-  const [paddlerId, setPaddlerId] = useState('')
+  const [donationID, setDonationID] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { loginWithRedirect, isAuthenticated } = useAuth()
+  const navigate = useNavigate()
 
   const handleDonate = async () => {
     setIsLoading(true)
@@ -21,7 +25,7 @@ export default function DonateCards() {
         body: JSON.stringify({ 
           amount: amount,
           currency: 'cad',
-          paddlerId: paddlerId
+          donationID: donationID
         }),
       })
 
@@ -104,8 +108,8 @@ export default function DonateCards() {
               <label className="block text-sm font-medium text-slate-700 mb-2">Paddler ID (Optional)</label>
               <input
                 type="text"
-                value={paddlerId}
-                onChange={(e) => setPaddlerId(e.target.value)}
+                value={donationID}
+                onChange={(e) => setDonationID(e.target.value)}
                 className="block w-full px-4 py-3 sm:text-sm rounded-xl border-slate-200 focus:ring-pink-500 focus:border-pink-500 border"
                 placeholder="Enter Paddler ID"
               />
@@ -157,9 +161,22 @@ export default function DonateCards() {
             <li className="flex items-center gap-3 text-slate-300"><Users className="w-5 h-5 text-pink-400" /><span>Training sessions provided</span></li>
           </ul>
 
-          <Button size="lg" variant="outline" className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02] mt-auto" onClick={() => window.open('https://example.com/raceroster', '_blank')}>
+          <Button 
+            size="lg" 
+            variant="outline" 
+            className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02] mt-auto" 
+            onClick={() => {
+              if (isAuthenticated) {
+                navigate('/teams')
+              } else {
+                loginWithRedirect({
+                  appState: { returnTo: '/teams' }
+                })
+              }
+            }}
+          >
             <Users className="w-5 h-5 mr-2" />
-            Register on Race Roster
+            {isAuthenticated ? 'Join or Create a Team' : 'Get Started'}
           </Button>
         </div>
       </motion.div>

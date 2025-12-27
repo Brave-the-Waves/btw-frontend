@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Button from './ui/button'
-import { Menu, X, Heart, Waves, User } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useAuth0 } from '@auth0/auth0-react'
+import { useAuth } from '../contexts/AuthContext'
+import { Menu, X, User, Waves, Heart, LogOut } from 'lucide-react'
+import RegistrationOverlay from '@/components/registration/registrationOverlay'
 
 const navLinks = [
   { label: 'Home', href: 'home' },
@@ -24,7 +25,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState(null)
   const navigate = useNavigate()
   const location = useLocation()
-  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0()
+  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth()
 
   const isScrolled = isWindowScrolled || location.pathname !== '/'
 
@@ -99,15 +100,17 @@ export default function Navbar() {
     }
   }, [location])
 
+  const navBarClasses = `fixed w-full z-50 transition-all duration-300 ${
+    isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
+  }`
+
   return (
     <>
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg shadow-slate-100/50' : 'bg-transparent'
-        }`}
+        className={navBarClasses}
       >
         <div className="max-w-[95%] mx-auto px-6">
           <div className="flex items-center justify-between h-20">
@@ -158,7 +161,7 @@ export default function Navbar() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                    onClick={() => logout()}
                     className={`text-xs ${!isScrolled && 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
                   >
                     Log Out
@@ -226,7 +229,7 @@ export default function Navbar() {
                       <Button 
                         variant="outline" 
                         className="w-full justify-center"
-                        onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                        onClick={() => logout()}
                       >
                         Log Out
                       </Button>
@@ -257,6 +260,9 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Render the overlay here, inside the Router context */}
+      <RegistrationOverlay />
     </>
   )
 }

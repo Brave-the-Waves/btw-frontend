@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
-import { useAuth0 } from '@auth0/auth0-react'
+import { useAuth } from '../contexts/AuthContext'
 import Button from '@/components/ui/button'
 import { Search, Users, Trophy, ArrowRight, Lock } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -26,7 +26,7 @@ const handleFetchTeams = async () => {
 }
 
 export default function Teams() {
-  const { isAuthenticated, loginWithRedirect, getAccessTokenSilently } = useAuth0()
+  const { isAuthenticated, loginWithRedirect, getAccessTokenSilently } = useAuth()
   const [teams, setTeams] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [showJoinModal, setShowJoinModal] = useState(false)

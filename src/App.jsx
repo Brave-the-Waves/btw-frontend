@@ -8,6 +8,8 @@ import TeamDetails from './pages/TeamDetails'
 import Leaderboard from './pages/Leaderboard'
 import Profile from './pages/Profile'
 import Participants from './pages/Participants'
+import RegistrationSuccess from './pages/RegistrationSuccess'
+import RegistrationCancel from './pages/RegistrationCancel'
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/participants" element={<Participants />} />
+        <Route path="/registration=success" element={<RegistrationSuccess />} />
+        <Route path="/registration=cancel" element={<RegistrationCancel />} />
       </Routes>
     </Router>
   )
