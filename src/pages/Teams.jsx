@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '@/components/ui/button'
-import { Search, Users, Trophy, ArrowRight, Lock, Plus } from 'lucide-react'
+import { Search, Users, Trophy, ArrowRight, Lock, Plus, Check } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import CreateTeamOverlay from '@/components/teams/CreateTeamOverlay'
@@ -35,6 +35,9 @@ export default function Teams() {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
   const [inviteCode, setInviteCode] = useState('')
+  const [joinError, setJoinError] = useState('')
+  const [isShaking, setIsShaking] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -106,22 +109,37 @@ export default function Teams() {
 
   const handleJoinSubmit = async (e) => {
     e.preventDefault()
+    setJoinError('')
+    setIsShaking(false)
+
     try {
       const token = await getAccessTokenSilently()
-      // Call API to join team
-      console.log('Joining team with code:', inviteCode, 'Token:', token)
-      // const response = await fetch('http://localhost:8000/api/registrations/join', {
-      //   method: 'POST',
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify({ inviteCode })
-      // })
-      setShowJoinModal(false)
-      alert('Request sent! (Mock)')
+      const response = await fetch('http://localhost:8000/api/registrations/join', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ inviteCode: inviteCode.trim() })
+      })
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        throw new Error(data.message || 'Invalid invite code')
+      }
+      // Refresh user data to update "Join Team" button state
+      await refreshUser()
+      
+      setIsSuccess(true)
+      setTimeout(() => {
+        setShowJoinModal(false)
+        setInviteCode('')
+        setIsSuccess(false)
+      }, 1500)
     } catch (error) {
       console.error(error)
+      setJoinError(error.message)
+      setIsShaking(true)
+      setTimeout(() => setIsShaking(false), 500)
     }
   }
 
@@ -164,7 +182,16 @@ export default function Teams() {
                 <Plus className="w-4 h-4 mr-2" />
                 Create Team
               </Button>
-              <Button onClick={handleJoinClick} className="bg-slate-900 text-white hover:bg-slate-800 shadow-lg">
+              <Button 
+                onClick={handleJoinClick} 
+                disabled={!isAuthenticated || user?.team || !user?.hasPaid}
+                className="bg-slate-900 text-white hover:bg-slate-800 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                title={
+                  !isAuthenticated ? "Log in to join a team" :
+                  !user?.hasPaid ? "Pay registration fee to join a team" :
+                  user?.team ? "You are already in a team" : "Join a team"
+                }
+              >
                 Join a Team
               </Button>
             </div>
@@ -241,16 +268,64 @@ export default function Teams() {
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-slate-700 mb-2">Invite Code</label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                    <input 
+                    <AnimatePresence mode="wait">
+                      {isSuccess ? (
+                        <motion.div
+                          key="check"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 z-10"
+                        >
+                          <Check className="w-5 h-5 text-green-500" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="lock"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 z-10"
+                        >
+                          <Lock className="w-5 h-5 text-slate-400" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <motion.input 
+                      animate={
+                        isShaking ? { x: [-10, 10, -10, 10, 0] } : 
+                        isSuccess ? { 
+                          borderColor: '#22c55e', 
+                          backgroundColor: '#f0fdf4',
+                          boxShadow: '0 0 0 2px #bbf7d0'
+                        } : {}
+                      }
+                      transition={{ duration: 0.33 }}
                       type="text" 
                       value={inviteCode}
-                      onChange={(e) => setInviteCode(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none uppercase tracking-widest"
-                      placeholder="ABC-123"
+                      onChange={(e) => {
+                        setInviteCode(e.target.value)
+                        setJoinError('')
+                      }}
+                      disabled={isSuccess}
+                      className={`w-full pl-10 pr-4 py-3 rounded-xl border focus:ring-2 outline-none uppercase tracking-widest transition-colors duration-300 ${
+                        joinError 
+                          ? 'border-red-500 focus:ring-red-200 bg-red-50' 
+                          : 'border-slate-200 focus:ring-pink-500'
+                      }`}
+                      placeholder="ABC123"
                       required
                     />
                   </div>
+                  {joinError && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-red-500 text-sm mt-2 ml-1"
+                    >
+                      {joinError}
+                    </motion.p>
+                  )}
                 </div>
                 
                 <div className="flex gap-3">
