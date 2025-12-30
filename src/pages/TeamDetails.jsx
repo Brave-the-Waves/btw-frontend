@@ -46,7 +46,7 @@ export default function TeamDetails() {
           division: teamData.division,
           description: teamData.description,
           raised: Number(teamData.totalRaised) || 0,
-          goal: Number(teamData.fundraisingGoal) || 10000,
+          goal: Number(teamData.donationGoal) || 10000,
           members: membersData,
         })
       } catch (error) {

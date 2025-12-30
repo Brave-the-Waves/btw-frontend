@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import { Search } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
+import ParticipantOverlay from '@/components/users/ParticipantOverlay'
 
 export default function Participants() {
   const [searchTerm, setSearchTerm] = useState('')
   const [participants, setParticipants] = useState([])
+  const [selectedParticipantId, setSelectedParticipantId] = useState(null)
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -80,7 +82,7 @@ export default function Participants() {
                 }`}>
                   {p.role}
                 </span>
-                <button className="text-sm font-medium text-pink-600 hover:text-pink-700" onClick = { () => handleViewProfile(p.id) }>
+                <button className="text-sm font-medium text-pink-600 hover:text-pink-700" onClick = { () => setSelectedParticipantId(p.id) }>
                   View Profile
                 </button>
               </div>
@@ -94,6 +96,15 @@ export default function Participants() {
           </div>
         )}
       </div>
+
+      <AnimatePresence>
+        {selectedParticipantId && (
+          <ParticipantOverlay 
+            participantId={selectedParticipantId} 
+            onClose={() => setSelectedParticipantId(null)} 
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
