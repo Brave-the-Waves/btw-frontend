@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Button from './ui/button'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { Menu, X, User, Waves, Heart, LogOut } from 'lucide-react'
+import { Menu, X, User, Waves, Heart } from 'lucide-react'
 import RegistrationOverlay from '@/components/registration/registrationOverlay'
 
 const navLinks = [
@@ -25,7 +25,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState(null)
   const navigate = useNavigate()
   const location = useLocation()
-  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth()
+  const { loginWithRedirect, user, isAuthenticated } = useAuth()
 
   const isScrolled = isWindowScrolled || location.pathname !== '/'
 
@@ -158,14 +158,6 @@ export default function Navbar() {
                     )}
                     <span>{user.name}</span>
                   </button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => logout()}
-                    className={`text-xs ${!isScrolled && 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
-                  >
-                    Log Out
-                  </Button>
                 </div>
               ) : (
                 <Button 
@@ -180,10 +172,8 @@ export default function Navbar() {
               <Button 
                 onClick={() => {
                   if (location.pathname !== '/') {
-                    console.log('navigating to home to donate if statement')
                     navigate('/', { state: { scrollTo: 'donate' } })
                   } else {
-                    console.log('navigating to home to donate else statement')
                     document.getElementById('donate')?.scrollIntoView({ behavior: 'smooth' })
                   }
                 }}
@@ -226,13 +216,6 @@ export default function Navbar() {
                         )}
                         My Profile
                       </button>
-                      <Button 
-                        variant="outline" 
-                        className="w-full justify-center"
-                        onClick={() => logout()}
-                      >
-                        Log Out
-                      </Button>
                     </>
                   ) : (
                     <Button 

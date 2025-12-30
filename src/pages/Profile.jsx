@@ -5,7 +5,7 @@ import Button from '@/components/ui/button'
 import { AlertCircle } from 'lucide-react'
 
 export default function Profile() {
-  const { user, isAuthenticated, isLoading, getAccessTokenSilently, initiateRegistrationPayment, isPaymentLoading } = useAuth()
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently, initiateRegistrationPayment, isPaymentLoading, logout } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -104,9 +104,14 @@ export default function Profile() {
         <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-3xl font-bold text-slate-900">My Profile</h1>
-            <Button variant="outline" onClick={() => setIsEditing(!isEditing)}>
-              {isEditing ? 'Cancel' : 'Edit Profile'}
-            </Button>
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={() => logout()} className="text-slate-600 hover:text-slate-900">
+                Log Out
+              </Button>
+              <Button variant="outline" onClick={() => setIsEditing(!isEditing)}>
+                {isEditing ? 'Cancel' : 'Edit Profile'}
+              </Button>
+            </div>
           </div>
 
           <div className="flex flex-col md:flex-row gap-8 items-start">
