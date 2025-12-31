@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Heart, Shield, Trophy, Users, Waves, DollarSign } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Heart, Shield, Trophy, Users, Waves, DollarSign, Check, User } from 'lucide-react'
 import Button from '@/components/ui/button'
 import { useAuth } from '../../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
@@ -10,12 +10,44 @@ export default function DonateCards() {
   const [isCustom, setIsCustom] = useState(false)
   const [donationID, setDonationID] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [donationError, setDonationError] = useState('')
+  const [isShaking, setIsShaking] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const { loginWithRedirect, isAuthenticated } = useAuth()
   const navigate = useNavigate()
 
   const handleDonate = async () => {
     setIsLoading(true)
+    setDonationError('')
+    setIsShaking(false)
+
     try {
+      if (donationID) {
+        const resUser = await fetch('http://localhost:8000/api/users', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+        
+        if (!resUser.ok) {
+            throw new Error('Unable to verify Paddler ID')
+        }
+
+        const userData = await resUser.json()
+        console.log('Fetched user data for donation ID verification:', userData)
+        // Check if any user has this donationId (case-insensitive and trimmed)
+        const isValid = userData.some(user => 
+            user.donationId && user.donationId.trim() === donationID.trim() 
+        )
+
+        console.log('Paddler ID valid:', isValid)
+        
+        if (!isValid) {
+            throw new Error('Invalid Paddler ID')
+        }
+      }
+
       // Call backend to create checkout session
       const response = await fetch('http://localhost:8000/api/create-checkout-session', {
         method: 'POST',
@@ -25,7 +57,7 @@ export default function DonateCards() {
         body: JSON.stringify({ 
           amount: amount,
           currency: 'cad',
-          donationID: donationID
+          donationId: donationID
         }),
       })
 
@@ -40,14 +72,28 @@ export default function DonateCards() {
 
       // Redirect to Stripe Checkout URL provided by backend
       if (session.url) {
-        window.location.href = session.url
+        if (donationID) {
+            setIsSuccess(true)
+            setTimeout(() => {
+                window.location.href = session.url
+            }, 1500)
+        } else {
+            window.location.href = session.url
+        }
       } else {
         console.error('No checkout URL provided in session')
       }
     } catch (error) {
       console.error('Error:', error)
+      if (donationID) {
+          setDonationError(error.message)
+          setIsShaking(true)
+          setTimeout(() => setIsShaking(false), 500)
+      }
     } finally {
-      setIsLoading(false)
+      if (!donationID || !isSuccess) {
+          setIsLoading(false)
+      }
     }
   }
 
@@ -106,13 +152,64 @@ export default function DonateCards() {
             {/* Paddler ID Input */}
             <div className="mt-4">
               <label className="block text-sm font-medium text-slate-700 mb-2">Paddler ID (Optional)</label>
-              <input
-                type="text"
-                value={donationID}
-                onChange={(e) => setDonationID(e.target.value)}
-                className="block w-full px-4 py-3 sm:text-sm rounded-xl border-slate-200 focus:ring-pink-500 focus:border-pink-500 border"
-                placeholder="Enter Paddler ID"
-              />
+              <div className="relative">
+                  <AnimatePresence mode="wait">
+                      {isSuccess ? (
+                        <motion.div
+                          key="check"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 z-10"
+                        >
+                          <Check className="w-5 h-5 text-green-500" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="user"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 z-10"
+                        >
+                          <User className="w-5 h-5 text-slate-400" />
+                        </motion.div>
+                      )}
+                  </AnimatePresence>
+                  <motion.input
+                    animate={
+                        isShaking ? { x: [-10, 10, -10, 10, 0] } : 
+                        isSuccess ? { 
+                          borderColor: '#22c55e', 
+                          backgroundColor: '#f0fdf4',
+                          boxShadow: '0 0 0 2px #bbf7d0'
+                        } : {}
+                    }
+                    transition={{ duration: 0.4 }}
+                    type="text"
+                    value={donationID}
+                    onChange={(e) => {
+                        setDonationID(e.target.value)
+                        setDonationError('')
+                    }}
+                    disabled={isSuccess}
+                    className={`block w-full pl-10 pr-4 py-3 sm:text-sm rounded-xl border focus:ring-2 outline-none transition-colors duration-300 ${
+                        donationError 
+                          ? 'border-red-500 focus:ring-red-200 bg-red-50' 
+                          : 'border-slate-200 focus:ring-pink-500 focus:border-pink-500'
+                    }`}
+                    placeholder="Enter Paddler ID"
+                  />
+              </div>
+              {donationError && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-red-500 text-sm mt-2 ml-1"
+                    >
+                      {donationError}
+                    </motion.p>
+              )}
             </div>
           </div>
 
