@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { X, Trophy, Target, User } from 'lucide-react'
+import { X, Trophy, Target, User, Copy, Check } from 'lucide-react'
 
 export default function ParticipantOverlay({ participantId, onClose }) {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [copySuccess, setCopySuccess] = useState(false)
 
   useEffect(() => {
     const fetchParticipantDetails = async () => {
@@ -26,6 +27,18 @@ export default function ParticipantOverlay({ participantId, onClose }) {
       fetchParticipantDetails() 
     }
   }, [])
+
+  const handleCopyDonationId = async () => {
+    const id = profile?.donationId
+    if (!id) return
+    try {
+      await navigator.clipboard.writeText(id)
+      setCopySuccess(true)
+      setTimeout(() => setCopySuccess(false), 1500)
+    } catch (err) {
+      console.error('Failed to copy donation ID', err)
+    }
+  }
 
   if (!participantId) return null
 
@@ -81,9 +94,25 @@ export default function ParticipantOverlay({ participantId, onClose }) {
                         <Target className="w-4 h-4" />
                         <h3 className="font-medium text-sm">Donation ID</h3>
                     </div>
-                    <p className="text-lg font-mono text-slate-700 bg-white px-2 py-1 rounded border border-slate-200 inline-block">
-                      {profile.donationId || 'N/A'}
-                    </p>
+                    <div className="flex items-center gap-3">
+                      <p className="text-lg font-mono text-slate-700 bg-white px-2 py-1 rounded border border-slate-200 inline-block">
+                        {profile.donationId || 'N/A'}
+                      </p>
+                      {profile.donationId && (
+                        <button
+                          type="button"
+                          onClick={handleCopyDonationId}
+                          aria-label="Copy donation ID"
+                          className="text-slate-400 hover:text-slate-700 transition-colors"
+                        >
+                          {copySuccess ? (
+                            <Check className="w-4 h-4 text-green-500" />
+                          ) : (
+                            <Copy className="w-4 h-4" />
+                          )}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
 
