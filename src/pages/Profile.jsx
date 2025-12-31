@@ -2,7 +2,8 @@ import React, { useEffect,  useState } from 'react'
 import Navbar from '@/components/Navbar'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '@/components/ui/button'
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Copy, Check } from 'lucide-react'
+import { motion} from 'framer-motion'
 
 export default function Profile() {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently, initiateRegistrationPayment, isPaymentLoading, logout } = useAuth()
@@ -19,12 +20,15 @@ export default function Profile() {
     name: '',
     bio: ''
   })
+  const [isProfileLoading, setIsProfileLoading] = useState(true)
+  const [copySuccess, setCopySuccess] = useState(false)
 
   // Initialize form data when user loads
   useEffect(() => {
     if (!user) return
     let mounted = true
     const loadProfile = async () => {
+      setIsProfileLoading(true)
       try {
         const token = await getAccessTokenSilently()
         const res = await fetch('http://localhost:8000/api/users/me', {
@@ -56,6 +60,8 @@ export default function Profile() {
           setFormData(prev => ({ ...prev, ...initialData }))
           setEditFormData(initialData)
         }
+      } finally {
+        if (mounted) setIsProfileLoading(false)
       }
     }
     loadProfile()
@@ -89,8 +95,27 @@ export default function Profile() {
     }
   }
 
-  if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+  const handleCopyDonationId = async () => {
+    const id = formData.donationId
+    if (!id) return
+    try {
+      await navigator.clipboard.writeText(id)
+      setCopySuccess(true)
+      setTimeout(() => setCopySuccess(false), 1500)
+    } catch (err) {
+      console.error('Failed to copy donation ID', err)
+    }
+  }
+
+  if (isLoading || isProfileLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin" />
+          <p className="text-slate-500 font-medium">Loading profile...</p>
+        </div>
+      </div>
+    )
   }
 
   if (!isAuthenticated) {
@@ -100,103 +125,124 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-slate-50">
       <Navbar />
-      <div className="pt-32 px-6 max-w-3xl mx-auto">
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold text-slate-900">My Profile</h1>
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={() => logout()} className="text-slate-600 hover:text-slate-900">
-                Log Out
-              </Button>
-              <Button variant="outline" onClick={() => setIsEditing(!isEditing)}>
-                {isEditing ? 'Cancel' : 'Edit Profile'}
-              </Button>
+      <motion.div
+        initial={{ opacity: 0 , scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+      >
+        <div className="pt-32 px-6 max-w-3xl mx-auto">
+          <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-slate-900">My Profile</h1>
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={() => logout()} className="text-slate-600 hover:text-slate-900">
+                  Log Out
+                </Button>
+                <Button variant="outline" onClick={() => setIsEditing(!isEditing)}>
+                  {isEditing ? 'Cancel' : 'Edit Profile'}
+                </Button>
+              </div>
             </div>
-          </div>
 
-          <div className="flex flex-col md:flex-row gap-8 items-start">
-            <img src={user.picture} alt={user.name} className="w-32 h-32 rounded-full border-4 border-pink-100" />
-            
-            <div className="flex-1 w-full">
-              {isEditing ? (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Display Name</label>
-                    <input 
-                      type="text" 
-                      value={editFormData.name}
-                      onChange={(e) => setEditFormData({...editFormData, name: e.target.value})}
-                      className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Bio</label>
-                    <textarea 
-                      value={editFormData.bio}
-                      onChange={(e) => setEditFormData({...editFormData, bio: e.target.value})}
-                      className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none h-32 resize-none"
-                      placeholder="Tell us why you paddle..."
-                    />
-                  </div>
-                  <Button type="submit" className="bg-slate-900 text-white hover:bg-slate-800">
-                    Save Changes
-                  </Button>
-                </form>
-              ) : (
-                <div className="space-y-6">
-                  <div>
-                    <h2 className="text-2xl font-bold text-slate-900">{formData.name}</h2>
-                    <p className="text-slate-500">{user.email}</p>
-                    {formData.team && (
-                      <p className="text-pink-600 font-medium mt-1">Team: {formData.team.name}</p>
-                    )}
-                  </div>
-                  
-                  <div>
-                    {formData.hasPaid ? (
-                      <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
-                        Registration Completed
-                      </span>
-                    ) : (
-                      <Button 
-                        onClick={initiateRegistrationPayment} 
-                        disabled={isPaymentLoading}
-                        className="bg-pink-600 text-white hover:bg-pink-700 rounded-full"
-                      >
-                        <AlertCircle className="w-4 h-4 mr-2" />
-                        {isPaymentLoading ? 'Processing...' : 'Pay Registration Fee'}
-                      </Button>
-                    )}
-                  </div>
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+              <img src={user.picture} alt={user.name} className="w-32 h-32 rounded-full border-4 border-pink-100" />
+              
+              <div className="flex-1 w-full">
+                {isEditing ? (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">Display Name</label>
+                      <input 
+                        type="text" 
+                        value={editFormData.name}
+                        onChange={(e) => setEditFormData({...editFormData, name: e.target.value})}
+                        className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">Bio</label>
+                      <textarea 
+                        value={editFormData.bio}
+                        onChange={(e) => setEditFormData({...editFormData, bio: e.target.value})}
+                        className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none h-32 resize-none"
+                        placeholder="Tell us why you paddle..."
+                      />
+                    </div>
+                    <Button type="submit" className="bg-slate-900 text-white hover:bg-slate-800">
+                      Save Changes
+                    </Button>
+                  </form>
+                ) : (
+                  <div className="space-y-6">
+                    <div>
+                      <h2 className="text-2xl font-bold text-slate-900">{formData.name}</h2>
+                      <p className="text-slate-500">{user.email}</p>
+                      {formData.team && (
+                        <p className="text-pink-600 font-medium mt-1">Team: {formData.team.name}</p>
+                      )}
+                    </div>
+                    
+                    <div>
+                      {formData.hasPaid ? (
+                        <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                          Registration Completed
+                        </span>
+                      ) : (
+                        <Button 
+                          onClick={initiateRegistrationPayment} 
+                          disabled={isPaymentLoading}
+                          className="bg-pink-600 text-white hover:bg-pink-700 rounded-full"
+                        >
+                          <AlertCircle className="w-4 h-4 mr-2" />
+                          {isPaymentLoading ? 'Processing...' : 'Pay Registration Fee'}
+                        </Button>
+                      )}
+                    </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <h3 className="font-medium text-slate-900 mb-2">Amount Raised</h3>
+                        <p className="text-3xl font-bold text-pink-600">
+                          ${formData.amountRaised?.toLocaleString() || '0'}
+                        </p>
+                      </div>
+                      <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <h3 className="font-medium text-slate-900 mb-2">Donation ID</h3>
+                        <div className="flex items-center gap-3">
+                          <p className="text-lg font-mono text-slate-600 bg-white px-3 py-1 rounded border border-slate-200 inline-block">
+                            {formData.donationId || 'Generating...'}
+                          </p>
+                          {formData.donationId && (
+                            <button
+                              type="button"
+                              onClick={handleCopyDonationId}
+                              aria-label="Copy donation ID"
+                              className="text-slate-400 hover:text-slate-700 transition-colors"
+                            >
+                              {copySuccess ? (
+                                <Check className="w-4 h-4 text-green-500" />
+                              ) : (
+                                <Copy className="w-4 h-4" />
+                              )}
+                            </button>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-500 mt-2">Share this ID to get credit for donations!</p>
+                      </div>
+                    </div>
+
                     <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                      <h3 className="font-medium text-slate-900 mb-2">Amount Raised</h3>
-                      <p className="text-3xl font-bold text-pink-600">
-                        ${formData.amountRaised?.toLocaleString() || '0'}
+                      <h3 className="font-medium text-slate-900 mb-2">About Me</h3>
+                      <p className="text-slate-600 whitespace-pre-wrap leading-relaxed">
+                        {formData.bio || "No bio yet. Click edit to add one!"}
                       </p>
                     </div>
-                    <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                      <h3 className="font-medium text-slate-900 mb-2">Donation ID</h3>
-                      <p className="text-lg font-mono text-slate-600 bg-white px-3 py-1 rounded border border-slate-200 inline-block">
-                        {formData.donationId || 'Generating...'}
-                      </p>
-                      <p className="text-xs text-slate-500 mt-2">Share this ID to get credit for donations!</p>
-                    </div>
                   </div>
-
-                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                    <h3 className="font-medium text-slate-900 mb-2">About Me</h3>
-                    <p className="text-slate-600 whitespace-pre-wrap leading-relaxed">
-                      {formData.bio || "No bio yet. Click edit to add one!"}
-                    </p>
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

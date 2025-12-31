@@ -36,7 +36,6 @@ export default function Leaderboard() {
           members: t.memberCount || 0
         }))
 
-        console.log('Fetched leaderboards', { individuals, teams })
         if (mounted) setData({ teams, individuals })
       } catch (err) {
         console.error('Failed to load leaderboards', err)
