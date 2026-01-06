@@ -3,13 +3,15 @@ import Navbar from '@/components/Navbar'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Users, Trophy, Calendar } from 'lucide-react'
+import { useAuth } from '../contexts/AuthContext'
+import DisplayMembers from '@/components/teams/DisplayMembers'
 
 export default function TeamDetails() {
 
   const [team, setTeam] = useState(null)
   const { name } = useParams()
   const teamName = decodeURIComponent(name)
-  
+
   useEffect(() => {
     const fetchTeamDetails = async () => {
       try {
@@ -42,6 +44,8 @@ export default function TeamDetails() {
         const membersData = (await Promise.all(memberPromises)).filter(m => m !== null)
 
         setTeam({
+          id: teamData._id,
+          captain: teamData.captain,
           name: teamData.name,
           division: teamData.division,
           description: teamData.description,
@@ -91,25 +95,10 @@ export default function TeamDetails() {
             </div>
           </div>
 
-          <div className="border-t border-slate-100 pt-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-              <Users className="w-6 h-6 text-pink-500" />
-              Team Members
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {team.members.map((member) => (
-                <div key={member.id} className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors">
-                  <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold">
-                    {member.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-medium text-slate-900">{member.name}</p>
-                    <p className="text-xs text-slate-500">{member.role}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <DisplayMembers 
+            team={team} 
+            setTeam={setTeam}
+          />
         </div>
       </div>
     </div>

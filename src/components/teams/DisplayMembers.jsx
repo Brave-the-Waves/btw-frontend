@@ -1,0 +1,93 @@
+import { useState, useEffect } from 'react'
+import { Users } from 'lucide-react'
+import { useAuth } from '../../contexts/AuthContext'
+
+export default function DisplayMembers({ team, setTeam }) {
+    const { user, getAccessTokenSilently } = useAuth()
+    const [currentUserId, setCurrentUserId] = useState(null)
+    const [confirmKickId, setConfirmKickId] = useState(null)
+
+    useEffect(() => {
+        const fetchCurrentUser = async () => {
+            if (user) {
+            try {
+                const token = await getAccessTokenSilently()
+                const res = await fetch('http://localhost:8000/api/users/me', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+                })
+                if (res.ok) {
+                const userData = await res.json()
+                setCurrentUserId(userData._id)
+                }
+            } catch (err) {
+                console.error('Failed to fetch current user ID:', err)
+            }
+            }
+        }
+        fetchCurrentUser()
+    }, [user, getAccessTokenSilently])
+    return (
+        <div className="border-t border-slate-100 pt-8">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                <Users className="w-6 h-6 text-pink-500" />
+                Team Members
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {team.members.map((member) => {
+                const isCaptain = currentUserId && team.captain && currentUserId === team.captain
+                const isMemberCaptain = team.captain === member.id
+                return (
+                <div key={member.id} className="flex items-center justify-between gap-4 p-4 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors">
+                    <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold">
+                        {member.name.charAt(0)}
+                    </div>
+                    <div>
+                        <p className="font-medium text-slate-900">{member.name}</p>
+                        <p className="text-xs text-slate-500">{member.role}</p>
+                    </div>
+                    </div>
+                    {isCaptain && !isMemberCaptain && (
+                    <div className="flex items-center gap-2">
+                        {confirmKickId === member.id ? (
+                        <>
+                            <button
+                            onClick={async () => {
+                                try {
+                                const token = await getAccessTokenSilently()
+                                const res = await fetch(`http://localhost:8000/api/teams/${team.id}/members/${member.id}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                    'Content-Type': 'application/json',
+                                    Authorization: `Bearer ${token}`
+                                    }
+                                })
+                                if (!res.ok) throw new Error('Failed to remove member')
+                                setTeam(prev => ({ ...prev, members: prev.members.filter(m => m.id !== member.id) }))
+                                setConfirmKickId(null)
+                                } catch (err) {
+                                console.error(err)
+                                setConfirmKickId(null)
+                                }
+                            }}
+                            className="bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition-colors"
+                            >
+                            Confirm
+                            </button>
+                            <button onClick={() => setConfirmKickId(null)} className="px-3 py-1 rounded-md border border-slate-300 text-slate-700 text-sm hover:bg-slate-50 transition-colors">Cancel</button>
+                        </>
+                        ) : (
+                        <button onClick={() => setConfirmKickId(member.id)} className="bg-red-50 text-red-600 px-2 py-0.5 rounded-lg text-sm border border-red-200 hover:bg-red-100 transition-colors">Kick</button>
+                        )}
+                    </div>
+                    )}
+                </div>
+                )
+                })}
+            </div>
+        </div>
+    )
+}
