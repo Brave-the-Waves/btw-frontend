@@ -234,7 +234,7 @@ export default function Teams() {
                 <Button 
                   variant="outline" 
                   className="flex-1"
-                  onClick={() => navigate(`/teams/${team.name}`)} // Assuming name is unique or use ID
+                  onClick={() => navigate(`/teams/${team.name}`)}
                 >
                   View Details
                 </Button>

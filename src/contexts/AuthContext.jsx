@@ -157,7 +157,7 @@ export default function AuthProvider({ children }) {
     try {
       await signOut(auth)
       setShowPaymentModal(false)
-      console.log('User signed out')
+      window.location.href = '/'
     } catch (error) {
       console.error('Logout error:', error)
     }
