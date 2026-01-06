@@ -21,6 +21,7 @@ export default function Participants() {
           id: u._id,
           name: u.name,
           team: u.team?.name || 'No Team',
+          amountRaised: Number(u.amountRaised) || 0,
           role: u.team?.captain === u._id ? 'Captain' : 'Paddler'
         })))
       } catch (error) {
@@ -73,7 +74,22 @@ export default function Participants() {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900">{p.name}</h3>
-                  <p className="text-sm text-slate-500">{p.team}</p>
+                  {
+                    p.team !== "No Team" ? (
+                      <p className="text-sm text-slate-500">{p.team}</p>
+                    ) : null
+                  }
+                  {
+                    p.amountRaised > 0 ? (
+                      <p className="text-sm text-pink-600 font-medium mt-1">
+                        Raised: ${p.amountRaised.toLocaleString()}
+                      </p>
+                    ) : (
+                      <p className="text-sm text-slate-500 mt-1">
+                        Raised: $0
+                      </p>
+                    )
+                  }
                 </div>
               </div>
               <div className="mt-4 pt-4 border-t border-slate-50 flex justify-between items-center">
