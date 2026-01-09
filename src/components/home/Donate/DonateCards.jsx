@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, Shield, Trophy, Users, Waves, DollarSign, Check, User } from 'lucide-react'
+import { Heart, Shield, Trophy, Users, Waves, DollarSign, Check, User, MessageSquare } from 'lucide-react'
 import Button from '@/components/ui/button'
 import { useAuth } from '../../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import Checkbox from './CheckBox'
 
 export default function DonateCards() {
   const [amount, setAmount] = useState(25)
@@ -13,9 +14,22 @@ export default function DonateCards() {
   const [donationError, setDonationError] = useState('')
   const [isShaking, setIsShaking] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [message, setMessage] = useState('')
+  const [isAnonymous, setIsAnonymous] = useState(false)
   const { loginWithRedirect, isAuthenticated } = useAuth()
   const navigate = useNavigate()
+  const textareaRef = useRef(null)
+  const maxMessageChars = 100
 
+  const handleMessageChange = (e) => {
+    const val = e.target.value.slice(0, maxMessageChars)
+    setMessage(val)
+    const ta = textareaRef.current
+    if (ta) {
+      ta.style.height = 'auto'
+      ta.style.height = `${ta.scrollHeight}px`
+    }
+  }
   const handleDonate = async () => {
     setIsLoading(true)
     setDonationError('')
@@ -56,13 +70,12 @@ export default function DonateCards() {
         },
         body: JSON.stringify({ 
           amount: amount,
-          currency: 'cad',
-          donationId: donationID
+          currency: 'CAD',
+          donationId: donationID,
+          message: message,
+          isAnonymous: isAnonymous
         }),
       })
-
-      console.log('Response status:', response.status)
-      console.log('Response: ', response)
 
       if (!response.ok) {
         throw new Error('Network response was not ok')
@@ -100,8 +113,8 @@ export default function DonateCards() {
   const presetAmounts = [5, 10, 25, 50, 100]
 
   return (
-    <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-      <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group">
+    <div className="grid md:grid-cols-5 gap-8 max-w-8xl mx-auto">
+      <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group md:col-span-3">
         <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-pink-600 rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity" />
         <div className="relative bg-white rounded-3xl p-8 md:p-10 shadow-xl shadow-pink-100/50 border border-pink-100 h-full flex flex-col">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -211,6 +224,27 @@ export default function DonateCards() {
                     </motion.p>
               )}
             </div>
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-slate-700 mb-2">Message (Optional)</label>
+              <div className="relative">
+                  <div className="absolute top-3 left-3">
+                      <MessageSquare className="w-5 h-5 text-slate-400" /> 
+                  </div>
+                  <textarea
+                    ref={textareaRef}
+                    rows={1}
+                    maxLength={maxMessageChars}
+                    className="block w-full pl-10 pr-4 py-3 sm:text-sm rounded-xl border border-slate-200 focus:ring-pink-500 focus:border-pink-500 outline-none resize-none overflow-hidden"
+                    placeholder="Leave a message..."
+                    value={message}
+                    onChange={handleMessageChange}
+                  />
+              </div>
+            </div>
+            <div className="text-sm text-slate-500 mt-1 text-right">
+                {message.length}/{maxMessageChars} characters
+            </div>
+            <Checkbox label="Make my donation anonymous" isChecked={isAnonymous} setIsChecked={setIsAnonymous}/>
           </div>
 
           <ul className="space-y-3 mb-8">
@@ -243,7 +277,7 @@ export default function DonateCards() {
         </div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group">
+      <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group md:col-span-2">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-900 rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity" />
         <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 md:p-10 shadow-xl h-full text-white flex flex-col">
           <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
