@@ -13,6 +13,8 @@ export default function TeamDetails() {
   const { name } = useParams()
   const teamName = decodeURIComponent(name)
 
+  const { getAccessTokenSilently } = useAuth()
+  console.log('team: ', team)
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -33,7 +35,13 @@ export default function TeamDetails() {
   useEffect(() => {
     const fetchTeamDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/public/teams/${teamName}`)
+        const token = await getAccessTokenSilently()
+        const response = await fetch(`http://localhost:8000/api/public/teams/${teamName}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          })
         if (!response.ok) {
           throw new Error('Failed to fetch team details')
         }
@@ -100,6 +108,8 @@ export default function TeamDetails() {
                 </span>
               </div>
               <h1 className="text-4xl font-bold text-slate-900 mb-4">{team.name}</h1>
+
+              <h2 className="flex items-center gap-3 text-slate-600 mb-4"> {team.inviteCode} </h2>
               <p className="text-slate-600 max-w-2xl text-lg">{team.description}</p>
             </div>
             
