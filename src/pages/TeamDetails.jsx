@@ -2,19 +2,26 @@ import React from 'react'
 import Navbar from '@/components/Navbar'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Users, Trophy, Calendar } from 'lucide-react'
+import { Users, Trophy, Calendar, Copy } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import DisplayMembers from '@/components/teams/DisplayMembers'
 
 export default function TeamDetails() {
 
   const [team, setTeam] = useState(null)
-  const [members, setMembers] = useState([])  
+  const [members, setMembers] = useState([])
+  const [copied, setCopied] = useState(false)
   const { name } = useParams()
   const teamName = decodeURIComponent(name)
 
   const { getAccessTokenSilently } = useAuth()
   console.log('team: ', team)
+  
+  const copyInviteCode = () => {
+    navigator.clipboard.writeText(team.inviteCode)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 500)
+  }
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -109,7 +116,14 @@ export default function TeamDetails() {
               </div>
               <h1 className="text-4xl font-bold text-slate-900 mb-4">{team.name}</h1>
 
-              <h2 className="flex items-center gap-3 text-slate-600 mb-4"> {team.inviteCode} </h2>
+              <h2 
+                onClick={copyInviteCode}
+                className="flex items-center gap-2 text-slate-600 mb-4 cursor-pointer hover:text-pink-600 transition-colors"
+                title="Click to copy invite code"
+              >
+                {team.inviteCode}
+                {copied ? <span className="text-xs">✓ Copied!</span> : <Copy className="w-4 h-4" />}
+              </h2>
               <p className="text-slate-600 max-w-2xl text-lg">{team.description}</p>
             </div>
             
