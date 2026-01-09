@@ -9,8 +9,26 @@ import DisplayMembers from '@/components/teams/DisplayMembers'
 export default function TeamDetails() {
 
   const [team, setTeam] = useState(null)
+  const [members, setMembers] = useState([])  
   const { name } = useParams()
   const teamName = decodeURIComponent(name)
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/public/teams/${teamName}/members`)
+        if (!response.ok) {
+          throw new Error('Failed to fetch team members')
+        }
+        const membersData = await response.json()
+        setMembers(membersData)
+      } catch (error) {
+        console.error('Error fetching team members:', error)
+      }
+    }
+
+    fetchMembers()
+  }, [teamName])
 
   useEffect(() => {
     const fetchTeamDetails = async () => {
@@ -51,7 +69,7 @@ export default function TeamDetails() {
           description: teamData.description,
           raised: Number(teamData.totalRaised) || 0,
           goal: Number(teamData.donationGoal) || 10000,
-          members: membersData,
+          inviteCode : teamData.inviteCode ? teamData.inviteCode : '', //backend deals with removing inviteCode for members
         })
       } catch (error) {
         console.error('Error fetching team details:', error)
@@ -97,7 +115,8 @@ export default function TeamDetails() {
 
           <DisplayMembers 
             team={team} 
-            setTeam={setTeam}
+            members={members}
+            setMembers={setMembers}
           />
         </div>
       </div>

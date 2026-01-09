@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Users } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
-export default function DisplayMembers({ team, setTeam }) {
+export default function DisplayMembers({ team, members, setMembers }) {
     const { user, getAccessTokenSilently } = useAuth()
     const [currentUserId, setCurrentUserId] = useState(null)
     const [confirmKickId, setConfirmKickId] = useState(null)
@@ -29,6 +29,7 @@ export default function DisplayMembers({ team, setTeam }) {
         }
         fetchCurrentUser()
     }, [user, getAccessTokenSilently])
+
     return (
         <div className="border-t border-slate-100 pt-8">
             <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
@@ -36,9 +37,9 @@ export default function DisplayMembers({ team, setTeam }) {
                 Team Members
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {team.members.map((member) => {
+                {(members || []).map((member) => {
                 const isCaptain = currentUserId && team.captain && currentUserId === team.captain
-                const isMemberCaptain = team.captain === member.id
+                const isMemberCaptain = team.captain === member._id
                 return (
                 <div key={member.id} className="flex items-center justify-between gap-4 p-4 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors">
                     <div className="flex items-center gap-4">
@@ -66,7 +67,7 @@ export default function DisplayMembers({ team, setTeam }) {
                                     }
                                 })
                                 if (!res.ok) throw new Error('Failed to remove member')
-                                setTeam(prev => ({ ...prev, members: prev.members.filter(m => m.id !== member.id) }))
+                                setMembers(prev => prev.filter(m => m.id !== member.id))
                                 setConfirmKickId(null)
                                 } catch (err) {
                                 console.error(err)
