@@ -48,7 +48,7 @@ export default function DisplayMembers({ team, members, setMembers }) {
                     </div>
                     <div>
                         <p className="font-medium text-slate-900">{member.name}</p>
-                        <p className="text-xs text-slate-500">{member.role}</p>
+                        <p className="text-xs text-slate-500">{isMemberCaptain ? 'Captain' : 'Paddler'}</p>
                     </div>
                     </div>
                     {isCaptain && !isMemberCaptain && (

@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '@/components/Navbar'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { Users, Trophy, Calendar, Copy } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import DisplayMembers from '@/components/teams/DisplayMembers'
@@ -11,16 +11,19 @@ export default function TeamDetails() {
   const [team, setTeam] = useState(null)
   const [members, setMembers] = useState([])
   const [copied, setCopied] = useState(false)
+  const [confirmLeave, setConfirmLeave] = useState(false)
+  const [isInTeam, setIsInTeam] = useState(false)
   const { name } = useParams()
   const teamName = decodeURIComponent(name)
 
   const { getAccessTokenSilently } = useAuth()
+  const navigate = useNavigate()
   console.log('team: ', team)
   
   const copyInviteCode = () => {
     navigator.clipboard.writeText(team.inviteCode)
     setCopied(true)
-    setTimeout(() => setCopied(false), 500)
+    setTimeout(() => setCopied(false), 1300)
   }
   useEffect(() => {
     const fetchMembers = async () => {
@@ -30,6 +33,7 @@ export default function TeamDetails() {
           throw new Error('Failed to fetch team members')
         }
         const membersData = await response.json()
+        console.log('membersData: ', membersData)
         setMembers(membersData)
       } catch (error) {
         console.error('Error fetching team members:', error)
@@ -94,6 +98,51 @@ export default function TeamDetails() {
     fetchTeamDetails()
   }, [teamName])
 
+  const leaveTeam = async () => {
+    try {
+      const token = await getAccessTokenSilently()
+      const response = await fetch(`http://localhost:8000/api/teams/leave`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      if (!response.ok) {
+        throw new Error('Failed to leave team')
+      }
+      navigate('/teams')
+    } 
+    catch (error) {
+      console.error('Error leaving team:', error)
+    }
+  }
+
+  useEffect(() => {
+    const checkMembership = async () => {
+      try {
+        const token = await getAccessTokenSilently()
+        const response = await fetch(`http://localhost:8000/api/teams/me`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        if (!response.ok) {
+          setIsInTeam(false)
+          return
+        }
+        const data = await response.json()
+        setIsInTeam(data.team && data.team.name === teamName)
+      } 
+      catch (error) {
+        console.error('Error verifying team membership:', error)
+        setIsInTeam(false)
+      }
+    }
+    checkMembership()
+  }, [teamName, getAccessTokenSilently]) 
+
   if (!team) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
@@ -115,16 +164,44 @@ export default function TeamDetails() {
                 </span>
               </div>
               <h1 className="text-4xl font-bold text-slate-900 mb-4">{team.name}</h1>
-
-              <h2 
-                onClick={copyInviteCode}
-                className="flex items-center gap-2 text-slate-600 mb-4 cursor-pointer hover:text-pink-600 transition-colors"
-                title="Click to copy invite code"
-              >
-                {team.inviteCode}
-                {copied ? <span className="text-xs">✓ Copied!</span> : <Copy className="w-4 h-4" />}
-              </h2>
-              <p className="text-slate-600 max-w-2xl text-lg">{team.description}</p>
+              {
+                team.inviteCode && (
+                  <h2 
+                    onClick={copyInviteCode}
+                    className="flex items-center gap-2 text-slate-600 mb-4 cursor-pointer hover:text-pink-600 transition-colors"
+                    title="Click to copy invite code"
+                  >
+                    {team.inviteCode}
+                    {copied ? <span className="text-xs">✓ Copied!</span> : <Copy className="w-4 h-4" />}
+                  </h2>
+                )
+              }
+              <p className="text-slate-600 max-w-2xl text-lg mb-4">{team.description}</p>
+              {isInTeam && (
+                !confirmLeave ? (
+                  <button
+                    onClick={() => setConfirmLeave(true)}
+                    className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                  >
+                    Leave Team
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={leaveTeam}
+                      className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                    >
+                      Confirm Leave
+                    </button>
+                    <button
+                      onClick={() => setConfirmLeave(false)}
+                      className="px-3 py-1 text-sm border border-slate-300 text-slate-700 rounded-md hover:bg-slate-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )
+              )}
             </div>
             
             <div className="bg-slate-50 p-6 rounded-2xl min-w-[250px]">
