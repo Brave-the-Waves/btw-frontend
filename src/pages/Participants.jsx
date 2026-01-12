@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
+import Button from '@/components/ui/button'
 import { Search } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ParticipantOverlay from '@/components/users/ParticipantOverlay'
@@ -8,6 +9,7 @@ export default function Participants() {
   const [searchTerm, setSearchTerm] = useState('')
   const [participants, setParticipants] = useState([])
   const [selectedParticipantId, setSelectedParticipantId] = useState(null)
+  const [itemsToShow, setItemsToShow] = useState(20)
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -36,6 +38,9 @@ export default function Participants() {
     p.team.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  const displayedParticipants = filteredParticipants.slice(0, itemsToShow)
+  const hasMore = filteredParticipants.length > itemsToShow
+
   return (
     <div className="min-h-screen bg-slate-50">
       <Navbar />
@@ -60,7 +65,7 @@ export default function Participants() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredParticipants.map((p, index) => (
+          {displayedParticipants.map((p, index) => (
             <motion.div
               key={p.id}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -105,6 +110,17 @@ export default function Participants() {
             </motion.div>
           ))}
         </div>
+
+        {hasMore && (
+          <div className="flex justify-center mt-8">
+            <Button
+              onClick={() => setItemsToShow(prev => prev + 20)}
+              className="px-6 py-3 bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200"
+            >
+              Load More ({filteredParticipants.length - itemsToShow} remaining)
+            </Button>
+          </div>
+        )}
 
         {filteredParticipants.length === 0 && (
           <div className="text-center py-20 text-slate-500">

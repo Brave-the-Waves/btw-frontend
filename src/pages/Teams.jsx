@@ -35,6 +35,7 @@ export default function Teams() {
   const [showJoinModal, setShowJoinModal] = useState(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
+  const [itemsToShow, setItemsToShow] = useState(20)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -123,6 +124,9 @@ export default function Teams() {
     team.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  const displayedTeams = filteredTeams.slice(0, itemsToShow)
+  const hasMore = filteredTeams.length > itemsToShow
+
   return (
     <div className="min-h-screen bg-slate-50">
       <Navbar />
@@ -175,7 +179,7 @@ export default function Teams() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTeams.map((team) => (
+          {displayedTeams.map((team) => (
             <motion.div 
               key={team.id}
               initial={{ opacity: 0, y: 20 }}
@@ -218,6 +222,23 @@ export default function Teams() {
             </motion.div>
           ))}
         </div>
+
+        {hasMore && (
+          <div className="flex justify-center mt-8">
+            <Button
+              onClick={() => setItemsToShow(prev => prev + 20)}
+              className="px-6 py-3 bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200"
+            >
+              Load More ({filteredTeams.length - itemsToShow} remaining)
+            </Button>
+          </div>
+        )}
+
+        {filteredTeams.length === 0 && (
+          <div className="text-center py-20 text-slate-500">
+            No teams found matching "{searchTerm}"
+          </div>
+        )}
       </div>
 
       <AnimatePresence>
