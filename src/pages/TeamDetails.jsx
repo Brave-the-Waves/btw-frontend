@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Users, Trophy, Calendar, Copy } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import JoinTeamOverlay from '../components/teams/JoinTeamOverlay'
 import DisplayMembers from '@/components/teams/DisplayMembers'
+import { AnimatePresence } from 'framer-motion'
 
 export default function TeamDetails() {
 
@@ -13,10 +15,12 @@ export default function TeamDetails() {
   const [copied, setCopied] = useState(false)
   const [confirmLeave, setConfirmLeave] = useState(false)
   const [isInTeam, setIsInTeam] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(false)
   const { name } = useParams()
+  const [joinModal, setJoinModal] = useState(false)
   const teamName = decodeURIComponent(name)
 
-  const { getAccessTokenSilently } = useAuth()
+  const { getAccessTokenSilently, isAuthenticated, refreshUser } = useAuth()
   const navigate = useNavigate()
   console.log('team: ', team)
   
@@ -25,6 +29,7 @@ export default function TeamDetails() {
     setCopied(true)
     setTimeout(() => setCopied(false), 1300)
   }
+
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -41,10 +46,12 @@ export default function TeamDetails() {
     }
 
     fetchMembers()
-  }, [teamName])
+  }, [teamName, refreshKey])
 
   useEffect(() => {
     const fetchTeamDetails = async () => {
+      if (!isAuthenticated) return
+      
       try {
         const token = await getAccessTokenSilently()
         const response = await fetch(`http://localhost:8000/api/public/teams/${teamName}`, {
@@ -57,29 +64,7 @@ export default function TeamDetails() {
           throw new Error('Failed to fetch team details')
         }
         const teamData = await response.json()
-
-        // Fetch details for each member
-        const memberPromises = (teamData.members || []).map(async (memberId) => {
-          try {
-            // Assuming endpoint for fetching public user details
-            const userResponse = await fetch(`http://localhost:8000/api/users/${memberId}`)
-            if (!userResponse.ok) return null
-            const userData = await userResponse.json()
-            
-            return {
-              id: memberId,
-              name: userData.name || 'Unknown Member',
-              role: memberId === teamData.captain ? 'Captain' : 'Paddler',
-              amountRaised: Number(userData.amountraised) || 0
-            }
-          } catch (err) {
-            console.error(`Failed to fetch member ${memberId}`, err)
-            return null
-          }
-        })
-
-        const membersData = (await Promise.all(memberPromises)).filter(m => m !== null)
-
+        
         setTeam({
           id: teamData._id,
           captain: teamData.captain,
@@ -96,7 +81,7 @@ export default function TeamDetails() {
     }
     
     fetchTeamDetails()
-  }, [teamName])
+  }, [teamName, refreshKey, isAuthenticated, getAccessTokenSilently])
 
   const leaveTeam = async () => {
     try {
@@ -111,6 +96,7 @@ export default function TeamDetails() {
       if (!response.ok) {
         throw new Error('Failed to leave team')
       }
+      await refreshUser()
       navigate('/teams')
     } 
     catch (error) {
@@ -120,9 +106,11 @@ export default function TeamDetails() {
 
   useEffect(() => {
     const checkMembership = async () => {
+      if (!isAuthenticated) return
+      
       try {
         const token = await getAccessTokenSilently()
-        const response = await fetch(`http://localhost:8000/api/teams/me`, {
+        const response = await fetch(`http://localhost:8000/api/users/me`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -141,7 +129,7 @@ export default function TeamDetails() {
       }
     }
     checkMembership()
-  }, [teamName, getAccessTokenSilently]) 
+  }, [teamName, getAccessTokenSilently, isAuthenticated]) 
 
   if (!team) {
     return (
@@ -177,7 +165,7 @@ export default function TeamDetails() {
                 )
               }
               <p className="text-slate-600 max-w-2xl text-lg mb-4">{team.description}</p>
-              {isInTeam && (
+              {isInTeam ? (
                 !confirmLeave ? (
                   <button
                     onClick={() => setConfirmLeave(true)}
@@ -201,6 +189,27 @@ export default function TeamDetails() {
                     </button>
                   </div>
                 )
+              ) : (
+                <>
+                  <button
+                    onClick={() => setJoinModal(true)}
+                    className="px-3 py-1 text-sm bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors"
+                  >
+                    Join Team
+                  </button>
+                  <AnimatePresence>
+                    {joinModal && (
+                      <JoinTeamOverlay 
+                        teamName={team.name}
+                        onClose={() => setJoinModal(false)}
+                        onSuccess={ async() => {
+                          await refreshUser()
+                          setRefreshKey(prev => !prev)
+                        }}
+                      />
+                    )}
+                  </AnimatePresence>
+                </>
               )}
             </div>
             
@@ -218,6 +227,7 @@ export default function TeamDetails() {
             team={team} 
             members={members}
             setMembers={setMembers}
+            onMemberChange={() => setRefreshKey(prev => !prev)}
           />
         </div>
       </div>

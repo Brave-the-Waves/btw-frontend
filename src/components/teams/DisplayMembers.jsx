@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Users } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
-export default function DisplayMembers({ team, members, setMembers }) {
+export default function DisplayMembers({ team, members, setMembers, onMemberChange }) {
     const { user, getAccessTokenSilently } = useAuth()
     const [currentUserId, setCurrentUserId] = useState(null)
     const [confirmKickId, setConfirmKickId] = useState(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchCurrentUser = async () => {
@@ -38,11 +40,15 @@ export default function DisplayMembers({ team, members, setMembers }) {
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {(members || []).map((member) => {
+                const isCurrentUser = currentUserId === member._id
                 const isCaptain = currentUserId && team.captain && currentUserId === team.captain
                 const isMemberCaptain = team.captain === member._id
                 return (
-                <div key={member.id} className="flex items-center justify-between gap-4 p-4 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors">
-                    <div className="flex items-center gap-4">
+                <div key={member._id} className={`flex items-center justify-between gap-4 p-4 rounded-xl transition-colors ${isCurrentUser ? 'bg-gradient-to-r from-rose-50 to-rose-100 hover:from-rose-100 hover:to-rose-200' : 'bg-slate-50 hover:bg-slate-100'}`}>
+                    <div 
+                      className="flex items-center gap-4 flex-1 cursor-pointer"
+                      onClick={() => navigate(`/profile/${member._id}`)}
+                    >
                     <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold">
                         {member.name.charAt(0)}
                     </div>
@@ -53,7 +59,7 @@ export default function DisplayMembers({ team, members, setMembers }) {
                     </div>
                     {isCaptain && !isMemberCaptain && (
                     <div className="flex items-center gap-2">
-                        {confirmKickId === member.id ? (
+                        {confirmKickId === member._id ? (
                         <>
                             <button
                             onClick={async () => {
@@ -69,6 +75,7 @@ export default function DisplayMembers({ team, members, setMembers }) {
                                 if (!res.ok) throw new Error('Failed to remove member')
                                 setMembers(prev => prev.filter(m => m.id !== member.id))
                                 setConfirmKickId(null)
+                                onMemberChange()
                                 } catch (err) {
                                 console.error(err)
                                 setConfirmKickId(null)

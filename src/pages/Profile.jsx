@@ -2,8 +2,9 @@ import React, { useEffect,  useState } from 'react'
 import Navbar from '@/components/Navbar'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '@/components/ui/button'
-import { AlertCircle, Copy, Check } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 import { motion} from 'framer-motion'
+import UserProfileCard from '@/components/users/UserProfileCard'
 
 export default function Profile() {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently, initiateRegistrationPayment, isPaymentLoading, logout } = useAuth()
@@ -21,7 +22,6 @@ export default function Profile() {
     bio: ''
   })
   const [isProfileLoading, setIsProfileLoading] = useState(true)
-  const [copySuccess, setCopySuccess] = useState(false)
 
   // Initialize form data when user loads
   useEffect(() => {
@@ -92,18 +92,6 @@ export default function Profile() {
       setIsEditing(false)
     } catch (error) {
       console.error(error)
-    }
-  }
-
-  const handleCopyDonationId = async () => {
-    const id = formData.donationId
-    if (!id) return
-    try {
-      await navigator.clipboard.writeText(id)
-      setCopySuccess(true)
-      setTimeout(() => setCopySuccess(false), 1500)
-    } catch (err) {
-      console.error('Failed to copy donation ID', err)
     }
   }
 
@@ -198,44 +186,11 @@ export default function Profile() {
                       )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                        <h3 className="font-medium text-slate-900 mb-2">Amount Raised</h3>
-                        <p className="text-3xl font-bold text-pink-600">
-                          ${formData.amountRaised?.toLocaleString() || '0'}
-                        </p>
-                      </div>
-                      <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                        <h3 className="font-medium text-slate-900 mb-2">Donation ID</h3>
-                        <div className="flex items-center gap-3">
-                          <p className="text-lg font-mono text-slate-600 bg-white px-3 py-1 rounded border border-slate-200 inline-block">
-                            {formData.donationId || 'Generating...'}
-                          </p>
-                          {formData.donationId && (
-                            <button
-                              type="button"
-                              onClick={handleCopyDonationId}
-                              aria-label="Copy donation ID"
-                              className="text-slate-400 hover:text-slate-700 transition-colors"
-                            >
-                              {copySuccess ? (
-                                <Check className="w-4 h-4 text-green-500" />
-                              ) : (
-                                <Copy className="w-4 h-4" />
-                              )}
-                            </button>
-                          )}
-                        </div>
-                        <p className="text-xs text-slate-500 mt-2">Share this ID to get credit for donations!</p>
-                      </div>
-                    </div>
-
-                    <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                      <h3 className="font-medium text-slate-900 mb-2">About Me</h3>
-                      <p className="text-slate-600 whitespace-pre-wrap leading-relaxed">
-                        {formData.bio || "No bio yet. Click edit to add one!"}
-                      </p>
-                    </div>
+                    <UserProfileCard 
+                      userData={formData}
+                      showEmail={false}
+                      showDonationId={true}
+                    />
                   </div>
                 )}
               </div>
