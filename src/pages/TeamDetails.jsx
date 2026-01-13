@@ -15,15 +15,17 @@ export default function TeamDetails() {
   const [members, setMembers] = useState([])
   const [copied, setCopied] = useState(false)
   const [confirmLeave, setConfirmLeave] = useState(false)
-  const [isInTeam, setIsInTeam] = useState(false)
   const [refreshKey, setRefreshKey] = useState(false)
   const { name } = useParams()
   const [joinModal, setJoinModal] = useState(false)
   const teamName = decodeURIComponent(name)
 
-  const { getAccessTokenSilently, isAuthenticated, refreshUser } = useAuth()
+  const { getAccessTokenSilently, isAuthenticated, refreshUser, user } = useAuth()
   const navigate = useNavigate()
   
+  // Check membership directly from authenticated user context instead of re-fetching
+  const isInTeam = isAuthenticated && user?.team?.name === teamName
+
   const copyInviteCode = () => {
     navigator.clipboard.writeText(team.inviteCode)
     setCopied(true)
@@ -110,33 +112,6 @@ export default function TeamDetails() {
       console.error('Error leaving team:', error)
     }
   }
-
-  useEffect(() => {
-    const checkMembership = async () => {
-      if (!isAuthenticated) return
-      
-      try {
-        const token = await getAccessTokenSilently()
-        const response = await fetch(`http://localhost:8000/api/users/me`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        if (!response.ok) {
-          setIsInTeam(false)
-          return
-        }
-        const data = await response.json()
-        setIsInTeam(data.team && data.team.name === teamName)
-      } 
-      catch (error) {
-        console.error('Error verifying team membership:', error)
-        setIsInTeam(false)
-      }
-    }
-    checkMembership()
-  }, [teamName, getAccessTokenSilently, isAuthenticated]) 
 
   if (!team) {
     return (

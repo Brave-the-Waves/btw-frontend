@@ -6,32 +6,10 @@ import DonateButton from '../users/DonateButton'
 
 export default function DisplayMembers({ team, members, setMembers, onMemberChange }) {
     const { user, getAccessTokenSilently } = useAuth()
-    const [currentUserId, setCurrentUserId] = useState(null)
     const [confirmKickId, setConfirmKickId] = useState(null)
     const navigate = useNavigate()
 
-    useEffect(() => {
-        const fetchCurrentUser = async () => {
-            if (user) {
-            try {
-                const token = await getAccessTokenSilently()
-                const res = await fetch('http://localhost:8000/api/users/me', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-                })
-                if (res.ok) {
-                const userData = await res.json()
-                setCurrentUserId(userData._id)
-                }
-            } catch (err) {
-                console.error('Failed to fetch current user ID:', err)
-            }
-            }
-        }
-        fetchCurrentUser()
-    }, [user, getAccessTokenSilently])
+    const currentUserId = user?._id
 
     return (
         <div className="border-t border-slate-100 pt-8">

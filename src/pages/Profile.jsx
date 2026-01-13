@@ -8,7 +8,7 @@ import UserProfileCard from '@/components/users/UserProfileCard'
 import RecentDonations from '@/components/users/RecentDonations'
 
 export default function Profile() {
-  const { user, isAuthenticated, isLoading, getAccessTokenSilently, initiateRegistrationPayment, isPaymentLoading, logout } = useAuth()
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently, initiateRegistrationPayment, isPaymentLoading, logout, refreshUser } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -25,50 +25,25 @@ export default function Profile() {
   })
   const [isProfileLoading, setIsProfileLoading] = useState(true)
 
-  // Initialize form data when user loads
+  // Initialize form data when user loads from context
   useEffect(() => {
-    if (!user) return
-    let mounted = true
-    const loadProfile = async () => {
-      setIsProfileLoading(true)
-      try {
-        const token = await getAccessTokenSilently()
-        const res = await fetch('http://localhost:8000/api/users/me', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        if (!res.ok) throw new Error('Failed to load profile')
-        const profile = await res.json()
-        if (!mounted) return
-        setUserId(profile._id)
-        setFormData({
-          name: profile.name || user.name || '',
-          email: profile.email || user.email || '',
-          bio: profile.bio || '',
-          hasPaid: profile.hasPaid || false,
-          amountRaised: profile.amountRaised || 0,
-          donationId: profile.donationId || '',
-          team: profile.team || null
-        })
-        setEditFormData({
-          name: profile.name || user.name || '',
-          bio: profile.bio || ''
-        })
-      } catch (err) {
-        console.error('Failed to fetch profile:', err)
-        if (mounted) {
-          const initialData = { name: user.name || '', bio: '', email: user.email || '' }
-          setFormData(prev => ({ ...prev, ...initialData }))
-          setEditFormData({ name: initialData.name, bio: initialData.bio })
-        }
-      } finally {
-        if (mounted) setIsProfileLoading(false)
-      }
+    if (user) {
+      setUserId(user._id)
+      setFormData({
+        name: user.name || '',
+        email: user.email || '',
+        bio: user.bio || '',
+        hasPaid: user.hasPaid || false,
+        amountRaised: user.amountRaised || 0,
+        donationId: user.donationId || '',
+        team: user.team || null
+      })
+      setEditFormData({
+        name: user.name || '',
+        bio: user.bio || ''
+      })
+      setIsProfileLoading(false)
     }
-    loadProfile()
-    return () => { mounted = false }
   }, [user])
 
   const handleSubmit = async (e) => {
@@ -83,14 +58,11 @@ export default function Profile() {
         },
         body: JSON.stringify(editFormData)
       })
-      console.log('Update response:', res)
       
-      // Update local display data
-      setFormData(prev => ({
-        ...prev,
-        name: editFormData.name,
-        bio: editFormData.bio
-      }))
+      if (!res.ok) throw new Error('Failed to update profile')
+
+      // Refresh global user context to reflect changes
+      await refreshUser()
       
       setIsEditing(false)
     } catch (error) {

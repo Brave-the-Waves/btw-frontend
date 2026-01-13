@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react'
 import { 
   signInWithPopup, 
   GoogleAuthProvider, 
@@ -51,6 +51,9 @@ export default function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true)
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [isPaymentLoading, setIsPaymentLoading] = useState(false)
+  
+  // Cache to prevent redundant backend fetches on token refreshes
+  const lastSyncedUid = useRef(null)
 
   const fetchBackendUser = async (firebaseUser) => {
     try {
@@ -79,19 +82,27 @@ export default function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        setUser({
+        // Update basic auth info immediately
+        setUser(prev => ({
+          ...prev,
           uid: firebaseUser.uid,
           email: firebaseUser.email,
           name: firebaseUser.displayName,
           picture: firebaseUser.photoURL
-        })
+        }))
         setIsAuthenticated(true)
-        const backendData = await fetchBackendUser(firebaseUser)
-        setUser(prev => ({ ...prev, ...backendData }))
+
+        // Only fetch backend data if we haven't synced this user yet in this session
+        if (lastSyncedUid.current !== firebaseUser.uid) {
+          const backendData = await fetchBackendUser(firebaseUser)
+          setUser(prev => ({ ...prev, ...backendData }))
+          lastSyncedUid.current = firebaseUser.uid
+        }
       } else {
         setUser(null)
         setIsAuthenticated(false)
         setShowPaymentModal(false)
+        lastSyncedUid.current = null
       }
       setIsLoading(false)
     })
