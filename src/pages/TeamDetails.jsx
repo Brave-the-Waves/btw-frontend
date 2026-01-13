@@ -8,6 +8,7 @@ import JoinTeamOverlay from '../components/teams/JoinTeamOverlay'
 import DisplayMembers from '@/components/teams/DisplayMembers'
 import RecentDonations from '@/components/users/RecentDonations'
 import { AnimatePresence } from 'framer-motion'
+import registrationOverlay from '@/components/teams/JoinTeamOverlay'
 
 export default function TeamDetails() {
 
@@ -20,7 +21,7 @@ export default function TeamDetails() {
   const [joinModal, setJoinModal] = useState(false)
   const teamName = decodeURIComponent(name)
 
-  const { getAccessTokenSilently, isAuthenticated, refreshUser, user } = useAuth()
+  const { getAccessTokenSilently, isAuthenticated, refreshUser, user, setShowPaymentModal } = useAuth()
   const navigate = useNavigate()
   
   // Check membership directly from authenticated user context instead of re-fetching
@@ -177,7 +178,7 @@ export default function TeamDetails() {
                   ) : (
                     <>
                       <button
-                        onClick={() => setJoinModal(true)}
+                        onClick={user && user.isRegistered ? () => setJoinModal(true) : () => setShowPaymentModal(true)}
                         className="px-3 py-1 text-sm bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors"
                       >
                         Join Team

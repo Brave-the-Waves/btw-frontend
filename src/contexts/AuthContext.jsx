@@ -66,6 +66,23 @@ export default function AuthProvider({ children }) {
       })
       if (res.ok) {
         const backendUser = await res.json()
+
+        // Fetch registration status
+        try {
+          const regRes = await fetch(`http://localhost:8000/api/registrations/${backendUser.id}/status`, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            }
+          })
+          if (regRes.ok) {
+            const regData = await regRes.json()
+            backendUser.isRegistered = regData.isRegistered
+          }
+        } catch (err) {
+          console.error('Failed to fetch registration status:', err)
+        }
+
         if (!backendUser.hasPaid) {
             setShowPaymentModal(true)
         } else {
@@ -192,6 +209,10 @@ export default function AuthProvider({ children }) {
     }
   }
 
+  const isRegisteredUser = () => {
+    return !!user?.isRegistered
+  }
+
   const value = {
     user,
     isAuthenticated,
@@ -202,8 +223,10 @@ export default function AuthProvider({ children }) {
     initiateRegistrationPayment,
     isPaymentLoading,
     showPaymentModal,
+    setShowPaymentModal,
     dismissPaymentModal,
-    refreshUser
+    refreshUser,
+    isRegisteredUser
   }
 
   return (
