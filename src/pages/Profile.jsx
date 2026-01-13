@@ -43,6 +43,7 @@ export default function Profile() {
         if (!mounted) return
         setFormData({
           name: profile.name || user.name || '',
+          email: profile.email || user.email || '',
           bio: profile.bio || '',
           hasPaid: profile.hasPaid || false,
           amountRaised: profile.amountRaised || 0,
@@ -56,9 +57,9 @@ export default function Profile() {
       } catch (err) {
         console.error('Failed to fetch profile:', err)
         if (mounted) {
-          const initialData = { name: user.name || '', bio: '' }
+          const initialData = { name: user.name || '', bio: '', email: user.email || '' }
           setFormData(prev => ({ ...prev, ...initialData }))
-          setEditFormData(initialData)
+          setEditFormData({ name: initialData.name, bio: initialData.bio })
         }
       } finally {
         if (mounted) setIsProfileLoading(false)
@@ -161,37 +162,29 @@ export default function Profile() {
                   </form>
                 ) : (
                   <div className="space-y-6">
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-900">{formData.name}</h2>
-                      <p className="text-slate-500">{user.email}</p>
-                      {formData.team && (
-                        <p className="text-pink-600 font-medium mt-1">Team: {formData.team.name}</p>
-                      )}
-                    </div>
-                    
-                    <div>
-                      {formData.hasPaid ? (
-                        <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
-                          Registration Completed
-                        </span>
-                      ) : (
-                        <Button 
-                          onClick={initiateRegistrationPayment} 
-                          disabled={isPaymentLoading}
-                          className="bg-pink-600 text-white hover:bg-pink-700 rounded-full"
-                        >
-                          <AlertCircle className="w-4 h-4 mr-2" />
-                          {isPaymentLoading ? 'Processing...' : 'Pay Registration Fee'}
-                        </Button>
-                      )}
-                    </div>
+                      <div>
+                        {formData.hasPaid ? (
+                          <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                            Registration Completed
+                          </span>
+                        ) : (
+                          <Button 
+                            onClick={initiateRegistrationPayment} 
+                            disabled={isPaymentLoading}
+                            className="bg-pink-600 text-white hover:bg-pink-700 rounded-full"
+                          >
+                            <AlertCircle className="w-4 h-4 mr-2" />
+                            {isPaymentLoading ? 'Processing...' : 'Pay Registration Fee'}
+                          </Button>
+                        )}
+                      </div>
 
-                    <UserProfileCard 
-                      userData={formData}
-                      showEmail={false}
-                      showDonationId={true}
-                    />
-                  </div>
+                      <UserProfileCard 
+                        userData={formData}
+                        showEmail={true}
+                        showDonationId={true}
+                      />
+                    </div>
                 )}
               </div>
             </div>

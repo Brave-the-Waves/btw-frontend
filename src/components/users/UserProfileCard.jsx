@@ -1,6 +1,7 @@
 import React from 'react'
 import { Copy, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 
 export default function UserProfileCard({ 
   userData, 
@@ -9,6 +10,7 @@ export default function UserProfileCard({
   pictureUrl
 }) {
   const [copySuccess, setCopySuccess] = React.useState(false)
+  const navigate = useNavigate()
 
   const handleCopyDonationId = async () => {
     const id = userData.donationId
@@ -32,7 +34,12 @@ export default function UserProfileCard({
         <h2 className="text-2xl font-bold text-slate-900">{userData.name}</h2>
         {showEmail && <p className="text-slate-500">{userData.email}</p>}
         {userData.team && (
-          <p className="text-pink-600 font-medium mt-1">Team: {userData.team.name}</p>
+          <button
+            onClick={() => navigate(`/teams/${userData.team.name}`)}
+            className="text-pink-600 font-medium mt-1 hover:text-pink-700 transition-colors cursor-pointer"
+          >
+            Team: {userData.team.name}
+          </button>
         )}
       </div>
 
