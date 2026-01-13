@@ -41,7 +41,6 @@ export default function Profile() {
         })
         if (!res.ok) throw new Error('Failed to load profile')
         const profile = await res.json()
-        console.log('Fetched profile:', profile)
         if (!mounted) return
         setUserId(profile._id)
         setFormData({

@@ -71,7 +71,6 @@ export default function TeamDetails() {
           throw new Error('Failed to fetch team details')
         }
         const teamData = await response.json()
-        console.log('Fetched team data:', teamData)
         
         setTeam({
           id: teamData._id,
@@ -242,7 +241,7 @@ export default function TeamDetails() {
               />
             </div>
           </div>
-          
+
           {/* Donations sidebar - 30% on large screens */}
           <div className="lg:col-span-3">
             <RecentDonations context="team" targetId={team.id} itemsPerPage={5} />

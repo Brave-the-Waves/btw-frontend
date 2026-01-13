@@ -56,7 +56,6 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
         }
 
         const userData = await resUser.json()
-        console.log('Fetched user data for donation ID verification:', userData)
         // Check if any user has this donationId (case-insensitive and trimmed)
         const isValid = userData.some(user => 
             user.donationId && user.donationId.trim() === donationID.trim() 

@@ -31,7 +31,6 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5 })
         if (!response.ok) throw new Error('Failed to fetch donations')
         
         const data = await response.json()
-        console.log('Fetched donations data:', data)
         
         // Backend returns { success: true, donations: [...] }
         const donationsArray = data.donations || []
