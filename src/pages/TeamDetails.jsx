@@ -6,6 +6,7 @@ import { Users, Trophy, Calendar, Copy } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import JoinTeamOverlay from '../components/teams/JoinTeamOverlay'
 import DisplayMembers from '@/components/teams/DisplayMembers'
+import RecentDonations from '@/components/users/RecentDonations'
 import { AnimatePresence } from 'framer-motion'
 
 export default function TeamDetails() {
@@ -22,7 +23,6 @@ export default function TeamDetails() {
 
   const { getAccessTokenSilently, isAuthenticated, refreshUser } = useAuth()
   const navigate = useNavigate()
-  console.log('team: ', team)
   
   const copyInviteCode = () => {
     navigator.clipboard.writeText(team.inviteCode)
@@ -38,7 +38,6 @@ export default function TeamDetails() {
           throw new Error('Failed to fetch team members')
         }
         const membersData = await response.json()
-        console.log('membersData: ', membersData)
         setMembers(membersData)
       } catch (error) {
         console.error('Error fetching team members:', error)
@@ -50,20 +49,29 @@ export default function TeamDetails() {
 
   useEffect(() => {
     const fetchTeamDetails = async () => {
-      if (!isAuthenticated) return
-      
+      console.log('Fetching team details for:', teamName)
       try {
-        const token = await getAccessTokenSilently()
+        const headers = {
+          'Content-Type': 'application/json' 
+        }
+
+        if (isAuthenticated) {
+          try {
+            const token = await getAccessTokenSilently()
+            headers['Authorization'] = `Bearer ${token}`
+          } catch (err) {
+            console.warn('Failed to get token for public request:', err)
+          }
+        }
+
         const response = await fetch(`http://localhost:8000/api/public/teams/${teamName}`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            }
+            headers
           })
         if (!response.ok) {
           throw new Error('Failed to fetch team details')
         }
         const teamData = await response.json()
+        console.log('Fetched team data:', teamData)
         
         setTeam({
           id: teamData._id,
@@ -143,92 +151,102 @@ export default function TeamDetails() {
     <div className="min-h-screen bg-slate-50">
       <Navbar />
       <div className="pt-32 px-6 max-w-7xl mx-auto">
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-sm font-medium">
-                  {team.division} Division
-                </span>
-              </div>
-              <h1 className="text-4xl font-bold text-slate-900 mb-4">{team.name}</h1>
-              {
-                team.inviteCode && (
-                  <h2 
-                    onClick={copyInviteCode}
-                    className="flex items-center gap-2 text-slate-600 mb-4 cursor-pointer hover:text-pink-600 transition-colors"
-                    title="Click to copy invite code"
-                  >
-                    {team.inviteCode}
-                    {copied ? <span className="text-xs">✓ Copied!</span> : <Copy className="w-4 h-4" />}
-                  </h2>
-                )
-              }
-              <p className="text-slate-600 max-w-2xl text-lg mb-4">{team.description}</p>
-              {isInTeam ? (
-                !confirmLeave ? (
-                  <button
-                    onClick={() => setConfirmLeave(true)}
-                    className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                  >
-                    Leave Team
-                  </button>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={leaveTeam}
-                      className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                    >
-                      Confirm Leave
-                    </button>
-                    <button
-                      onClick={() => setConfirmLeave(false)}
-                      className="px-3 py-1 text-sm border border-slate-300 text-slate-700 rounded-md hover:bg-slate-50 transition-colors"
-                    >
-                      Cancel
-                    </button>
+        <div className="grid lg:grid-cols-10 gap-6">
+          {/* Main content area - 70% on large screens */}
+          <div className="lg:col-span-7">
+            <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+              <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-sm font-medium">
+                      {team.division} Division
+                    </span>
                   </div>
-                )
-              ) : (
-                <>
-                  <button
-                    onClick={() => setJoinModal(true)}
-                    className="px-3 py-1 text-sm bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors"
-                  >
-                    Join Team
-                  </button>
-                  <AnimatePresence>
-                    {joinModal && (
-                      <JoinTeamOverlay 
-                        teamName={team.name}
-                        onClose={() => setJoinModal(false)}
-                        onSuccess={ async() => {
-                          await refreshUser()
-                          setRefreshKey(prev => !prev)
-                        }}
-                      />
-                    )}
-                  </AnimatePresence>
-                </>
-              )}
-            </div>
-            
-            <div className="bg-slate-50 p-6 rounded-2xl min-w-[250px]">
-              <p className="text-sm text-slate-500 mb-1">Total Raised</p>
-              <p className="text-3xl font-bold text-slate-900 mb-2">${team.raised.toLocaleString()}</p>
-              <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mb-2">
-                <div className="bg-pink-500 h-full rounded-full" style={{ width: `${(team.raised / team.goal) * 100}%` }} />
+                  <h1 className="text-4xl font-bold text-slate-900 mb-4">{team.name}</h1>
+                  {
+                    team.inviteCode && (
+                      <h2 
+                        onClick={copyInviteCode}
+                        className="flex items-center gap-2 text-slate-600 mb-4 cursor-pointer hover:text-pink-600 transition-colors"
+                        title="Click to copy invite code"
+                      >
+                        {team.inviteCode}
+                        {copied ? <span className="text-xs">✓ Copied!</span> : <Copy className="w-4 h-4" />}
+                      </h2>
+                    )
+                  }
+                  <p className="text-slate-600 max-w-2xl text-lg mb-4">{team.description}</p>
+                  {isInTeam ? (
+                    !confirmLeave ? (
+                      <button
+                        onClick={() => setConfirmLeave(true)}
+                        className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                      >
+                        Leave Team
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={leaveTeam}
+                          className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                        >
+                          Confirm Leave
+                        </button>
+                        <button
+                          onClick={() => setConfirmLeave(false)}
+                          className="px-3 py-1 text-sm border border-slate-300 text-slate-700 rounded-md hover:bg-slate-50 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => setJoinModal(true)}
+                        className="px-3 py-1 text-sm bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors"
+                      >
+                        Join Team
+                      </button>
+                      <AnimatePresence>
+                        {joinModal && (
+                          <JoinTeamOverlay 
+                            teamName={team.name}
+                            onClose={() => setJoinModal(false)}
+                            onSuccess={ async() => {
+                              await refreshUser()
+                              setRefreshKey(prev => !prev)
+                            }}
+                          />
+                        )}
+                      </AnimatePresence>
+                    </>
+                  )}
+                </div>
+                
+                <div className="bg-slate-50 p-6 rounded-2xl min-w-[250px]">
+                  <p className="text-sm text-slate-500 mb-1">Total Raised</p>
+                  <p className="text-3xl font-bold text-slate-900 mb-2">${team.raised.toLocaleString()}</p>
+                  <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mb-2">
+                    <div className="bg-pink-500 h-full rounded-full" style={{ width: `${(team.raised / team.goal) * 100}%` }} />
+                  </div>
+                  <p className="text-xs text-slate-500">of ${team.goal.toLocaleString()} goal</p>
+                </div>
               </div>
-              <p className="text-xs text-slate-500">of ${team.goal.toLocaleString()} goal</p>
+
+              <DisplayMembers 
+                team={team} 
+                members={members}
+                setMembers={setMembers}
+                onMemberChange={() => setRefreshKey(prev => !prev)}
+              />
             </div>
           </div>
-
-          <DisplayMembers 
-            team={team} 
-            members={members}
-            setMembers={setMembers}
-            onMemberChange={() => setRefreshKey(prev => !prev)}
-          />
+          
+          {/* Donations sidebar - 30% on large screens */}
+          <div className="lg:col-span-3">
+            <RecentDonations context="team" targetId={team.id} itemsPerPage={5} />
+          </div>
         </div>
       </div>
     </div>

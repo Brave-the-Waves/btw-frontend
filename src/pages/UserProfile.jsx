@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '@/components/Navbar'
 import { useParams, useNavigate } from 'react-router-dom'
 import UserProfileCard from '@/components/users/UserProfileCard'
+import RecentDonations from '@/components/users/RecentDonations'
 import Button from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 
@@ -92,6 +93,12 @@ export default function UserProfile() {
               />
             </div>
           </div>
+        </div>
+        {
+          console.log("Attempting to render RecentDonations for user:", id)
+        }
+        <div className="mt-6">
+          <RecentDonations context="user" targetId={id} itemsPerPage={10} />
         </div>
       </div>
     </div>

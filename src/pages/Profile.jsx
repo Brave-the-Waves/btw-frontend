@@ -5,6 +5,7 @@ import Button from '@/components/ui/button'
 import { AlertCircle } from 'lucide-react'
 import { motion} from 'framer-motion'
 import UserProfileCard from '@/components/users/UserProfileCard'
+import RecentDonations from '@/components/users/RecentDonations'
 
 export default function Profile() {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently, initiateRegistrationPayment, isPaymentLoading, logout } = useAuth()
@@ -17,6 +18,7 @@ export default function Profile() {
     donationId: '',
     team: null
   })
+  const [userId, setUserId] = useState(null)
   const [editFormData, setEditFormData] = useState({
     name: '',
     bio: ''
@@ -41,6 +43,7 @@ export default function Profile() {
         const profile = await res.json()
         console.log('Fetched profile:', profile)
         if (!mounted) return
+        setUserId(profile._id)
         setFormData({
           name: profile.name || user.name || '',
           email: profile.email || user.email || '',
@@ -189,6 +192,12 @@ export default function Profile() {
               </div>
             </div>
           </div>
+
+          {!isEditing && userId && (
+            <div className="mt-6">
+              <RecentDonations context="user" targetId={userId} itemsPerPage={10} />
+            </div>
+          )}
         </div>
       </motion.div>
     </div>
