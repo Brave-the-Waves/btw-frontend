@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import DonateCards from './DonateCards'
 import Partnerships from './Partnerships'
 
-export default function Donate() {
+export default function Donate({ preFillDonationId, preFillName }) {
   return (
     <section id="donate" className="py-24 md:py-32 bg-gradient-to-b from-pink-50/50 to-white">
       <div className="max-w-7xl mx-auto px-6">
@@ -13,7 +13,7 @@ export default function Donate() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">Whether you paddle, donate, or volunteer – every contribution creates waves of change</p>
         </motion.div>
 
-        <DonateCards />
+        <DonateCards preFillDonationId={preFillDonationId} preFillName={preFillName} />
         <Partnerships />
       
       </div>

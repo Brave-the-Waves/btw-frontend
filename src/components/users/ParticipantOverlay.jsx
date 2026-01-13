@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { X, Trophy, Target, User, Copy, Check } from 'lucide-react'
+import DonateButton from '@/components/users/DonateButton'
 
 export default function ParticipantOverlay({ participantId, onClose }) {
   const [profile, setProfile] = useState(null)
@@ -74,6 +75,12 @@ export default function ParticipantOverlay({ participantId, onClose }) {
               <div className="flex-1 w-full space-y-6">
                 <div>
                   <h2 className="text-2xl font-bold text-slate-900">{profile.name}</h2>
+                  <DonateButton 
+                    donationId={profile.donationId} 
+                    userName={profile.name}
+                    size="sm"
+                    className="rounded-full"
+                  />
                   {profile.team && (
                     <p className="text-pink-600 font-medium mt-1">Team: {profile.team.name}</p>
                   )}

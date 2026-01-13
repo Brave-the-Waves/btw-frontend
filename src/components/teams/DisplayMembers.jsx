@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Users } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import DonateButton from '../users/DonateButton'
 
 export default function DisplayMembers({ team, members, setMembers, onMemberChange }) {
     const { user, getAccessTokenSilently } = useAuth()
@@ -44,23 +45,24 @@ export default function DisplayMembers({ team, members, setMembers, onMemberChan
                 const isCaptain = currentUserId && team.captain && currentUserId === team.captain
                 const isMemberCaptain = team.captain === member._id
                 return (
-                <div key={member._id} className={`flex items-center justify-between gap-4 p-4 rounded-xl transition-colors ${isCurrentUser ? 'bg-gradient-to-r from-rose-50 to-rose-100 hover:from-rose-100 hover:to-rose-200' : 'bg-slate-50 hover:bg-slate-100'}`}>
-                    <div 
-                      className="flex items-center gap-4 flex-1 cursor-pointer"
-                      onClick={() => navigate(`/profile/${member._id}`)}
-                    >
-                    <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold">
-                        {member.name.charAt(0)}
-                    </div>
-                    <div>
-                        <p className="font-medium text-slate-900">{member.name}</p>
-                        <p className="text-xs text-slate-500">{isMemberCaptain ? 'Captain' : 'Paddler'}</p>
-                    </div>
-                    </div>
-                    {isCaptain && !isMemberCaptain && (
-                    <div className="flex items-center gap-2">
-                        {confirmKickId === member._id ? (
-                        <>
+                <div key={member._id} className={`p-4 rounded-xl transition-colors ${isCurrentUser ? 'bg-gradient-to-r from-rose-50 to-rose-100 hover:from-rose-100 hover:to-rose-200' : 'bg-slate-50 hover:bg-slate-100'}`}>
+                    <div className="flex items-center justify-between gap-4">
+                      <div 
+                        className="flex items-center gap-4 flex-1 cursor-pointer"
+                        onClick={() => navigate(`/profile/${member._id}`)}
+                      >
+                        <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold">
+                            {member.name.charAt(0)}
+                        </div>
+                        <div>
+                            <p className="font-medium text-slate-900">{member.name}</p>
+                            <p className="text-xs text-slate-500">{isMemberCaptain ? 'Captain' : 'Paddler'}</p>
+                        </div>
+                      </div>
+                      {isCaptain && !isMemberCaptain && (
+                      <div className="flex items-center gap-2">
+                          {confirmKickId === member._id ? (
+                          <>
                             <button
                             onClick={async () => {
                                 try {
@@ -92,6 +94,7 @@ export default function DisplayMembers({ team, members, setMembers, onMemberChan
                         )}
                     </div>
                     )}
+                    </div>
                 </div>
                 )
                 })}

@@ -6,10 +6,10 @@ import { useAuth } from '../../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import Checkbox from './CheckBox'
 
-export default function DonateCards() {
+export default function DonateCards({ preFillDonationId, preFillName }) {
   const [amount, setAmount] = useState(25)
   const [isCustom, setIsCustom] = useState(false)
-  const [donationID, setDonationID] = useState('')
+  const [donationID, setDonationID] = useState(preFillDonationId || '')
   const [isLoading, setIsLoading] = useState(false)
   const [donationError, setDonationError] = useState('')
   const [isShaking, setIsShaking] = useState(false)
@@ -20,6 +20,13 @@ export default function DonateCards() {
   const navigate = useNavigate()
   const textareaRef = useRef(null)
   const maxMessageChars = 100
+
+  // Update donationID when preFillDonationId changes
+  React.useEffect(() => {
+    if (preFillDonationId) {
+      setDonationID(preFillDonationId)
+    }
+  }, [preFillDonationId])
 
   const handleMessageChange = (e) => {
     const val = e.target.value.slice(0, maxMessageChars)

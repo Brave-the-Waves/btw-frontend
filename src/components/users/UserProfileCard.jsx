@@ -2,12 +2,14 @@ import React from 'react'
 import { Copy, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import DonateButton from './DonateButton'
 
 export default function UserProfileCard({ 
   userData, 
   showEmail = false, 
   showDonationId = true,
-  pictureUrl
+  pictureUrl,
+  showDonateButton = true
 }) {
   const [copySuccess, setCopySuccess] = React.useState(false)
   const navigate = useNavigate()
@@ -40,6 +42,16 @@ export default function UserProfileCard({
           >
             Team: {userData.team.name}
           </button>
+        )}
+        {showDonateButton && userData.donationId && (
+          <div className="mt-3">
+            <DonateButton 
+              donationId={userData.donationId} 
+              userName={userData.name}
+              size="sm"
+              className="rounded-full"
+            />
+          </div>
         )}
       </div>
 
