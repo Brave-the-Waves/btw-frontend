@@ -2,12 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Users, DollarSign, Heart, Calendar } from 'lucide-react'
 import Button from '../../ui/button'
+import prizeImage from '../../../assets/images/Prize.png'
 
 const pastEvents = [
-  { year: '2024', image: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80', teams: 48, raised: 125000, participants: 960, highlight: 'Record-breaking attendance with 48 teams competing' },
-  { year: '2023', image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&q=80', teams: 42, raised: 98000, participants: 840, highlight: 'First year with dedicated survivor team division' },
-  { year: '2022', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80', teams: 35, raised: 75000, participants: 700, highlight: 'Expanded to include corporate challenge cup' },
-  { year: '2021', image: 'https://images.unsplash.com/photo-1559223607-a43c990c692c?w=800&q=80', teams: 28, raised: 52000, participants: 560, highlight: 'Post-pandemic comeback celebration' },
+  { year: '2025', image: prizeImage, teams: 0, raised: 19000, participants: 0, highlight: 'Our first-ever fundraiser event marked the beginning of our initiative.' },
 ]
 
 

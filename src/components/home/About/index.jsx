@@ -7,12 +7,12 @@ const values = [
   {
     icon: Heart,
     title: 'Mission',
-    description: "To unite communities through the spirit of dragon boat racing while raising vital funds and awareness for women's health initiatives."
+    description: "To bring together our community in raising crucial funds for breast cancer -- all while having fun!"
   },
   {
     icon: Target,
     title: 'Vision',
-    description: "A world where every woman has access to healthcare resources and support, championed by a community that paddles together for change."
+    description: "A world where every breast cancer warrior—and their loved ones who walk beside them—can access the support and care they deserve, no matter their race or financial circumstances."
   },
   {
     icon: Sparkles,

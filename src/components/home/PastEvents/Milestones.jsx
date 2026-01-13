@@ -3,10 +3,10 @@ import { DollarSign, Users, Heart, Calendar } from 'lucide-react'
 import CountUpNumber from './CountUpNumbers'
 
 const milestones = [
-  { icon: DollarSign, value: 450, label: 'Total Raised', prefix: '$', suffix: 'K+' },
-  { icon: Users, value: 3000, label: 'Participants', prefix: '', suffix: '+' },
-  { icon: Heart, value: 150, label: 'Teams', prefix: '', suffix: '+' },
-  { icon: Calendar, value: 5, label: 'Years Running', prefix: '', suffix: '' },
+  { icon: DollarSign, value: 19, label: 'Total Raised', prefix: '$', suffix: 'K+' },
+  { icon: Users, value: 0, label: 'Participants', prefix: '', suffix: '+' },
+  { icon: Heart, value: 0, label: 'Teams', prefix: '', suffix: '+' },
+  { icon: Calendar, value: 1, label: 'Years Running', prefix: '', suffix: '' },
 ]
 
 export default function PastEventsMilestones() {

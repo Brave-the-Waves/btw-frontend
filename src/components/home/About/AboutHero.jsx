@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import peoplePaddling from '../../../assets/images/PeoplePaddling1.jpg'
 
 export default function AboutHero() {
   return (
@@ -10,9 +11,9 @@ export default function AboutHero() {
         transition={{ duration: 0.8 }}
         className="relative"
       >
-        <div className="aspect-[4/5] rounded-4xl overflow-hidden relative z-10">
+        <div className="aspect-[7/5] rounded-4xl overflow-hidden relative z-10">
           <img
-            src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80"
+            src={peoplePaddling}
             alt="Team paddling together"
             className="w-full h-full object-cover"
           />
@@ -31,13 +32,10 @@ export default function AboutHero() {
           About Us
         </span>
         <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-          Paddling with Purpose, <span className="text-pink-500">Racing for Hope</span>
+          Braving the Waves for <span className="text-pink-500">Breast Cancer</span>
         </h2>
         <p className="text-lg text-slate-600 mb-6 leading-relaxed">
-          Brave the Waves brings together passionate paddlers, survivors, and supporters in an annual celebration of strength and solidarity. Our partnership with women's health organizations creates meaningful impact in our community.
-        </p>
-        <p className="text-lg text-slate-600 leading-relaxed">
-          What started as a small gathering of dragon boat enthusiasts has grown into the region's most anticipated charity event. Every stroke of the paddle represents hope, every race a step toward better healthcare access for all women.
+          The BtW event is an annual collaboration between the Women’s Health Awareness Movement (WHAM), a McGill Medical Student initiative and the Club sportif de bateau-dragon de l’Université de Montréal (CsBUM), a dragon boat team from the University of Montreal. This fundraiser is organized with and benefits More Than a Cure (MTAC), a non-profit organization led by pediatrician Dr. Tammy Gafoor. Funds go to empowering underprivileged and underserved women battling breast cancer.
         </p>
       </motion.div>
     </div>
