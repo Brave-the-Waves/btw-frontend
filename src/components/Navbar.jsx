@@ -56,14 +56,10 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-20">
             <button onClick={() => scrollToSection('home')} className="flex items-center gap-3 group">
-              <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-                  isScrolled ? 'bg-gradient-to-br from-pink-500 to-pink-600' : 'bg-white/20 backdrop-blur'
-                }`}
-              >
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors bg-[#fc87a7] hover:bg-[#fc87a7]/30">
                 <Waves className="w-5 h-5 text-white" />
               </div>
-              <span className={`text-lg font-bold transition-colors ${isScrolled ? 'text-slate-900' : 'text-white'}`}>
+              <span className={`text-lg font-bold transition-colors ${isScrolled ? 'text-slate-900' : 'text-slate-600'}`}>
                 Brave the Waves
               </span>
             </button>
@@ -75,12 +71,12 @@ export default function Navbar() {
                   onClick={() => scrollToSection(link.href)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     activeSection === link.href
-                      ? isScrolled
-                        ? 'bg-pink-100 text-pink-600'
-                        : 'bg-white/20 text-white'
-                      : isScrolled
-                      ? 'text-slate-600 hover:text-pink-600 hover:bg-pink-50'
-                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                        ? isScrolled
+                          ? 'bg-[#fc87a7]/10 text-[#fc87a7]'
+                          : 'bg-white/20 text-slate-600'
+                        : isScrolled
+                        ? 'text-slate-600 hover:text-[#fc87a7] hover:bg-[#fc87a7]/5'
+                        : 'text-slate-600 hover:text-white hover:bg-white/10'
                   }`}
                 >
                   {link.label}
@@ -89,7 +85,7 @@ export default function Navbar() {
             </div>
 
             <div className="hidden lg:block">
-              <Button onClick={() => scrollToSection('donate')} className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-full px-6 shadow-lg shadow-pink-200/50">
+              <Button onClick={() => scrollToSection('donate')} className="bg-[#fc87a7] hover:bg-[#fc87a7]/30 text-white rounded-full px-6 shadow-lg shadow-[#fc87a7]/30">
                 <Heart className="w-4 h-4 mr-2" />
                 Donate
               </Button>
@@ -110,13 +106,13 @@ export default function Navbar() {
               <div className="p-6 pt-24">
                 <div className="space-y-2">
                   {navLinks.map((link) => (
-                    <button key={link.href} onClick={() => scrollToSection(link.href)} className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-colors ${activeSection === link.href ? 'bg-pink-100 text-pink-600' : 'text-slate-700 hover:bg-slate-100'}`}>
+                    <button key={link.href} onClick={() => scrollToSection(link.href)} className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-colors ${activeSection === link.href ? 'bg-[#fc87a7]/10 text-[#fc87a7]' : 'text-slate-700 hover:bg-slate-100'}`}>
                       {link.label}
                     </button>
                   ))}
                 </div>
                 <div className="mt-8">
-                  <Button onClick={() => scrollToSection('donate')} className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl py-4">
+                  <Button onClick={() => scrollToSection('donate')} className="w-full bg-[#fc87a7] hover:bg-[#fc87a7] text-white rounded-xl py-4">
                     <Heart className="w-5 h-5 mr-2" />
                     Donate Now
                   </Button>

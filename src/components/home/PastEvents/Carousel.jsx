@@ -32,22 +32,22 @@ export default function PastEventsCarousel() {
                 <div className="aspect-video md:aspect-auto">
                   <img src={pastEvents[currentIndex].image} alt={`Event ${pastEvents[currentIndex].year}`} className="w-full h-full object-cover" />
                 </div>
-                <div className="bg-gradient-to-br from-pink-600 to-pink-700 p-8 md:p-12 flex flex-col justify-center">
+                <div className="bg-gradient-to-br from-[#fc87a7] to-[#fc87a7]/90 p-8 md:p-12 flex flex-col justify-center">
                   <span className="text-6xl md:text-8xl font-bold text-white/20 absolute top-4 right-4 md:top-8 md:right-8">{pastEvents[currentIndex].year}</span>
                   <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">{pastEvents[currentIndex].year} Event</h3>
-                  <p className="text-pink-100 mb-8 text-lg">{pastEvents[currentIndex].highlight}</p>
+                  <p className="text-[#fc87a7]/10 mb-8 text-lg">{pastEvents[currentIndex].highlight}</p>
                   <div className="grid grid-cols-3 gap-4">
                     <div>
                       <p className="text-3xl font-bold text-white">{pastEvents[currentIndex].teams}</p>
-                      <p className="text-pink-200 text-sm">Teams</p>
+                      <p className="text-[#fc87a7]/20 text-sm">Teams</p>
                     </div>
                     <div>
                       <p className="text-3xl font-bold text-white">${(pastEvents[currentIndex].raised / 1000).toFixed(0)}K</p>
-                      <p className="text-pink-200 text-sm">Raised</p>
+                      <p className="text-[#fc87a7]/20 text-sm">Raised</p>
                     </div>
                     <div>
                       <p className="text-3xl font-bold text-white">{pastEvents[currentIndex].participants}</p>
-                      <p className="text-pink-200 text-sm">Participants</p>
+                      <p className="text-[#fc87a7]/20 text-sm">Participants</p>
                     </div>
                   </div>
                 </div>
@@ -60,7 +60,7 @@ export default function PastEventsCarousel() {
           <Button variant="outline" size="icon" onClick={prevSlide} className="rounded-full border-slate-700 bg-slate-800 hover:bg-slate-700 text-white">
             <ChevronLeft className="w-5 h-5" />
           </Button>
-          <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center">
             {pastEvents.map((_, index) => (
               <button 
                 key={index} 
@@ -68,7 +68,7 @@ export default function PastEventsCarousel() {
                   setCurrentIndex(index); 
                   setDirection(index > currentIndex ? 1 : -1); 
                 }} 
-                className={`w-2 h-2 rounded-full transition-all ${index === currentIndex ? 'bg-pink-500 w-8' : 'bg-slate-600'}`} 
+                className={`w-2 h-2 rounded-full transition-all ${index === currentIndex ? 'bg-[#fc87a7] w-8' : 'bg-slate-600'}`} 
               />
             ))}
           </div>

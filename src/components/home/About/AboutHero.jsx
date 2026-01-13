@@ -18,8 +18,8 @@ export default function AboutHero() {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-pink-100 to-pink-200 rounded-3xl z-0" />
-        <div className="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl z-0" />
+        <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gradient-to-br from-[#fc87a7]/10 to-[#fc87a7]/20 rounded-3xl z-0" />
+        <div className="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-[#fc87a7]/5 to-[#fc87a7]/10 rounded-2xl z-0" />
       </motion.div>
 
       <motion.div
@@ -28,11 +28,11 @@ export default function AboutHero() {
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <span className="inline-block px-4 py-1.5 rounded-full bg-pink-100 text-pink-600 text-sm font-medium mb-6">
+        <span className="inline-block px-4 py-1.5 rounded-full bg-[#fc87a7]/10 text-[#fc87a7] text-sm font-medium mb-6">
           About Us
         </span>
         <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-          Braving the Waves for <span className="text-pink-500">Breast Cancer</span>
+          Braving the Waves for <span className="text-[#fc87a7]">Breast Cancer</span>
         </h2>
         <p className="text-lg text-slate-600 mb-6 leading-relaxed">
           The BtW event is an annual collaboration between the Women’s Health Awareness Movement (WHAM), a McGill Medical Student initiative and the Club sportif de bateau-dragon de l’Université de Montréal (CsBUM), a dragon boat team from the University of Montreal. This fundraiser is organized with and benefits More Than a Cure (MTAC), a non-profit organization led by pediatrician Dr. Tammy Gafoor. Funds go to empowering underprivileged and underserved women battling breast cancer.

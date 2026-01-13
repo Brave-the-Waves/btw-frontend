@@ -6,8 +6,8 @@ export default function LocationMap() {
   return (
     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-3xl overflow-hidden shadow-2xl shadow-slate-200">
       <div className="bg-slate-100 p-4">
-        <div className="flex items-center gap-2 text-slate-600">
-          <MapPin className="w-5 h-5 text-pink-500" />
+          <div className="flex items-center gap-2 text-slate-600">
+          <MapPin className="w-5 h-5 text-[#fc87a7]" />
           <span className="font-medium">22Dragons, Rue Saint-Patrick, Montreal </span>
         </div>
       </div>
