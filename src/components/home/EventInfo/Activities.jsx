@@ -13,7 +13,7 @@ export default function Activities() {
   return (
     <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
       <h3 className="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-3">
-        <Sparkles className="w-6 h-6 text-pink-500" />
+        <Sparkles className="w-6 h-6 text-[#fc87a7]" />
         Activities & Highlights
       </h3>
       <div className="space-y-4">
@@ -27,8 +27,8 @@ export default function Activities() {
             className="bg-white rounded-2xl p-6 shadow-lg shadow-slate-100 hover:shadow-xl transition-shadow"
           >
             <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-100 to-pink-50 flex items-center justify-center flex-shrink-0">
-                <activity.icon className="w-6 h-6 text-pink-600" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#fc87a7]/10 to-[#fc87a7]/5 flex items-center justify-center flex-shrink-0">
+                <activity.icon className="w-6 h-6 text-[#fc87a7]" />
               </div>
               <div>
                 <h4 className="font-bold text-slate-900 mb-1">{activity.title}</h4>

@@ -16,23 +16,23 @@ export default function Team() {
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {teamMembers.map((member, index) => (
         <motion.div key={member.name} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-50 to-pink-50/50 p-6 border border-slate-100 hover:border-pink-200 transition-all duration-500 hover:shadow-xl hover:shadow-pink-100/50">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-50 to-[#fc87a7]/10 p-6 border border-slate-100 hover:border-[#fc87a7]/20 transition-all duration-500 hover:shadow-xl hover:shadow-[#fc87a7]/50">
             <div className="relative mb-6 mx-auto w-40 h-40">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#fc87a7] to-[#fc87a7]/90 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
               <img src={member.image} alt={member.name} className="relative w-full h-full object-cover rounded-full ring-4 ring-white shadow-lg" />
             </div>
 
             <div className="text-center">
               <h3 className="text-xl font-bold text-slate-900 mb-1">{member.name}</h3>
-              <p className="text-pink-600 font-medium text-sm mb-3">{member.role}</p>
+              <p className="text-[#fc87a7] font-medium text-sm mb-3">{member.role}</p>
               <p className="text-slate-600 text-sm leading-relaxed mb-4">{member.bio}</p>
 
               <div className="flex justify-center gap-3">
-                <button className="w-10 h-10 rounded-full bg-slate-100 hover:bg-pink-100 flex items-center justify-center transition-colors group/btn">
-                  <Linkedin className="w-4 h-4 text-slate-500 group-hover/btn:text-pink-600 transition-colors" />
+                <button className="w-10 h-10 rounded-full bg-slate-100 hover:bg-[#fc87a7]/10 flex items-center justify-center transition-colors group/btn">
+                  <Linkedin className="w-4 h-4 text-slate-500 group-hover/btn:text-[#fc87a7] transition-colors" />
                 </button>
-                <button className="w-10 h-10 rounded-full bg-slate-100 hover:bg-pink-100 flex items-center justify-center transition-colors group/btn">
-                  <Mail className="w-4 h-4 text-slate-500 group-hover/btn:text-pink-600 transition-colors" />
+                <button className="w-10 h-10 rounded-full bg-slate-100 hover:bg-[#fc87a7]/10 flex items-center justify-center transition-colors group/btn">
+                  <Mail className="w-4 h-4 text-slate-500 group-hover/btn:text-[#fc87a7] transition-colors" />
                 </button>
               </div>
             </div>

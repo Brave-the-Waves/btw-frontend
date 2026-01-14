@@ -8,8 +8,8 @@ export default function EventDetails() {
     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid sm:grid-cols-3 gap-6 mb-16">
       <Card className="p-6 bg-white border-0 shadow-lg shadow-slate-100 rounded-2xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center">
-            <Calendar className="w-6 h-6 text-pink-600" />
+          <div className="w-12 h-12 rounded-xl bg-[#fc87a7]/10 flex items-center justify-center">
+            <Calendar className="w-6 h-6 text-[#fc87a7]" />
           </div>
           <div>
             <p className="text-sm text-slate-500">Date</p>
@@ -19,8 +19,8 @@ export default function EventDetails() {
       </Card>
       <Card className="p-6 bg-white border-0 shadow-lg shadow-slate-100 rounded-2xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center">
-            <Clock className="w-6 h-6 text-pink-600" />
+          <div className="w-12 h-12 rounded-xl bg-[#fc87a7]/10 flex items-center justify-center">
+            <Clock className="w-6 h-6 text-[#fc87a7]" />
           </div>
           <div>
             <p className="text-sm text-slate-500">Time</p>
@@ -30,8 +30,8 @@ export default function EventDetails() {
       </Card>
       <Card className="p-6 bg-white border-0 shadow-lg shadow-slate-100 rounded-2xl">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center">
-            <MapPin className="w-6 h-6 text-pink-600" />
+          <div className="w-12 h-12 rounded-xl bg-[#fc87a7]/10 flex items-center justify-center">
+            <MapPin className="w-6 h-6 text-[#fc87a7]" />
           </div>
           <div>
             <p className="text-sm text-slate-500">Location</p>

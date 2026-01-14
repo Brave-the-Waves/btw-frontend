@@ -7,11 +7,11 @@ import LocationMap from './LocationMap'
 
 export default function EventInfo() {
   return (
-    <section id="event" className="py-24 md:py-32 bg-gradient-to-b from-white to-pink-50/30">
+    <section id="event" className="py-24 md:py-32 bg-gradient-to-b from-white to-[#fc87a7]/30">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-pink-100 text-pink-600 text-sm font-medium mb-6">Event Details</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Race Day <span className="text-pink-500">Experience</span></h2>
+          <span className="inline-block px-4 py-1.5 rounded-full bg-[#fc87a7]/10 text-[#fc87a7] text-sm font-medium mb-6">Event Details</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Race Day <span className="text-[#fc87a7]">Experience</span></h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">A full day of racing, entertainment, and community celebration</p>
         </motion.div>
 

@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion'
 
-const galleryImages = [
-    'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80',
-    'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=400&q=80',
-    'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=400&q=80',
-    'https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?w=400&q=80',
-    'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=400&q=80',
-    'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80',
-]
+import img1 from '../../../assets/images/2025Image1.jpg'
+import img2 from '../../../assets/images/2025Image2.jpg'
+import img3 from '../../../assets/images/2025Image3.jpg'
+import img4 from '../../../assets/images/2025Image4.jpg'
+import img5 from '../../../assets/images/2025Image5.jpg'
+import img6 from '../../../assets/images/2025Image6.jpg'
+
+const galleryImages = [img1, img2, img3, img4, img5, img6]
 
 export default function PastEventsGallery() {
     return (
