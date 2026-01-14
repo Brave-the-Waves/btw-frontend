@@ -121,9 +121,9 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
   return (
     <div className="grid md:grid-cols-5 gap-8 max-w-8xl mx-auto">
       <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group md:col-span-3">
-        <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-pink-600 rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity" />
-        <div className="relative bg-white rounded-3xl p-8 md:p-10 shadow-xl shadow-pink-100/50 border border-pink-100 h-full flex flex-col">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+        <div className="absolute inset-0 bg-[#fc87a7] rounded-3xl blur-xl opacity-10 group-hover:opacity-20 transition-opacity" />
+        <div className="relative bg-white rounded-3xl p-8 md:p-10 shadow-xl shadow-[#fc87a7]/50 border border-[#fc87a7]/10 h-full flex flex-col">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#fc87a7] to-[#fc87a7]/90 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
             <Heart className="w-8 h-8 text-white" />
           </div>
           <h3 className="text-2xl font-bold text-slate-900 mb-4">Support the Cause</h3>
@@ -139,7 +139,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
                   onClick={() => { setAmount(preset); setIsCustom(false); }}
                   className={`py-2 px-1 rounded-lg text-sm font-medium transition-all ${
                     amount === preset && !isCustom
-                      ? 'bg-pink-500 text-white shadow-md shadow-pink-200'
+                      ? 'bg-[#fc87a7] text-white shadow-md shadow-[#fc87a7]/50'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -160,7 +160,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
                   setIsCustom(true);
                 }}
                 onFocus={() => setIsCustom(true)}
-                className={`block w-full pl-9 pr-12 py-3 sm:text-sm rounded-xl border-slate-200 focus:ring-pink-500 focus:border-pink-500 ${isCustom ? 'border-pink-500 ring-1 ring-pink-500' : 'border'}`}
+                className={`block w-full pl-9 pr-12 py-3 sm:text-sm rounded-xl border-slate-200 focus:ring-[#fc87a7] focus:border-[#fc87a7] ${isCustom ? 'border-[#fc87a7] ring-1 ring-[#fc87a7]' : 'border'}`}
                 placeholder="Custom amount"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -215,7 +215,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
                     className={`block w-full pl-10 pr-4 py-3 sm:text-sm rounded-xl border focus:ring-2 outline-none transition-colors duration-300 ${
                         donationError 
                           ? 'border-red-500 focus:ring-red-200 bg-red-50' 
-                          : 'border-slate-200 focus:ring-pink-500 focus:border-pink-500'
+                          : 'border-slate-200 focus:ring-[#fc87a7] focus:border-[#fc87a7]'
                     }`}
                     placeholder="Enter Paddler ID"
                   />
@@ -240,7 +240,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
                     ref={textareaRef}
                     rows={1}
                     maxLength={maxMessageChars}
-                    className="block w-full pl-10 pr-4 py-3 sm:text-sm rounded-xl border border-slate-200 focus:ring-pink-500 focus:border-pink-500 outline-none resize-none overflow-hidden"
+                    className="block w-full pl-10 pr-4 py-3 sm:text-sm rounded-xl border border-slate-200 focus:ring-[#fc87a7] focus:border-[#fc87a7] outline-none resize-none overflow-hidden"
                     placeholder="Leave a message..."
                     value={message}
                     onChange={handleMessageChange}
@@ -254,14 +254,14 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           </div>
 
           <ul className="space-y-3 mb-8">
-            <li className="flex items-center gap-3 text-slate-600"><Shield className="w-5 h-5 text-pink-500" /><span>100% secure payment</span></li>
-            <li className="flex items-center gap-3 text-slate-600"><Trophy className="w-5 h-5 text-pink-500" /><span>Tax-deductible contributions</span></li>
-            <li className="flex items-center gap-3 text-slate-600"><Heart className="w-5 h-5 text-pink-500" /><span>Support survivor programs</span></li>
+            <li className="flex items-center gap-3 text-slate-600"><Shield className="w-5 h-5 text-[#fc87a7]" /><span>100% secure payment</span></li>
+            <li className="flex items-center gap-3 text-slate-600"><Trophy className="w-5 h-5 text-[#fc87a7]" /><span>Tax-deductible contributions</span></li>
+            <li className="flex items-center gap-3 text-slate-600"><Heart className="w-5 h-5 text-[#fc87a7]" /><span>Support survivor programs</span></li>
           </ul>
 
           <Button 
             size="lg" 
-            className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl py-3 text-lg shadow-lg shadow-pink-200 transition-all hover:scale-[1.02] text-center mt-auto disabled:opacity-70 disabled:cursor-not-allowed" 
+            className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-xl py-3 text-lg shadow-lg shadow-[#fc87a7]/20 transition-all hover:scale-[1.02] text-center mt-auto disabled:opacity-70 disabled:cursor-not-allowed" 
             onClick={handleDonate}
             disabled={isLoading || amount <= 0}
           >
@@ -293,9 +293,9 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           <p className="text-slate-300 mb-6 leading-relaxed">Assemble your crew and join the race! Whether corporate teams, community groups, or survivor squads – there's a division for everyone.</p>
 
           <ul className="space-y-3 mb-8">
-            <li className="flex items-center gap-3 text-slate-300"><Waves className="w-5 h-5 text-pink-400" /><span>Multiple team divisions available</span></li>
-            <li className="flex items-center gap-3 text-slate-300"><Trophy className="w-5 h-5 text-pink-400" /><span>Prizes for top fundraising teams</span></li>
-            <li className="flex items-center gap-3 text-slate-300"><Users className="w-5 h-5 text-pink-400" /><span>Training sessions provided</span></li>
+            <li className="flex items-center gap-3 text-slate-300"><Waves className="w-5 h-5 text-[#fc87a7]" /><span>Multiple team divisions available</span></li>
+            <li className="flex items-center gap-3 text-slate-300"><Trophy className="w-5 h-5 text-[#fc87a7]" /><span>Prizes for top fundraising teams</span></li>
+            <li className="flex items-center gap-3 text-slate-300"><Users className="w-5 h-5 text-[#fc87a7]" /><span>Training sessions provided</span></li>
           </ul>
 
           <Button 
