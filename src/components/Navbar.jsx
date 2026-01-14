@@ -56,7 +56,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-20">
             <button onClick={() => scrollToSection('home')} className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors bg-[#fc87a7] hover:bg-[#fc87a7]/30">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors bg-[#fc87a7] hover:bg-[#c14a75]">
                 <Waves className="w-5 h-5 text-white" />
               </div>
               <span className={`text-lg font-bold transition-colors ${isScrolled ? 'text-slate-900' : 'text-slate-600'}`}>
@@ -73,7 +73,7 @@ export default function Navbar() {
                     activeSection === link.href
                         ? isScrolled
                           ? 'bg-[#fc87a7]/10 text-[#fc87a7]'
-                          : 'bg-white/20 text-slate-600'
+                          : 'bg-white/20 text-slate-600 hover:text-white'
                         : isScrolled
                         ? 'text-slate-600 hover:text-[#fc87a7] hover:bg-[#fc87a7]/5'
                         : 'text-slate-600 hover:text-white hover:bg-white/10'
@@ -85,9 +85,9 @@ export default function Navbar() {
             </div>
 
             <div className="hidden lg:block">
-              <Button onClick={() => scrollToSection('donate')} className="bg-[#fc87a7] hover:bg-[#fc87a7]/30 text-white rounded-full px-6 shadow-lg shadow-[#fc87a7]/30">
+              <Button onClick={() => scrollToSection('donate')} className="bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-full px-6 shadow-lg shadow-[#c14a75]">
                 <Heart className="w-4 h-4 mr-2" />
-                Donate
+                Donate or Register
               </Button>
             </div>
 

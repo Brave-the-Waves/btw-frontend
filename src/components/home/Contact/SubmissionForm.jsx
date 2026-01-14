@@ -17,7 +17,7 @@ export default function SubmissionForm( { formData, setFormData, isSubmitting, h
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="lg:col-span-3">
-                <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-100 border border-slate-100">
+                <form onSubmit={handleSubmit} className="bg-[#fcf2f5] rounded-3xl p-8 shadow-xl shadow-slate-100 border border-slate-100">
                 <div className="grid sm:grid-cols-2 gap-6 mb-6">
                     <div className="flex items-center gap-4">
                     <Label htmlFor="name" className="text-slate-700 whitespace-nowrap">Name</Label>

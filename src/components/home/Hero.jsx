@@ -29,19 +29,8 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mx-auto pt-6 mb-6 w-full max-w-3xl md:max-w-5xl"
+          className="mx-auto pt-6 w-full max-w-4xl md:max-w-5xl h-auto object-contain"
         />
-
-        <motion.div className="flex flex-col sm:flex-row gap-4 justify-center" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }}>
-          <Button size="lg" onClick={() => scrollToSection('donate')} className="bg-[#fc87a7] hover:bg-[#c14a75] text-white px-8 py-6 text-lg rounded-full shadow-lg shadow-[#fc87a7]/30 transition-all duration-300 hover:scale-105">
-            <Heart className="w-5 h-5 mr-2" />
-            Donate Now
-          </Button>
-          <Button size="lg" variant="outline" onClick={() => scrollToSection('donate')} className="border-2 border-white/30 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 px-8 py-6 text-lg rounded-full transition-all duration-300 hover:scale-105">
-            <Users className="w-5 h-5 mr-2" />
-            Register Team
-          </Button>
-        </motion.div>
       </div>
 
       <motion.button onClick={() => scrollToSection('about')} className="absolute bottom-32 left-1/2 -translate-x-1/2 text-white/60 hover:text-white transition-colors" animate={{ y: [0, 10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
