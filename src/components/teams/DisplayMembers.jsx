@@ -4,12 +4,12 @@ import { useAuth } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import DonateButton from '../users/DonateButton'
 
-export default function DisplayMembers({ team, members, setMembers, onMemberChange }) {
+export default function DisplayMembers({ team, members, setMembers, onMemberChange, isEditing }) {
     const { user, getAccessTokenSilently } = useAuth()
     const [confirmKickId, setConfirmKickId] = useState(null)
     const navigate = useNavigate()
 
-    const currentUserId = user?._id
+    const currentUserId = user?._id || user?.id
 
     return (
         <div className="border-t border-slate-100 pt-8">
@@ -37,7 +37,7 @@ export default function DisplayMembers({ team, members, setMembers, onMemberChan
                             <p className="text-xs text-slate-500">{isMemberCaptain ? 'Captain' : 'Paddler'}</p>
                         </div>
                       </div>
-                      {isCaptain && !isMemberCaptain && (
+                      {isCaptain && !isMemberCaptain && isEditing && (
                       <div className="flex items-center gap-2">
                           {confirmKickId === member._id ? (
                           <>

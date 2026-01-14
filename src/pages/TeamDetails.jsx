@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '@/components/Navbar'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Users, Trophy, Calendar, Copy } from 'lucide-react'
+import { Users, Trophy, Calendar, Copy, Pencil, Check, X } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import JoinTeamOverlay from '../components/teams/JoinTeamOverlay'
 import DisplayMembers from '@/components/teams/DisplayMembers'
@@ -19,6 +19,15 @@ export default function TeamDetails() {
   const [refreshKey, setRefreshKey] = useState(false)
   const { name } = useParams()
   const [joinModal, setJoinModal] = useState(false)
+  
+  const [isEditing, setIsEditing] = useState(false)
+  const [editForm, setEditForm] = useState({
+    name: '',
+    description: '',
+    division: ''
+  })
+  const [isSaving, setIsSaving] = useState(false)
+  
   const teamName = decodeURIComponent(name)
 
   const { getAccessTokenSilently, isAuthenticated, refreshUser, user, setShowPaymentModal } = useAuth()
@@ -26,6 +35,68 @@ export default function TeamDetails() {
   
   // Check membership directly from authenticated user context instead of re-fetching
   const isInTeam = isAuthenticated && user?.team?.name === teamName
+  const isCaptain = user && team && (user._id === team.captain || user.id === team.captain)
+
+  const handleEditClick = () => {
+    setEditForm({
+      name: team.name,
+      description: team.description,
+      division: team.division
+    })
+    setIsEditing(true)
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditing(false)
+  }
+
+  const handleSaveEdit = async () => {
+    if (!editForm.name || !editForm.description) return 
+
+    setIsSaving(true)
+    try {
+        const token = await getAccessTokenSilently()
+        // Assuming API supports PUT /api/teams/:id
+        // Since original fetch was by name, using team.id is safer if name changes
+        const response = await fetch(`http://localhost:8000/api/teams/${team.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                name: editForm.name,
+                description: editForm.description,
+                division: editForm.division
+            })
+        })
+
+        if (!response.ok) {
+            throw new Error('Failed to update team details')
+        }
+
+        const updatedTeam = await response.json()
+        setTeam(prev => ({
+            ...prev,
+            name: updatedTeam.name,
+            description: updatedTeam.description,
+            division: updatedTeam.division
+        }))
+        setIsEditing(false)
+        await refreshUser()
+        
+        // If name changed, we might need to navigate or update URL, but for now let's keep it simple
+        // If name changes, URL /team/:name becomes invalid technically until reload or navigate
+        if (updatedTeam.name !== teamName) {
+           navigate(`/teams/${encodeURIComponent(updatedTeam.name)}`, { replace: true })
+        }
+    } catch (error) {
+        console.error('Error updating team:', error)
+        alert('Failed to update team details')
+    } finally {
+        setIsSaving(false)
+    }
+  }
 
   const copyInviteCode = () => {
     navigator.clipboard.writeText(team.inviteCode)
@@ -131,70 +202,136 @@ export default function TeamDetails() {
           <div className="lg:col-span-7">
             <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
               <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-sm font-medium">
-                      {team.division} Division
-                    </span>
-                  </div>
-                  <h1 className="text-4xl font-bold text-slate-900 mb-4">{team.name}</h1>
-                  {
-                    team.inviteCode && (
-                      <h2 
-                        onClick={copyInviteCode}
-                        className="flex items-center gap-2 text-slate-600 mb-4 cursor-pointer hover:text-pink-600 transition-colors"
-                        title="Click to copy invite code"
-                      >
-                        {team.inviteCode}
-                        {copied ? <span className="text-xs">✓ Copied!</span> : <Copy className="w-4 h-4" />}
-                      </h2>
-                    )
-                  }
-                  <p className="text-slate-600 max-w-2xl text-lg mb-4">{team.description}</p>
-                  {isInTeam ? (
-                    !confirmLeave ? (
-                      <button
-                        onClick={() => setConfirmLeave(true)}
-                        className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                      >
-                        Leave Team
-                      </button>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={leaveTeam}
-                          className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                <div className="w-full max-w-2xl">
+                  {isEditing ? (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Division</label>
+                        <select
+                          value={editForm.division}
+                          onChange={(e) => setEditForm(prev => ({ ...prev, division: e.target.value }))}
+                          className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition-all"
                         >
-                          Confirm Leave
+                          {['Student', 'Corporate', 'Survivor', 'Community'].map(div => (
+                            <option key={div} value={div}>{div}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Team Name</label>
+                        <input
+                          type="text"
+                          value={editForm.name}
+                          onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))}
+                          className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition-all font-bold text-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Description</label>
+                        <textarea
+                          value={editForm.description}
+                          onChange={(e) => setEditForm(prev => ({ ...prev, description: e.target.value }))}
+                          rows={4}
+                          className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition-all resize-none"
+                        />
+                      </div>
+
+                      <div className="flex gap-3 pt-2">
+                        <button
+                          onClick={handleSaveEdit}
+                          disabled={isSaving}
+                          className="flex items-center gap-2 px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors disabled:opacity-50"
+                        >
+                          {isSaving ? 'Saving...' : <><Check className="w-4 h-4" /> Save Changes</>}
                         </button>
                         <button
-                          onClick={() => setConfirmLeave(false)}
-                          className="px-3 py-1 text-sm border border-slate-300 text-slate-700 rounded-md hover:bg-slate-50 transition-colors"
+                          onClick={handleCancelEdit}
+                          className="flex items-center gap-2 px-4 py-2 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
                         >
-                          Cancel
+                          <X className="w-4 h-4" /> Cancel
                         </button>
                       </div>
-                    )
+                    </div>
                   ) : (
                     <>
-                      <button
-                        onClick={user && user.isRegistered ? () => setJoinModal(true) : () => setShowPaymentModal(true)}
-                        className="px-3 py-1 text-sm bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors"
-                      >
-                        Join Team
-                      </button>
-                      <AnimatePresence>
-                        {joinModal && (
-                          <JoinTeamOverlay 
-                            teamName={team.name}
-                            onClose={() => setJoinModal(false)}
-                            onSuccess={ async() => {
-                              await refreshUser()
-                              setRefreshKey(prev => !prev)
-                            }}
-                          />
-                        )}
-                      </AnimatePresence>
+                      {isCaptain && !isEditing && (
+                        <button 
+                          onClick={handleEditClick}
+                          className="mb-4 flex items-center gap-2 text-slate-500 hover:text-pink-600 transition-colors"
+                        >
+                          <div className="p-2 bg-slate-100 rounded-lg">
+                            <Pencil className="w-4 h-4" />
+                          </div>
+                          <span className="text-sm font-medium">Edit Details</span>
+                        </button>
+                      )}
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-sm font-medium">
+                          {team.division} Division
+                        </span>
+                      </div>
+                      <h1 className="text-4xl font-bold text-slate-900 mb-4">{team.name}</h1>
+                      {
+                        team.inviteCode && (
+                          <h2 
+                            onClick={copyInviteCode}
+                            className="flex items-center gap-2 text-slate-600 mb-4 cursor-pointer hover:text-pink-600 transition-colors"
+                            title="Click to copy invite code"
+                          >
+                            {team.inviteCode}
+                            {copied ? <span className="text-xs">✓ Copied!</span> : <Copy className="w-4 h-4" />}
+                          </h2>
+                        )
+                      }
+                      <p className="text-slate-600 max-w-2xl text-lg mb-4">{team.description}</p>
+                      {isInTeam ? (
+                        !confirmLeave ? (
+                          <button
+                            onClick={() => setConfirmLeave(true)}
+                            className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                          >
+                            Leave Team
+                          </button>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={leaveTeam}
+                              className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                            >
+                              Confirm Leave
+                            </button>
+                            <button
+                              onClick={() => setConfirmLeave(false)}
+                              className="px-3 py-1 text-sm border border-slate-300 text-slate-700 rounded-md hover:bg-slate-50 transition-colors"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        )
+                      ) : (
+                        <>
+                          <button
+                            onClick={user && user.isRegistered ? () => setJoinModal(true) : () => setShowPaymentModal(true)}
+                            className="px-3 py-1 text-sm bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors"
+                          >
+                            Join Team
+                          </button>
+                          <AnimatePresence>
+                            {joinModal && (
+                              <JoinTeamOverlay 
+                                teamName={team.name}
+                                onClose={() => setJoinModal(false)}
+                                onSuccess={ async() => {
+                                  await refreshUser()
+                                  setRefreshKey(prev => !prev)
+                                }}
+                              />
+                            )}
+                          </AnimatePresence>
+                        </>
+                      )}
                     </>
                   )}
                 </div>
@@ -214,6 +351,7 @@ export default function TeamDetails() {
                 members={members}
                 setMembers={setMembers}
                 onMemberChange={() => setRefreshKey(prev => !prev)}
+                isEditing={isEditing}
               />
             </div>
           </div>
