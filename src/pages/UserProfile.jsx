@@ -5,6 +5,7 @@ import UserProfileCard from '@/components/users/UserProfileCard'
 import RecentDonations from '@/components/users/RecentDonations'
 import Button from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
+import { LOCAL_PORT } from '@/config'
 
 export default function UserProfile() {
   const { id } = useParams()
@@ -18,7 +19,7 @@ export default function UserProfile() {
       setIsLoading(true)
       setError(null)
       try {
-        const response = await fetch(`http://localhost:8000/api/users/${id}`)
+        const response = await fetch(`${LOCAL_PORT}/api/users/${id}`)
         if (!response.ok) {
           throw new Error('Failed to load user profile')
         }

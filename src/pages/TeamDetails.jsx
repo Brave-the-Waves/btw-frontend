@@ -8,6 +8,7 @@ import JoinTeamOverlay from '../components/teams/JoinTeamOverlay'
 import DisplayMembers from '@/components/teams/DisplayMembers'
 import RecentDonations from '@/components/users/RecentDonations'
 import { AnimatePresence } from 'framer-motion'
+import { LOCAL_PORT } from '@/config'
 import registrationOverlay from '@/components/teams/JoinTeamOverlay'
 
 export default function TeamDetails() {
@@ -58,7 +59,7 @@ export default function TeamDetails() {
         const token = await getAccessTokenSilently()
         // Assuming API supports PUT /api/teams/:id
         // Since original fetch was by name, using team.id is safer if name changes
-        const response = await fetch(`http://localhost:8000/api/teams/${team.id}`, {
+        const response = await fetch(`${LOCAL_PORT}/api/teams/${team.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -107,7 +108,7 @@ export default function TeamDetails() {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/public/teams/${teamName}/members`)
+        const response = await fetch(`${LOCAL_PORT}/api/public/teams/${teamName}/members`)
         if (!response.ok) {
           throw new Error('Failed to fetch team members')
         }
@@ -138,7 +139,7 @@ export default function TeamDetails() {
           }
         }
 
-        const response = await fetch(`http://localhost:8000/api/public/teams/${teamName}`, {
+        const response = await fetch(`${LOCAL_PORT}/api/public/teams/${teamName}`, {
             headers
           })
         if (!response.ok) {
@@ -167,7 +168,7 @@ export default function TeamDetails() {
   const leaveTeam = async () => {
     try {
       const token = await getAccessTokenSilently()
-      const response = await fetch(`http://localhost:8000/api/teams/leave`, {
+      const response = await fetch(`${LOCAL_PORT}/api/teams/leave`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

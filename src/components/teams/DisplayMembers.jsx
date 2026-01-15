@@ -3,6 +3,7 @@ import { Users } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import DonateButton from '../users/DonateButton'
+import { LOCAL_PORT } from '@/config'
 
 export default function DisplayMembers({ team, members, setMembers, onMemberChange, isEditing }) {
     const { user, getAccessTokenSilently } = useAuth()
@@ -45,7 +46,7 @@ export default function DisplayMembers({ team, members, setMembers, onMemberChan
                             onClick={async () => {
                                 try {
                                 const token = await getAccessTokenSilently()
-                                const res = await fetch(`http://localhost:8000/api/teams/${team.id}/members/${member.id}`, {
+                                const res = await fetch(`${LOCAL_PORT}/api/teams/${team.id}/members/${member.id}`, {
                                     method: 'DELETE',
                                     headers: {
                                     'Content-Type': 'application/json',

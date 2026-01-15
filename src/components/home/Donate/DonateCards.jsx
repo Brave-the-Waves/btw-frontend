@@ -5,6 +5,7 @@ import Button from '@/components/ui/button'
 import { useAuth } from '../../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import Checkbox from './CheckBox'
+import { LOCAL_PORT } from '@/config'
 
 export default function DonateCards({ preFillDonationId, preFillName }) {
   const [amount, setAmount] = useState(25)
@@ -44,7 +45,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
 
     try {
       if (donationID) {
-        const resUser = await fetch('http://localhost:8000/api/users', {
+        const resUser = await fetch(`${LOCAL_PORT}/api/users`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -69,7 +70,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
       }
 
       // Call backend to create checkout session
-      const response = await fetch('http://localhost:8000/api/create-checkout-session', {
+      const response = await fetch(`${LOCAL_PORT}/api/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

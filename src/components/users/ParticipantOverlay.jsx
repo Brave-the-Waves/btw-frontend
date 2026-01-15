@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { X, Trophy, Target, Copy, Check } from 'lucide-react'
 import DonateButton from '@/components/users/DonateButton'
 import RecentDonations from '@/components/users/RecentDonations'
+import { LOCAL_PORT } from '@/config'
 
 export default function ParticipantOverlay({ participantId, onClose }) {
   const [profile, setProfile] = useState(null)
@@ -12,7 +13,7 @@ export default function ParticipantOverlay({ participantId, onClose }) {
   useEffect(() => {
     const fetchParticipantDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/users/${participantId}`)
+        const response = await fetch(`${LOCAL_PORT}/api/users/${participantId}`)
         if (!response.ok) {
             throw new Error('Failed to fetch participant details')
         }

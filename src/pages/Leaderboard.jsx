@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import { motion } from 'framer-motion'
 import { Trophy, Medal, TrendingUp } from 'lucide-react'
+import { LOCAL_PORT } from '@/config'
 
 export default function Leaderboard() {
   const [activeTab, setActiveTab] = useState('teams') // 'teams' or 'individuals'
@@ -12,8 +13,8 @@ export default function Leaderboard() {
     const fetchAll = async () => {
       try {
         const [usersRes, teamsRes] = await Promise.all([
-          fetch('http://localhost:8000/api/users/leaderboard'),
-          fetch('http://localhost:8000/api/public/teams/leaderboard')
+          fetch(`${LOCAL_PORT}/api/users/leaderboard`),
+          fetch(`${LOCAL_PORT}/api/public/teams/leaderboard`)
         ])
 
         if (!usersRes.ok || !teamsRes.ok) {

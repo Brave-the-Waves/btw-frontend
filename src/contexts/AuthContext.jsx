@@ -6,6 +6,7 @@ import {
   onAuthStateChanged 
 } from 'firebase/auth'
 import { auth } from '../firebase'
+import { LOCAL_PORT } from '../config'
 
 const AuthContext = createContext()
 
@@ -58,7 +59,7 @@ export default function AuthProvider({ children }) {
   const fetchBackendUser = async (firebaseUser) => {
     try {
       const token = await firebaseUser.getIdToken()
-      const res = await fetch('http://localhost:8000/api/users/me', {
+      const res = await fetch(`${LOCAL_PORT}/api/users/me`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
@@ -69,7 +70,7 @@ export default function AuthProvider({ children }) {
 
         // Fetch registration status
         try {
-          const regRes = await fetch(`http://localhost:8000/api/registrations/${backendUser.id}/status`, {
+          const regRes = await fetch(`${LOCAL_PORT}/api/registrations/${backendUser.id}/status`, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`
@@ -133,7 +134,7 @@ export default function AuthProvider({ children }) {
       const result = await signInWithPopup(auth, provider)
       console.log(result)
       const token = await auth.currentUser.getIdToken()
-      const res = await fetch('http://localhost:8000/api/users/sync', {
+      const res = await fetch(`${LOCAL_PORT}/api/users/sync`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -157,7 +158,7 @@ export default function AuthProvider({ children }) {
     setIsPaymentLoading(true)
     try {
       const token = await auth.currentUser.getIdToken()
-      const res = await fetch('http://localhost:8000/api/create-registration-checkout', {
+      const res = await fetch(`${LOCAL_PORT}/api/create-registration-checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

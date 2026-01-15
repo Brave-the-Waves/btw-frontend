@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Lock, Check } from 'lucide-react'
 import Button from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'
+import { LOCAL_PORT } from '@/config'
 
 export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
   const { getAccessTokenSilently } = useAuth()
@@ -20,7 +21,7 @@ export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
 
     try {
       const token = await getAccessTokenSilently()
-      const response = await fetch('http://localhost:8000/api/registrations/join', {
+      const response = await fetch(`${LOCAL_PORT}/api/registrations/join`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
