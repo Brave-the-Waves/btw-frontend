@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Heart, MessageSquare } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LOCAL_PORT } from '@/config'
+import { API_BASE_URL } from '@/config'
 
 export default function RecentDonations({ context, targetId, itemsPerPage = 5 }) {
   const [donations, setDonations] = useState([])
@@ -15,11 +15,11 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5 })
       try {
         let endpoint = ''
         if (context === 'user') {
-          endpoint = `${LOCAL_PORT}/api/donations/user/${targetId}`
+          endpoint = `${API_BASE_URL}/api/donations/user/${targetId}`
         } else if (context === 'team') {
-          endpoint = `${LOCAL_PORT}/api/donations/teams/${targetId}`
+          endpoint = `${API_BASE_URL}/api/donations/teams/${targetId}`
         } else if (context === 'home') {
-          endpoint = `${LOCAL_PORT}/api/donations/recent`
+          endpoint = `${API_BASE_URL}/api/donations/recent`
         }
 
         const response = await fetch(endpoint, {
@@ -40,7 +40,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5 })
         const donationsWithNames = await Promise.all(
           donationsArray.map(async (donation) => {
             try {
-              const userResponse = await fetch(`${LOCAL_PORT}/api/users/${donation.targetUser}`)
+              const userResponse = await fetch(`${API_BASE_URL}/api/users/${donation.targetUser}`)
               if (userResponse.ok) {
                 const userData = await userResponse.json()
                 return { ...donation, targetUserName: userData.name }

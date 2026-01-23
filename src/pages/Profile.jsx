@@ -6,7 +6,7 @@ import { AlertCircle } from 'lucide-react'
 import { motion} from 'framer-motion'
 import UserProfileCard from '@/components/users/UserProfileCard'
 import RecentDonations from '@/components/users/RecentDonations'
-import { LOCAL_PORT } from '@/config'
+import { API_BASE_URL } from '@/config'
 
 export default function Profile() {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently, initiateRegistrationPayment, isPaymentLoading, logout, refreshUser } = useAuth()
@@ -51,7 +51,7 @@ export default function Profile() {
     e.preventDefault()
     try {
       const token = await getAccessTokenSilently()
-      const res = await fetch(`${LOCAL_PORT}/api/users/me`, {
+      const res = await fetch(`${API_BASE_URL}/api/users/me`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

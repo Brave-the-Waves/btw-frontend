@@ -4,7 +4,7 @@ import Button from '@/components/ui/button'
 import { Search } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ParticipantOverlay from '@/components/users/ParticipantOverlay'
-import { LOCAL_PORT } from '@/config'
+import { API_BASE_URL } from '@/config'
 
 export default function Participants() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -15,7 +15,7 @@ export default function Participants() {
   useEffect(() => {
     const fetchParticipants = async () => {
       try {
-        const response = await fetch(`${LOCAL_PORT}/api/users/`)
+        const response = await fetch(`${API_BASE_URL}/api/users/`)
         if (!response.ok) {
           throw new Error('Failed to fetch participants')
         }

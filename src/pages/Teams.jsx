@@ -7,11 +7,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import CreateTeamOverlay from '@/components/teams/CreateTeamOverlay'
 import JoinTeamOverlay from '@/components/teams/JoinTeamOverlay'
-import { LOCAL_PORT } from '@/config'
+import { API_BASE_URL } from '@/config'
 
 const handleFetchTeams = async () => {
   try{ 
-    const response = await fetch(`${LOCAL_PORT}/api/public/teams`, {
+    const response = await fetch(`${API_BASE_URL}/api/public/teams`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export default function Teams() {
     setIsCreating(true)
     const token = await getAccessTokenSilently()
     try {
-      const response = await fetch(`${LOCAL_PORT}/api/registrations/team`, {
+      const response = await fetch(`${API_BASE_URL}/api/registrations/team`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
