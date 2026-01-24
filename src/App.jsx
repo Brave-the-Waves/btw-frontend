@@ -11,12 +11,16 @@ import UserProfile from './pages/UserProfile'
 import Participants from './pages/Participants'
 import RegistrationSuccess from './pages/RegistrationSuccess'
 import RegistrationCancel from './pages/RegistrationCancel'
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 export default function App() {
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
         <Route path="/teams" element={<Teams />} />

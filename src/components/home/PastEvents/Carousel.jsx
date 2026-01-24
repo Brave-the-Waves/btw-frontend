@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Users, DollarSign, Heart, Calendar } from 'lucide-react'
 import Button from '../../ui/button'
-import prizeImage from '../../../assets/images/Prize.png'
+import prizeImage from '../../../assets/images/Prize.jpg'
 
 const pastEvents = [
   { year: '2025', image: prizeImage, teams: 0, raised: 19000, participants: 0, highlight: 'Our first-ever fundraiser event marked the beginning of our initiative.' },

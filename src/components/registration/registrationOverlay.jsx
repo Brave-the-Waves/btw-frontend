@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
 export default function RegistrationOverlay() {
-  const { logout, loginWithRedirect, initiateRegistrationPayment, isPaymentLoading, showPaymentModal, isAuthenticated, isLoading, dismissPaymentModal } = useAuth()
+  const { logout, initiateRegistrationPayment, isPaymentLoading, showPaymentModal, isAuthenticated, isLoading, dismissPaymentModal } = useAuth()
   const navigate = useNavigate()
 
   if (!showPaymentModal || isLoading) {
@@ -35,7 +35,7 @@ export default function RegistrationOverlay() {
  
              <div className="space-y-3">
                <Button 
-                 onClick={loginWithRedirect}
+                 onClick={() => navigate('/login')}
                  className="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 text-lg rounded-xl"
                >
                  Log In

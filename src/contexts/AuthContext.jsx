@@ -3,7 +3,9 @@ import {
   signInWithPopup, 
   GoogleAuthProvider, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
 } from 'firebase/auth'
 import { auth } from '../firebase'
 import { API_BASE_URL } from '../config'
@@ -128,31 +130,60 @@ export default function AuthProvider({ children }) {
     return unsubscribe
   }, [])
 
-  const loginWithRedirect = async () => {
+  const syncUserWithBackend = async (firebaseUser) => {
+    const token = await firebaseUser.getIdToken()
+    const res = await fetch(`${API_BASE_URL}/api/users/sync`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (!res.ok) {
+      const errorText = await res.text()
+      console.error('Sync error details:', res.status, errorText)
+      throw new Error('Failed to sync user with backend: ' + errorText)
+    }
+    const backendData = await fetchBackendUser(firebaseUser)
+    setUser(prev => ({ ...prev, ...backendData }))
+  }
+
+  const signup = async (email, password) => {
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password)
+      await syncUserWithBackend(result.user)
+      return result
+    } catch (error) {
+      console.error('Signup error:', error)
+      throw error
+    }
+  }
+
+  const login = async (email, password) => {
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password)
+      await syncUserWithBackend(result.user)
+      return result
+    } catch (error) {
+      console.error('Login error:', error)
+      throw error
+    }
+  }
+
+  const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider()
     try {
       const result = await signInWithPopup(auth, provider)
-      console.log(result)
-      const token = await auth.currentUser.getIdToken()
-      const res = await fetch(`${API_BASE_URL}/api/users/sync`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      })
-
-      if (!res.ok) {
-        const errorText = await res.text()
-        console.error('Sync error details:', res.status, errorText)
-        throw new Error('Failed to sync user with backend: ' + errorText)
-      }
-      const backendData = await fetchBackendUser(result.user)
-      setUser(prev => ({ ...prev, ...backendData }))
+      await syncUserWithBackend(result.user)
     } catch (error) {
-      console.error('Login error:', error)
+      console.error('Google login error:', error)
+      throw error
     }
   }
+
+  // Deprecated: use loginWithGoogle
+  const loginWithRedirect = loginWithGoogle
 
   const initiateRegistrationPayment = async () => {
     setIsPaymentLoading(true)
@@ -219,6 +250,9 @@ export default function AuthProvider({ children }) {
     isAuthenticated,
     isLoading,
     loginWithRedirect,
+    loginWithGoogle,
+    login,
+    signup,
     logout,
     getAccessTokenSilently,
     initiateRegistrationPayment,

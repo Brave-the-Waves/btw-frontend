@@ -30,7 +30,7 @@ const handleFetchTeams = async () => {
 
 
 export default function Teams() {
-  const { isAuthenticated, loginWithRedirect, getAccessTokenSilently, user, refreshUser } = useAuth()
+  const { isAuthenticated, getAccessTokenSilently, user, refreshUser } = useAuth()
   const [teams, setTeams] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [showJoinModal, setShowJoinModal] = useState(false)
@@ -98,9 +98,7 @@ export default function Teams() {
 
   const handleJoinClick = () => {
     if (!isAuthenticated) {
-      loginWithRedirect({
-        appState: { returnTo: '/teams' }
-      })
+      navigate('/login')
     } else {
       setShowJoinModal(true)
     }

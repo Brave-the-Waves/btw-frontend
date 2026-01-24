@@ -17,7 +17,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
   const [isSuccess, setIsSuccess] = useState(false)
   const [message, setMessage] = useState('')
   const [isAnonymous, setIsAnonymous] = useState(false)
-  const { loginWithRedirect, isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
   const textareaRef = useRef(null)
   const maxMessageChars = 100
@@ -307,9 +307,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
               if (isAuthenticated) {
                 navigate('/teams')
               } else {
-                loginWithRedirect({
-                  appState: { returnTo: '/teams' }
-                })
+                navigate('/login')
               }
             }}
           >
