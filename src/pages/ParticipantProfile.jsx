@@ -7,7 +7,7 @@ import Button from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { API_BASE_URL } from '@/config'
 
-export default function UserProfile() {
+export default function ParticipantProfile() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [userData, setUserData] = useState(null)

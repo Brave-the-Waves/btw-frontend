@@ -94,7 +94,6 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           donationId: donationID,
           message: message,
           isAnonymous: isAnonymous,
-          email: isAuthenticated && user ? user.email : null,
         }),
       })
 

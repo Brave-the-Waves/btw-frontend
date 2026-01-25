@@ -54,20 +54,12 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
         const donationsArray = data.donations || []
         
         // Fetch user names for target users
-        const donationsWithNames = await Promise.all(
-          donationsArray.map(async (donation) => {
-            try {
-              const userResponse = await fetch(`${API_BASE_URL}/api/users/${donation.targetUser}`)
-              if (userResponse.ok) {
-                const userData = await userResponse.json()
-                return { ...donation, targetUserName: userData.name }
-              }
-            } catch (err) {
-              console.error('Failed to fetch user name:', err)
+        const donationsWithNames = donationsArray.map( (donation) => {
+          if (donation.targetUser) {
+            return { ...donation, targetUserName: donation.targetUser.name }
             }
             return { ...donation, targetUserName: 'Brave the Waves' }
-          })
-        )
+        })
         
         setDonations(donationsWithNames)
         setTotalDonations(donationsWithNames.length)
@@ -116,7 +108,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
         <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
           <Heart className="w-5 h-5 text-pink-500" />
-          {context === 'made' ? 'My Donations' : 'Received Donations'}
+          {title || context === 'made' ? 'My Donations' : 'Recent Donations'}
         </h3>
         <p className="text-slate-500 text-center py-8">No donations yet. Be the first to contribute!</p>
       </div>

@@ -12,20 +12,20 @@ export default function Leaderboard() {
     let mounted = true
     const fetchAll = async () => {
       try {
-        const [usersRes, teamsRes] = await Promise.all([
+        const [participantRes, teamsRes] = await Promise.all([
           fetch(`${API_BASE_URL}/api/participants/leaderboard`),
           fetch(`${API_BASE_URL}/api/public/teams/leaderboard`)
         ])
 
-        if (!usersRes.ok || !teamsRes.ok) {
-          console.error('Failed to fetch leaderboards', usersRes.status, teamsRes.status)
+        if (!participantRes.ok || !teamsRes.ok) {
+          console.error('Failed to fetch leaderboards', participantRes.status, teamsRes.status)
           return
         }
 
-        const usersJson = await usersRes.json()
+        const participantJson = await usersRes.json()
         const teamsJson = await teamsRes.json()
 
-        const individuals = usersJson.map(u => ({
+        const individuals = participantJson.map(u => ({
           name: u.name,
           team: u.team?.name ?? '',
           raised: Number(u.amountRaised) || 0
