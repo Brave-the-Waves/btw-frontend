@@ -20,7 +20,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
           endpoint = `${API_BASE_URL}/api/donations/user/${targetId}`
         } else if (context === 'team') {
           endpoint = `${API_BASE_URL}/api/donations/teams/${targetId}`
-        } else if (context === 'home') {
+        } else if (context === 'made') {
           endpoint = `${API_BASE_URL}/api/donations/made/${targetId}`
         }
 
@@ -65,7 +65,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
             } catch (err) {
               console.error('Failed to fetch user name:', err)
             }
-            return { ...donation, targetUserName: 'Unknown User' }
+            return { ...donation, targetUserName: 'Brave the Waves' }
           })
         )
         

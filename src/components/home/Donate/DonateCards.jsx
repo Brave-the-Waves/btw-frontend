@@ -94,9 +94,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           donationId: donationID,
           message: message,
           isAnonymous: isAnonymous,
-          // If authenticated, send email to prefill stripe (backend handles this if token is present, 
-          // but explicit email can be sent if needed, though usually Stripe uses customer email from existing logic or lets them enter it)
-          userEmail: user?.email 
+          email: isAuthenticated && user ? user.email : null,
         }),
       })
 
