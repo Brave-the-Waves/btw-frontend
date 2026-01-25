@@ -30,7 +30,7 @@ const handleFetchTeams = async () => {
 
 
 export default function Teams() {
-  const { isAuthenticated, getAccessTokenSilently, user, refreshUser } = useAuth()
+  const { isAuthenticated, getAccessTokenSilently, user, refreshUser, setShowPaymentModal } = useAuth()
   const [teams, setTeams] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [showJoinModal, setShowJoinModal] = useState(false)
@@ -149,12 +149,17 @@ export default function Teams() {
             </div>
             <div className="flex gap-2">
               <Button 
-                onClick={() => setShowCreateModal(true)} 
-                disabled={!isAuthenticated || !user?.hasPaid || user?.team}
+                onClick={() => {
+                  if (!user?.hasPaid) {
+                    setShowPaymentModal(true)
+                  } else {
+                    setShowCreateModal(true)
+                  }
+                }} 
+                disabled={!isAuthenticated || user?.team}
                 className="bg-pink-600 text-white hover:bg-pink-700 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 title={
                   !isAuthenticated ? "Log in to create a team" :
-                  !user?.hasPaid ? "Pay registration fee to create a team" :
                   user?.team ? "You are already in a team" : "Create a new team"
                 }
               >
@@ -162,12 +167,17 @@ export default function Teams() {
                 Create Team
               </Button>
               <Button 
-                onClick={handleJoinClick} 
-                disabled={!isAuthenticated || user?.team || !user?.hasPaid}
+                onClick={() => {
+                   if (!user?.hasPaid) {
+                    setShowPaymentModal(true)
+                   } else {
+                    handleJoinClick()
+                   }
+                }} 
+                disabled={!isAuthenticated || user?.team}
                 className="bg-slate-900 text-white hover:bg-slate-800 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 title={
                   !isAuthenticated ? "Log in to join a team" :
-                  !user?.hasPaid ? "Pay registration fee to join a team" :
                   user?.team ? "You are already in a team" : "Join a team"
                 }
               >

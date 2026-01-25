@@ -13,7 +13,7 @@ export default function ParticipantOverlay({ participantId, onClose }) {
   useEffect(() => {
     const fetchParticipantDetails = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/users/${participantId}`)
+        const response = await fetch(`${API_BASE_URL}/api/participants/${participantId}`)
         if (!response.ok) {
             throw new Error('Failed to fetch participant details')
         }

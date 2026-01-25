@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, Heart, MessageSquare } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { API_BASE_URL } from '@/config'
+import { useAuth } from '@/contexts/AuthContext'
 
-export default function RecentDonations({ context, targetId, itemsPerPage = 5 }) {
+export default function RecentDonations({ context, targetId, itemsPerPage = 5, title }) {
+  const { getAccessTokenSilently } = useAuth()
   const [donations, setDonations] = useState([])
   const [currentPage, setCurrentPage] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
@@ -19,14 +21,29 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5 })
         } else if (context === 'team') {
           endpoint = `${API_BASE_URL}/api/donations/teams/${targetId}`
         } else if (context === 'home') {
-          endpoint = `${API_BASE_URL}/api/donations/recent`
+          endpoint = `${API_BASE_URL}/api/donations/made/${targetId}`
+        }
+
+        // Prepare headers
+        const headers = {
+          'Content-Type': 'application/json',
+        }
+
+        // If context is 'made', we likely need authentication to prove ownership
+        // even if the backend endpoint is public-ish, it's safer to send it.
+        // Assuming the parent component ensures we only call this for the logged-in user.
+        if (context === 'made') {
+           try {
+             const token = await getAccessTokenSilently()
+             headers['Authorization'] = `Bearer ${token}`
+           } catch (e) {
+             console.warn('Could not get token for My Donations fetch', e)
+           }
         }
 
         const response = await fetch(endpoint, {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
+          headers: headers
         })
         console.log('Fetch donations response:', response)
         if (!response.ok) throw new Error('Failed to fetch donations')
@@ -99,7 +116,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5 })
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
         <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
           <Heart className="w-5 h-5 text-pink-500" />
-          Recent Donations
+          {context === 'made' ? 'My Donations' : 'Received Donations'}
         </h3>
         <p className="text-slate-500 text-center py-8">No donations yet. Be the first to contribute!</p>
       </div>
@@ -111,7 +128,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5 })
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
           <Heart className="w-5 h-5 text-pink-500" />
-          Recent Donations
+          {title || (context === 'made' ? 'My Donations' : 'Recent Donations')}
         </h3>
         <span className="text-sm text-slate-500">
           {totalDonations} total donation{totalDonations !== 1 ? 's' : ''}
@@ -137,13 +154,16 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5 })
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <p className="font-semibold text-slate-900">
-                        {donation.isAnonymous ? 'Anonymous' : donation.donorName || 'Anonymous'}
+                        {context === 'made' 
+                          ? `To: ${donation.targetUserName || 'Unknown Cause'}`
+                          : (donation.isAnonymous ? 'Anonymous' : donation.donorName || 'Anonymous')
+                        }
                       </p>
                       <span className="text-pink-600 font-bold">
                         ${donation.amount?.toLocaleString() || '0'}
                       </span>
                     </div>
-                    {context !== 'user' && donation.targetUserName && (
+                    {context !== 'user' && context !== 'made' && donation.targetUserName && (
                       <p className="text-xs text-slate-500 mb-1">
                         Supporting: {donation.targetUserName}
                       </p>

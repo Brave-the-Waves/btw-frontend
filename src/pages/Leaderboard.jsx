@@ -13,7 +13,7 @@ export default function Leaderboard() {
     const fetchAll = async () => {
       try {
         const [usersRes, teamsRes] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/users/leaderboard`),
+          fetch(`${API_BASE_URL}/api/participants/leaderboard`),
           fetch(`${API_BASE_URL}/api/public/teams/leaderboard`)
         ])
 

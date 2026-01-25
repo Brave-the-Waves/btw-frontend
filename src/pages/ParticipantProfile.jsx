@@ -19,7 +19,7 @@ export default function UserProfile() {
       setIsLoading(true)
       setError(null)
       try {
-        const response = await fetch(`${API_BASE_URL}/api/users/${id}`)
+        const response = await fetch(`${API_BASE_URL}/api/participants/${id}`)
         if (!response.ok) {
           throw new Error('Failed to load user profile')
         }

@@ -85,12 +85,7 @@ export default function AuthProvider({ children }) {
         } catch (err) {
           console.error('Failed to fetch registration status:', err)
         }
-
-        if (!backendUser.hasPaid) {
-            setShowPaymentModal(true)
-        } else {
-            setShowPaymentModal(false)
-        }
+        
         return backendUser
       }
     } catch (error) {

@@ -7,12 +7,12 @@ import Teams from './pages/Teams'
 import TeamDetails from './pages/TeamDetails'
 import Leaderboard from './pages/Leaderboard'
 import Profile from './pages/Profile'
-import UserProfile from './pages/UserProfile'
+import UserProfile from './pages/ParticipantProfile'
 import Participants from './pages/Participants'
 import RegistrationSuccess from './pages/RegistrationSuccess'
 import RegistrationCancel from './pages/RegistrationCancel'
 import Login from './pages/Login'
-import Register from './pages/Register'
+import Register from './pages/Signup'
 
 export default function App() {
   return (
