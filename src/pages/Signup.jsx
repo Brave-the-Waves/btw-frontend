@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import Button from '../components/ui/button'
 import { Input } from '../components/ui/input'
 
-export default function Register() {
+export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')

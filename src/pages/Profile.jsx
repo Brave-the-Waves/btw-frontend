@@ -136,38 +136,65 @@ export default function Profile() {
                     </Button>
                   </form>
                 ) : (
-                  <div className="space-y-6">
-                      <div>
-                        {formData.hasPaid ? (
-                          <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
-                            Registration Completed
-                          </span>
-                        ) : (
-                          <Button 
-                            onClick={initiateRegistrationPayment} 
-                            disabled={isPaymentLoading}
-                            className="bg-pink-600 text-white hover:bg-pink-700 rounded-full"
-                          >
-                            <AlertCircle className="w-4 h-4 mr-2" />
-                            {isPaymentLoading ? 'Processing...' : 'Pay Registration Fee'}
-                          </Button>
-                        )}
-                      </div>
+                   <div className="space-y-6">
+                      {!formData.hasPaid ? (
+                         <div className="space-y-6">
+                            <div>
+                                <h2 className="text-2xl font-bold text-slate-900">{formData.name}</h2>
+                                <p className="text-slate-500">{formData.email}</p>
+                            </div>
 
-                      <UserProfileCard 
-                        userData={formData}
-                        showEmail={true}
-                        showDonationId={true}
-                      />
+                            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                                <div className="flex gap-3">
+                                    <div className="flex-shrink-0">
+                                        <AlertCircle className="w-5 h-5 text-blue-600" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-sm text-blue-800">
+                                            To become an event participant and join a team, you must register by paying the registration fee.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Button 
+                                onClick={initiateRegistrationPayment} 
+                                disabled={isPaymentLoading}
+                                className="bg-pink-600 text-white hover:bg-pink-700 rounded-full w-full sm:w-auto"
+                            >
+                                <AlertCircle className="w-4 h-4 mr-2" />
+                                {isPaymentLoading ? 'Processing...' : 'Pay Registration Fee'}
+                            </Button>
+                         </div>
+                      ) : (
+                        <div className="space-y-6">
+                            <div>
+                                <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                                Registration Completed
+                                </span>
+                            </div>
+                            <UserProfileCard 
+                                userData={formData}
+                                showEmail={true}
+                                showDonationId={true}
+                            />
+                        </div>
+                      )}
                     </div>
                 )}
               </div>
             </div>
           </div>
 
+          {!isEditing && userId && formData.hasPaid && (
+            <div className="mt-6">
+              <RecentDonations context="user" targetId={userId} itemsPerPage={5} title="Received Donations" />
+            </div>
+          )}
+
           {!isEditing && userId && (
             <div className="mt-6">
-              <RecentDonations context="user" targetId={userId} itemsPerPage={10} />
+              <RecentDonations context="made" targetId={userId} itemsPerPage={5} title="My Contributions" />
             </div>
           )}
         </div>

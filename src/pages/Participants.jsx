@@ -15,7 +15,7 @@ export default function Participants() {
   useEffect(() => {
     const fetchParticipants = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/users/`)
+        const response = await fetch(`${API_BASE_URL}/api/participants/`)
         if (!response.ok) {
           throw new Error('Failed to fetch participants')
         }

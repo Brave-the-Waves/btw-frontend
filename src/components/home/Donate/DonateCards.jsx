@@ -17,7 +17,8 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
   const [isSuccess, setIsSuccess] = useState(false)
   const [message, setMessage] = useState('')
   const [isAnonymous, setIsAnonymous] = useState(false)
-  const { isAuthenticated } = useAuth()
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false)
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth()
   const navigate = useNavigate()
   const textareaRef = useRef(null)
   const maxMessageChars = 100
@@ -38,12 +39,24 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
       ta.style.height = `${ta.scrollHeight}px`
     }
   }
-  const handleDonate = async () => {
+
+  const proceedToDonation = async () => {
     setIsLoading(true)
     setDonationError('')
     setIsShaking(false)
+    setShowLoginPrompt(false)
 
     try {
+      // If user is authenticated, check for token
+      let token = null
+      if (isAuthenticated) {
+        try {
+          token = await getAccessTokenSilently()
+        } catch (e) {
+            console.error(e)
+        }
+      }
+
       if (donationID) {
         const resUser = await fetch(`${API_BASE_URL}/api/users`, {
           method: 'GET',
@@ -57,9 +70,8 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
         }
 
         const userData = await resUser.json()
-        // Check if any user has this donationId (case-insensitive and trimmed)
-        const isValid = userData.some(user => 
-            user.donationId && user.donationId.trim() === donationID.trim() 
+        const isValid = userData.some(u => 
+            u.donationId && u.donationId.trim() === donationID.trim() 
         )
 
         console.log('Paddler ID valid:', isValid)
@@ -74,13 +86,14 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
         body: JSON.stringify({ 
           amount: amount,
           currency: 'CAD',
           donationId: donationID,
           message: message,
-          isAnonymous: isAnonymous
+          isAnonymous: isAnonymous,
         }),
       })
 
@@ -117,10 +130,61 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
     }
   }
 
+  const handleDonateClick = () => {
+    if (!isAuthenticated) {
+        setShowLoginPrompt(true)
+    } else {
+        proceedToDonation()
+    }
+  }
+
   const presetAmounts = [5, 10, 25, 50, 100]
 
   return (
     <div className="grid md:grid-cols-5 gap-8 max-w-8xl mx-auto">
+
+    <AnimatePresence>
+        {showLoginPrompt && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 text-center"
+            >
+              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Heart className="w-8 h-8 text-pink-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Track Your Donation?</h3>
+              <p className="text-slate-600 mb-6">
+                Creating an account allows you to track your contribution history and easily manage your donations.
+              </p>
+              
+              <div className="flex flex-col gap-3">
+                <Button 
+                   onClick={() => navigate('/login')}
+                   className="w-full bg-slate-900 text-white hover:bg-slate-800"
+                >
+                   Login / Register to Track
+                </Button>
+                <button 
+                  onClick={proceedToDonation}
+                  className="text-slate-500 hover:text-pink-600 text-sm font-medium transition-colors"
+                >
+                  Continue as Guest
+                </button>
+                <button 
+                  onClick={() => setShowLoginPrompt(false)}
+                  className="text-slate-400 hover:text-slate-600 text-xs mt-2"
+                >
+                  Cancel
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group md:col-span-3">
         <div className="absolute inset-0 bg-[#fc87a7] rounded-3xl blur-xl opacity-10 group-hover:opacity-20 transition-opacity" />
         <div className="relative bg-white rounded-3xl p-8 md:p-10 shadow-xl shadow-[#fc87a7]/50 border border-[#fc87a7]/10 h-full flex flex-col">
@@ -263,7 +327,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           <Button 
             size="lg" 
             className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-xl py-3 text-lg shadow-lg shadow-[#fc87a7]/20 transition-all hover:scale-[1.02] text-center mt-auto disabled:opacity-70 disabled:cursor-not-allowed" 
-            onClick={handleDonate}
+            onClick={handleDonateClick}
             disabled={isLoading || amount <= 0}
           >
             {isLoading ? (
