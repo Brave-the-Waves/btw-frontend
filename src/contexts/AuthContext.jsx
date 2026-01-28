@@ -190,7 +190,7 @@ export default function AuthProvider({ children }) {
           url = `${API_BASE_URL}/api/create-bundle-registration-checkout`
           body = {
               bundleEmails: additionalData.emails || [],
-              amount: 25 * (1 + (additionalData.emails?.length || 0)),
+              amount: 20 * (1 + (additionalData.emails?.length || 0)),
               currency: 'CAD'
           }
       }
