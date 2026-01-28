@@ -4,7 +4,6 @@ import Button from './ui/button'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { Menu, X, User, Waves, Heart } from 'lucide-react'
-import RegistrationOverlay from '@/components/registration/registrationOverlay'
 
 const navLinks = [
   { label: 'Home', href: 'home' },
@@ -239,9 +238,6 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Render the overlay here, inside the Router context */}
-      <RegistrationOverlay />
     </>
   )
 }

@@ -3,11 +3,9 @@ import { motion } from 'framer-motion'
 import { CheckCircle, Users } from 'lucide-react'
 import Button from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '@/contexts/AuthContext'
 
 export default function RegistrationSuccess() {
   const navigate = useNavigate()
-  const { dismissPaymentModal } = useAuth()
 
   useEffect(() => {
     const isInitiated = sessionStorage.getItem('registration_payment_initiated')
@@ -16,8 +14,7 @@ export default function RegistrationSuccess() {
       return
     }
     // sessionStorage.removeItem('registration_payment_initiated')
-    dismissPaymentModal()
-  }, [navigate, dismissPaymentModal])
+  }, [navigate])
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">

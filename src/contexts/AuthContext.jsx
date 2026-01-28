@@ -52,7 +52,6 @@ export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [isPaymentLoading, setIsPaymentLoading] = useState(false)
   
   // Cache to prevent redundant backend fetches on token refreshes
@@ -116,7 +115,6 @@ export default function AuthProvider({ children }) {
       } else {
         setUser(null)
         setIsAuthenticated(false)
-        setShowPaymentModal(false)
         lastSyncedUid.current = null
       }
       setIsLoading(false)
@@ -180,17 +178,30 @@ export default function AuthProvider({ children }) {
   // Deprecated: use loginWithGoogle
   const loginWithRedirect = loginWithGoogle
 
-  const initiateRegistrationPayment = async () => {
+  const initiateRegistrationPayment = async (additionalData = {}) => {
     setIsPaymentLoading(true)
     try {
       const token = await auth.currentUser.getIdToken()
-      const res = await fetch(`${API_BASE_URL}/api/create-registration-checkout`, {
+      
+      let url = `${API_BASE_URL}/api/create-registration-checkout`
+      let body = { amount: 25, currency: 'CAD', ...additionalData }
+
+      if (additionalData.registrationType === 'bundle') {
+          url = `${API_BASE_URL}/api/create-bundle-registration-checkout`
+          body = {
+              bundleEmails: additionalData.emails || [],
+              amount: 25 * (1 + (additionalData.emails?.length || 0)),
+              currency: 'CAD'
+          }
+      }
+
+      const res = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ amount: 25, currency: 'CAD' })
+        body: JSON.stringify(body)
       })
 
       if (!res.ok) throw new Error('Failed to create checkout session')
@@ -211,15 +222,10 @@ export default function AuthProvider({ children }) {
   const logout = async () => {
     try {
       await signOut(auth)
-      setShowPaymentModal(false)
       window.location.href = '/'
     } catch (error) {
       console.error('Logout error:', error)
     }
-  }
-
-  const dismissPaymentModal = () => {
-    setShowPaymentModal(false)
   }
 
   const getAccessTokenSilently = async () => {
@@ -252,9 +258,6 @@ export default function AuthProvider({ children }) {
     getAccessTokenSilently,
     initiateRegistrationPayment,
     isPaymentLoading,
-    showPaymentModal,
-    setShowPaymentModal,
-    dismissPaymentModal,
     refreshUser,
     isRegisteredUser
   }

@@ -13,6 +13,7 @@ import RegistrationSuccess from './pages/RegistrationSuccess'
 import RegistrationCancel from './pages/RegistrationCancel'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import Register from './pages/Register'
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
         <Route path="/teams" element={<Teams />} />

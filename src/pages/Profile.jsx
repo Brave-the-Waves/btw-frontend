@@ -4,17 +4,19 @@ import { useAuth } from '../contexts/AuthContext'
 import Button from '@/components/ui/button'
 import { AlertCircle } from 'lucide-react'
 import { motion} from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import UserProfileCard from '@/components/users/UserProfileCard'
 import RecentDonations from '@/components/users/RecentDonations'
 import { API_BASE_URL } from '@/config'
 
 export default function Profile() {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently, initiateRegistrationPayment, isPaymentLoading, logout, refreshUser } = useAuth()
+  const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     bio: '',
-    hasPaid: false,
+    isRegistered: false,
     amountRaised: 0,
     donationId: '',
     team: null
@@ -34,7 +36,7 @@ export default function Profile() {
         name: user.name || '',
         email: user.email || '',
         bio: user.bio || '',
-        hasPaid: user.hasPaid || false,
+        isRegistered: user.isRegistered || false,
         amountRaised: user.amountRaised || 0,
         donationId: user.donationId || '',
         team: user.team || null
@@ -137,7 +139,7 @@ export default function Profile() {
                   </form>
                 ) : (
                    <div className="space-y-6">
-                      {!formData.hasPaid ? (
+                      {!formData.isRegistered ? (
                          <div className="space-y-6">
                             <div>
                                 <h2 className="text-2xl font-bold text-slate-900">{formData.name}</h2>
@@ -158,7 +160,7 @@ export default function Profile() {
                             </div>
 
                             <Button 
-                                onClick={initiateRegistrationPayment} 
+                                onClick={() => navigate('/register')}
                                 disabled={isPaymentLoading}
                                 className="bg-pink-600 text-white hover:bg-pink-700 rounded-full w-full sm:w-auto"
                             >
@@ -186,7 +188,7 @@ export default function Profile() {
             </div>
           </div>
 
-          {!isEditing && userId && formData.hasPaid && (
+          {!isEditing && userId && formData.isRegistered && (
             <div className="mt-6">
               <RecentDonations context="user" targetId={userId} itemsPerPage={5} title="Received Donations" />
             </div>

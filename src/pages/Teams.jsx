@@ -30,7 +30,7 @@ const handleFetchTeams = async () => {
 
 
 export default function Teams() {
-  const { isAuthenticated, getAccessTokenSilently, user, refreshUser, setShowPaymentModal, isLoading } = useAuth()
+  const { isAuthenticated, getAccessTokenSilently, user, refreshUser, isLoading } = useAuth()
   const [teams, setTeams] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [showJoinModal, setShowJoinModal] = useState(false)
@@ -150,9 +150,7 @@ export default function Teams() {
             <div className="flex gap-2">
               <Button 
                 onClick={() => {
-                  if (user?.hasPaid === false) {
-                    setShowPaymentModal(true)
-                  } else {
+                  if (user?.isRegistered === true) {
                     setShowCreateModal(true)
                   }
                 }} 
@@ -168,9 +166,7 @@ export default function Teams() {
               </Button>
               <Button 
                 onClick={() => {
-                   if (user?.hasPaid === false) {
-                    setShowPaymentModal(true)
-                   } else {
+                   if (user?.isRegistered === true) {
                     handleJoinClick()
                    }
                 }} 
