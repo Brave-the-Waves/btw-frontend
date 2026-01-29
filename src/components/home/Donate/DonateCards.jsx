@@ -326,7 +326,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
 
           <Button 
             size="lg" 
-            className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-xl py-3 text-lg shadow-lg shadow-[#fc87a7]/20 transition-all hover:scale-[1.02] text-center mt-auto disabled:opacity-70 disabled:cursor-not-allowed" 
+            className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-xl py-3 text-lg shadow-lg shadow-[#fc87a7]/20 transition-all hover:scale-[1.02] text-center mt-auto disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer" 
             onClick={handleDonateClick}
             disabled={isLoading || amount <= 0}
           >
@@ -366,7 +366,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           <Button 
             size="lg" 
             variant="outline" 
-            className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02] mt-auto" 
+            className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02] mt-auto cursor-pointer" 
             onClick={() => {
               if (isAuthenticated) {
                 navigate('/teams')
