@@ -7,12 +7,12 @@ const values = [
   {
     icon: Heart,
     title: 'Mission',
-    description: "To bring together our community in raising crucial funds for breast cancer -- all while having fun!"
+    description: "To bring together our community in raising crucial funds for breast cancer—all while having fun!"
   },
   {
     icon: Target,
     title: 'Vision',
-    description: "A world where every breast cancer warrior—and their loved ones who walk beside them—can access the support and care they deserve, no matter their race or financial circumstances."
+    description: "A world where every breast cancer warrior—and their loved ones who walk beside them—can access the support and care they deserve, no matter their circumstances."
   },
   {
     icon: Sparkles,

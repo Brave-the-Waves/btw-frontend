@@ -140,7 +140,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
             {currentDonations.map((donation, index) => (
               <div
                 key={`${donation._id || index}-${currentPage}`}
-                className="bg-gradient-to-r from-pink-50 to-rose-50 p-4 rounded-xl border border-pink-100 hover:border-pink-200 transition-colors"
+                className="bg-white p-4 rounded-xl border border-pink-400 hover:border-pink-800 transition-colors"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
@@ -184,7 +184,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
           <button
             onClick={goToPreviousPage}
             disabled={currentPage === 0}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
             Previous
@@ -197,7 +197,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
           <button
             onClick={goToNextPage}
             disabled={currentPage === totalPages - 1}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             Next
             <ChevronRight className="w-4 h-4" />

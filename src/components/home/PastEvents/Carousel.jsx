@@ -5,7 +5,7 @@ import Button from '../../ui/button'
 import prizeImage from '../../../assets/images/Prize.jpg'
 
 const pastEvents = [
-  { year: '2025', image: prizeImage, teams: 0, raised: 19000, participants: 0, highlight: 'Our first-ever fundraiser event marked the beginning of our initiative.' },
+  { year: '2025', image: prizeImage, teams: 29, raised: 18529, participants: 350, highlight: 'Our first-ever fundraiser event marked the beginning of our initiative.' },
 ]
 
 
@@ -33,21 +33,21 @@ export default function PastEventsCarousel() {
                   <img src={pastEvents[currentIndex].image} alt={`Event ${pastEvents[currentIndex].year}`} className="w-full h-full object-cover" />
                 </div>
                 <div className="bg-gradient-to-br from-[#fc87a7] to-[#fc87a7]/90 p-8 md:p-12 flex flex-col justify-center">
-                  <span className="text-6xl md:text-8xl font-bold text-white/20 absolute top-4 right-4 md:top-8 md:right-8">{pastEvents[currentIndex].year}</span>
+                  <span className="hidden lg:block text-6xl md:text-8xl font-bold text-white/20 absolute top-4 right-4 md:top-8 md:right-8">{pastEvents[currentIndex].year}</span>
                   <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">{pastEvents[currentIndex].year} Event</h3>
                   <p className="text-[#fc87a7]/10 mb-8 text-lg">{pastEvents[currentIndex].highlight}</p>
                   <div className="grid grid-cols-3 gap-4">
                     <div>
                       <p className="text-3xl font-bold text-white">{pastEvents[currentIndex].teams}</p>
-                      <p className="text-[#fc87a7]/20 text-sm">Teams</p>
+                      <p className="text-white text-sm">Teams</p>
                     </div>
                     <div>
                       <p className="text-3xl font-bold text-white">${(pastEvents[currentIndex].raised / 1000).toFixed(0)}K</p>
-                      <p className="text-[#fc87a7]/20 text-sm">Raised</p>
+                      <p className="text-white text-sm">Raised</p>
                     </div>
                     <div>
                       <p className="text-3xl font-bold text-white">{pastEvents[currentIndex].participants}</p>
-                      <p className="text-[#fc87a7]/20 text-sm">Participants</p>
+                      <p className="text-white text-sm">Participants</p>
                     </div>
                   </div>
                 </div>
@@ -68,7 +68,7 @@ export default function PastEventsCarousel() {
                   setCurrentIndex(index); 
                   setDirection(index > currentIndex ? 1 : -1); 
                 }} 
-                className={`w-2 h-2 rounded-full transition-all ${index === currentIndex ? 'bg-[#fc87a7] w-8' : 'bg-slate-600'}`} 
+                className={`w-2 h-2 rounded-full transition-all cursor-pointer ${index === currentIndex ? 'bg-[#fc87a7] w-8' : 'bg-slate-600'}`} 
               />
             ))}
           </div>

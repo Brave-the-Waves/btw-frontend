@@ -155,26 +155,30 @@ export default function Teams() {
                   }
                 }} 
                 disabled={isLoading || !isAuthenticated || user?.team}
-                className="bg-pink-600 text-white hover:bg-pink-700 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-[#fa6090] text-white hover:bg-pink-700 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer rounded-lg"
                 title={
-                  !isAuthenticated ? "Log in to create a team" :
-                  user?.team ? "You are already in a team" : "Create a new team"
+                  !isAuthenticated ? "Log in first to create a team" :
+                  user?.team ? "You are already in a team" :
+                  !user?.isRegistered ? "Complete registration first to create a team" :
+                  "Create a new team"
                 }
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Create Team
               </Button>
               <Button 
-                onClick={() => {
+                onClick={() => {s
                    if (user?.isRegistered === true) {
                     handleJoinClick()
                    }
                 }} 
                 disabled={isLoading || !isAuthenticated || user?.team}
-                className="bg-slate-900 text-white hover:bg-slate-800 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-white text-black hover:bg-slate-100 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed rounded-lg cursor-pointer border-2"
                 title={
-                  !isAuthenticated ? "Log in to join a team" :
-                  user?.team ? "You are already in a team" : "Join a team"
+                  !isAuthenticated ? "Log in first to join a team" :
+                  user?.team ? "You are already in a team" :
+                  !user?.isRegistered ? "Complete registration first to join a team" :
+                  "Join a team"
                 }
               >
                 Join a Team
@@ -218,7 +222,7 @@ export default function Teams() {
               <div className="flex gap-3">
                 <Button 
                   variant="outline" 
-                  className="flex-1"
+                  className="flex-1 border-2 rounded-md text-slate-700 cursor-pointer hover:bg-gray-100"
                   onClick={() => navigate(`/teams/${team.name}`)}
                 >
                   View Details
@@ -232,7 +236,7 @@ export default function Teams() {
           <div className="flex justify-center mt-8">
             <Button
               onClick={() => setItemsToShow(prev => prev + 20)}
-              className="px-6 py-3 bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200"
+              className="px-6 py-3 bg-[#fc87a7]/10 text-pink-700 hover:bg-pink-100 border-2 rounded-lg cursor-pointer"
             >
               Load More ({filteredTeams.length - itemsToShow} remaining)
             </Button>

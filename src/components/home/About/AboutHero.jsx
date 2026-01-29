@@ -35,7 +35,7 @@ export default function AboutHero() {
           Braving the Waves for <span className="text-[#fc87a7]">Breast Cancer</span>
         </h2>
         <p className="text-lg text-slate-600 mb-6 leading-relaxed">
-          The BtW event is an annual collaboration between the Women’s Health Awareness Movement (WHAM), a McGill Medical Student initiative and the Club sportif de bateau-dragon de l’Université de Montréal (CsBUM), a dragon boat team from the University of Montreal. This fundraiser is organized with and benefits More Than a Cure (MTAC), a non-profit organization led by pediatrician Dr. Tammy Gafoor. Funds go to empowering underprivileged and underserved women battling breast cancer.
+          The Brave The Waves (BTW) event is an annual collaboration between the Women’s Health Awareness Movement (WHAM), a McGill Medical Student initiative and the Club sportif de bateau-dragon de l’Université de Montréal (CsBUM), a dragon boat team from the University of Montreal. This fundraiser benefits More Than a Cure (MTAC), a non-profit organization led by pediatrician Dr. Tammy Gafoor. Funds go to empowering underprivileged and underserved women battling breast cancer.
         </p>
       </motion.div>
     </div>

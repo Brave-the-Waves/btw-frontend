@@ -188,7 +188,7 @@ export default function TeamDetails() {
   if (!team) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900"></div>
       </div>
     )
   }
@@ -210,7 +210,7 @@ export default function TeamDetails() {
                         <select
                           value={editForm.division}
                           onChange={(e) => setEditForm(prev => ({ ...prev, division: e.target.value }))}
-                          className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition-all"
+                          className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-2 focus:ring-slate-200 outline-none transition-all"
                         >
                           {['Student', 'Corporate', 'Survivor', 'Community'].map(div => (
                             <option key={div} value={div}>{div}</option>
@@ -224,7 +224,7 @@ export default function TeamDetails() {
                           type="text"
                           value={editForm.name}
                           onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))}
-                          className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition-all font-bold text-lg"
+                          className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-2 focus:ring-slate-200 outline-none transition-all font-bold text-lg"
                         />
                       </div>
 
@@ -234,7 +234,7 @@ export default function TeamDetails() {
                           value={editForm.description}
                           onChange={(e) => setEditForm(prev => ({ ...prev, description: e.target.value }))}
                           rows={4}
-                          className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition-all resize-none"
+                          className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-2 focus:ring-slate-200 outline-none transition-all resize-none"
                         />
                       </div>
 
@@ -259,7 +259,7 @@ export default function TeamDetails() {
                       {isCaptain && !isEditing && (
                         <button 
                           onClick={handleEditClick}
-                          className="mb-4 flex items-center gap-2 text-slate-500 hover:text-pink-600 transition-colors"
+                          className="mb-4 flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors"
                         >
                           <div className="p-2 bg-slate-100 rounded-lg">
                             <Pencil className="w-4 h-4" />
@@ -268,7 +268,7 @@ export default function TeamDetails() {
                         </button>
                       )}
                       <div className="flex items-center gap-3 mb-4">
-                        <span className="px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-sm font-medium">
+                        <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-900 text-sm font-medium">
                           {team.division} Division
                         </span>
                       </div>
@@ -277,7 +277,7 @@ export default function TeamDetails() {
                         team.inviteCode && (
                           <h2 
                             onClick={copyInviteCode}
-                            className="flex items-center gap-2 text-slate-600 mb-4 cursor-pointer hover:text-pink-600 transition-colors"
+                            className="flex items-center gap-2 text-slate-600 mb-4 cursor-pointer hover:text-slate-900 transition-colors"
                             title="Click to copy invite code"
                           >
                             {team.inviteCode}
@@ -314,7 +314,7 @@ export default function TeamDetails() {
                         <>
                           <button
                             onClick={user && user.isRegistered ? () => setJoinModal(true) : console.log('register first')}
-                            className="px-3 py-1 text-sm bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors"
+                            className="px-3 py-1 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700 transition-colors cursor-pointer"
                           >
                             Join Team
                           </button>
@@ -340,7 +340,7 @@ export default function TeamDetails() {
                   <p className="text-sm text-slate-500 mb-1">Total Raised</p>
                   <p className="text-3xl font-bold text-slate-900 mb-2">${team.raised.toLocaleString()}</p>
                   <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mb-2">
-                    <div className="bg-pink-500 h-full rounded-full" style={{ width: `${(team.raised / team.goal) * 100}%` }} />
+                    <div className="bg-pink-600 h-full rounded-full" style={{ width: `${(team.raised / team.goal) * 100}%` }} />
                   </div>
                   <p className="text-xs text-slate-500">of ${team.goal.toLocaleString()} goal</p>
                 </div>

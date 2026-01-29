@@ -169,13 +169,13 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
                 </Button>
                 <button 
                   onClick={proceedToDonation}
-                  className="text-slate-500 hover:text-pink-600 text-sm font-medium transition-colors"
+                  className="text-slate-500 hover:text-pink-600 text-sm font-medium transition-colors cursor-pointer"
                 >
                   Continue as Guest
                 </button>
                 <button 
                   onClick={() => setShowLoginPrompt(false)}
-                  className="text-slate-400 hover:text-slate-600 text-xs mt-2"
+                  className="text-slate-400 hover:text-slate-600 text-xs mt-2 cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -202,7 +202,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
                 <button
                   key={preset}
                   onClick={() => { setAmount(preset); setIsCustom(false); }}
-                  className={`py-2 px-1 rounded-lg text-sm font-medium transition-all ${
+                  className={`py-2 px-1 rounded-lg text-sm font-medium transition-all cursor-pointer ${
                     amount === preset && !isCustom
                       ? 'bg-[#fc87a7] text-white shadow-md shadow-[#fc87a7]/50'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'

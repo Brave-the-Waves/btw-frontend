@@ -104,7 +104,7 @@ export default function Participants() {
                 }`}>
                   {p.role}
                 </span>
-                <button className="text-sm font-medium text-pink-600 hover:text-pink-700" onClick = { () => setSelectedParticipantId(p.id) }>
+                <button className="text-sm font-medium text-pink-600 hover:text-pink-700 cursor-pointer" onClick = { () => setSelectedParticipantId(p.id) }>
                   View Profile
                 </button>
               </div>

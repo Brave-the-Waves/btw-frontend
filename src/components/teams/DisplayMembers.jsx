@@ -66,10 +66,10 @@ export default function DisplayMembers({ team, members, setMembers, onMemberChan
                             >
                             Confirm
                             </button>
-                            <button onClick={() => setConfirmKickId(null)} className="px-3 py-1 rounded-md border border-slate-300 text-slate-700 text-sm hover:bg-slate-50 transition-colors">Cancel</button>
+                            <button onClick={() => setConfirmKickId(null)} className="px-3 py-1 rounded-md border border-slate-300 text-slate-700 text-sm hover:bg-slate-50 transition-colors cursor-pointer">Cancel</button>
                         </>
                         ) : (
-                        <button onClick={() => setConfirmKickId(member.id)} className="bg-red-50 text-red-600 px-2 py-0.5 rounded-lg text-sm border border-red-200 hover:bg-red-100 transition-colors">Kick</button>
+                        <button onClick={() => setConfirmKickId(member.id)} className="bg-red-50 text-red-600 px-2 py-0.5 rounded-lg text-sm border border-red-200 hover:bg-red-100 transition-colors cursor-pointer">Kick</button>
                         )}
                     </div>
                     )}

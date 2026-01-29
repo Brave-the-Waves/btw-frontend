@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
+import emailjs from '@emailjs/browser'
 import Media from './Media'
 import SubmissionForm from './SubmissionForm'
 
@@ -11,10 +12,31 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    toast.success("Message sent! We'll get back to you soon.")
-    setFormData({ name: '', email: '', subject: '', message: '' })
-    setIsSubmitting(false)
+
+    try {
+      // Replace these with your actual EmailJS credentials
+      const serviceId = 'YOUR_SERVICE_ID'
+      const templateId = 'YOUR_TEMPLATE_ID'
+      const publicKey = 'YOUR_PUBLIC_KEY'
+
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        to_email: 'bravethewaves.braverlesvagues@gmail.com'
+      }
+
+      await emailjs.send(serviceId, templateId, templateParams, publicKey)
+      
+      toast.success("Message sent! We'll get back to you soon.")
+      setFormData({ name: '', email: '', subject: '', message: '' })
+    } catch (error) {
+      console.error('Failed to send email:', error)
+      toast.error('Failed to send message. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (

@@ -4,8 +4,8 @@ import CountUpNumber from './CountUpNumbers'
 
 const milestones = [
   { icon: DollarSign, value: 19, label: 'Total Raised', prefix: '$', suffix: 'K+' },
-  { icon: Users, value: 0, label: 'Participants', prefix: '', suffix: '+' },
-  { icon: Heart, value: 0, label: 'Teams', prefix: '', suffix: '+' },
+  { icon: Users, value: 350, label: 'Participants', prefix: '', suffix: '+' },
+  { icon: Heart, value: 25, label: 'Teams', prefix: '', suffix: '+' },
   { icon: Calendar, value: 1, label: 'Years Running', prefix: '', suffix: '' },
 ]
 
