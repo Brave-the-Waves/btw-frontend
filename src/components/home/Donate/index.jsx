@@ -14,7 +14,7 @@ export default function Donate({ preFillDonationId, preFillName }) {
         </motion.div>
 
         <DonateCards preFillDonationId={preFillDonationId} preFillName={preFillName} />
-        <Partnerships />
+        {/* <Partnerships /> */}
       
       </div>
     </section>
