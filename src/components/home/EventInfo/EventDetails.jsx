@@ -13,7 +13,7 @@ export default function EventDetails() {
           </div>
           <div>
             <p className="text-sm text-slate-500">Date</p>
-            <p className="font-semibold text-slate-900">June 15, 2025</p>
+            <p className="font-semibold text-slate-900">July 4, 2026</p>
           </div>
         </div>
       </Card>
@@ -24,7 +24,7 @@ export default function EventDetails() {
           </div>
           <div>
             <p className="text-sm text-slate-500">Time</p>
-            <p className="font-semibold text-slate-900">7:00 AM - 7:00 PM</p>
+            <p className="font-semibold text-slate-900">8:00 AM - 4:00 PM</p>
           </div>
         </div>
       </Card>
@@ -35,7 +35,7 @@ export default function EventDetails() {
           </div>
           <div>
             <p className="text-sm text-slate-500">Location</p>
-            <p className="font-semibold text-slate-900">Harbor Marina Park</p>
+            <p className="font-semibold text-slate-900">22 Dragons</p>
           </div>
         </div>
       </Card>

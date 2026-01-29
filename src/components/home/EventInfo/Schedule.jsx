@@ -2,16 +2,16 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Clock, Trophy, Music, Utensils, Award, Users } from 'lucide-react'
 
-const schedule = [
-  { time: '7:00 AM', event: 'Registration & Check-in', icon: Users, description: 'Team registration and welcome packets' },
-  { time: '8:00 AM', event: 'Opening Ceremony', icon: Award, description: 'Welcome address and warm-up session' },
-  { time: '9:00 AM', event: 'Heat Races Begin', icon: Trophy, description: 'Preliminary races across all divisions' },
-  { time: '12:00 PM', event: 'Lunch & Entertainment', icon: Utensils, description: 'Food vendors and live performances' },
-  { time: '2:00 PM', event: 'Semi-Finals', icon: Trophy, description: 'Top teams compete for finals spots' },
-  { time: '4:00 PM', event: 'Championship Finals', icon: Trophy, description: 'Final races and spectator favorites' },
-  { time: '5:30 PM', event: 'Awards Ceremony', icon: Award, description: 'Recognition and celebration' },
-  { time: '6:30 PM', event: 'Closing Celebration', icon: Music, description: 'Live music and community gathering' },
-]
+// const schedule = [
+//   { time: '7:00 AM', event: 'Registration & Check-in', icon: Users, description: 'Team registration and welcome packets' },
+//   { time: '8:00 AM', event: 'Opening Ceremony', icon: Award, description: 'Welcome address and warm-up session' },
+//   { time: '9:00 AM', event: 'Heat Races Begin', icon: Trophy, description: 'Preliminary races across all divisions' },
+//   { time: '12:00 PM', event: 'Lunch & Entertainment', icon: Utensils, description: 'Food vendors and live performances' },
+//   { time: '2:00 PM', event: 'Semi-Finals', icon: Trophy, description: 'Top teams compete for finals spots' },
+//   { time: '4:00 PM', event: 'Championship Finals', icon: Trophy, description: 'Final races and spectator favorites' },
+//   { time: '5:30 PM', event: 'Awards Ceremony', icon: Award, description: 'Recognition and celebration' },
+//   { time: '6:30 PM', event: 'Closing Celebration', icon: Music, description: 'Live music and community gathering' },
+// ]
 
 export default function Schedule() {
   return (
