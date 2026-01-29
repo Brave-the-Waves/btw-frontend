@@ -25,16 +25,16 @@ export default function Team() {
             <div className="text-center">
               <h3 className="text-xl font-bold text-slate-900 mb-1">{member.name}</h3>
               <p className="text-[#fc87a7] font-medium text-sm mb-3">{member.role}</p>
-              <p className="text-slate-600 text-sm leading-relaxed mb-4">{member.bio}</p>
+              {/* <p className="text-slate-600 text-sm leading-relaxed mb-4">{member.bio}</p> */}
 
-              <div className="flex justify-center gap-3">
+              {/* <div className="flex justify-center gap-3">
                 <button className="w-10 h-10 rounded-full bg-slate-100 hover:bg-[#fc87a7]/10 flex items-center justify-center transition-colors group/btn">
                   <Linkedin className="w-4 h-4 text-slate-500 group-hover/btn:text-[#fc87a7] transition-colors" />
                 </button>
                 <button className="w-10 h-10 rounded-full bg-slate-100 hover:bg-[#fc87a7]/10 flex items-center justify-center transition-colors group/btn">
                   <Mail className="w-4 h-4 text-slate-500 group-hover/btn:text-[#fc87a7] transition-colors" />
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </motion.div>

@@ -57,7 +57,7 @@ export default function ParticipantOverlay({ participantId, onClose }) {
             >
               <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                 <h2 className="text-xl font-bold text-slate-900">Paddler Profile</h2>
-                <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
+                <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -99,7 +99,7 @@ export default function ParticipantOverlay({ participantId, onClose }) {
                               <Trophy className="w-4 h-4" />
                               <h3 className="font-medium text-sm">Amount Raised</h3>
                           </div>
-                          <p className="text-2xl font-bold text-pink-600">
+                          <p className="text-2xl font-bold text-[#fa6090]">
                             ${profile.amountRaised?.toLocaleString() || '0'}
                           </p>
                         </div>
@@ -117,7 +117,7 @@ export default function ParticipantOverlay({ participantId, onClose }) {
                                 type="button"
                                 onClick={handleCopyDonationId}
                                 aria-label="Copy donation ID"
-                                className="text-slate-400 hover:text-slate-700 transition-colors"
+                                className="text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
                               >
                                 {copySuccess ? (
                                   <Check className="w-4 h-4 text-green-500" />

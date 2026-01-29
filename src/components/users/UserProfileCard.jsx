@@ -58,7 +58,7 @@ export default function UserProfileCard({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
           <h3 className="font-medium text-slate-900 mb-2">Amount Raised</h3>
-          <p className="text-3xl font-bold text-pink-600">
+          <p className="text-3xl font-bold text-[#f94f85]">
             ${userData.amountRaised?.toLocaleString() || '0'}
           </p>
         </div>
@@ -74,7 +74,7 @@ export default function UserProfileCard({
                   type="button"
                   onClick={handleCopyDonationId}
                   aria-label="Copy donation ID"
-                  className="text-slate-400 hover:text-slate-700 transition-colors"
+                  className="text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
                 >
                   {copySuccess ? (
                     <Check className="w-4 h-4 text-green-500" />

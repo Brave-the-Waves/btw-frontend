@@ -20,7 +20,7 @@ export default function Schedule() {
         <Clock className="w-6 h-6 text-[#fc87a7]" />
         Race Day Schedule
       </h3>
-      <div className="space-y-1">
+      {/* <div className="space-y-1">
         {schedule.map((item, index) => (
           <motion.div 
             key={index} 
@@ -43,6 +43,9 @@ export default function Schedule() {
             </div>
           </motion.div>
         ))}
+      </div> */}
+      <div className="text-xl border-l-2 border-[#fc87a7]/30 ml-4 pl-6 py-8 text-slate-600">
+      <p> Detailed schedule coming soon. Stay tuned!</p>
       </div>
     </motion.div>
   )

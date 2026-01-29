@@ -22,7 +22,7 @@ export default function Leaderboard() {
           return
         }
 
-        const participantJson = await usersRes.json()
+        const participantJson = await participantRes.json()
         const teamsJson = await teamsRes.json()
 
         const individuals = participantJson.map(u => ({
@@ -71,7 +71,7 @@ export default function Leaderboard() {
           <div className="bg-white p-1 rounded-xl shadow-sm border border-slate-200 inline-flex">
             <button
               onClick={() => setActiveTab('teams')}
-              className={`px-6 py-2 rounded-lg font-medium transition-all ${
+              className={`px-6 py-2 rounded-lg font-medium transition-all cursor-pointer ${
                 activeTab === 'teams' 
                   ? 'bg-slate-900 text-white shadow-md' 
                   : 'text-slate-600 hover:bg-slate-50'
@@ -81,7 +81,7 @@ export default function Leaderboard() {
             </button>
             <button
               onClick={() => setActiveTab('individuals')}
-              className={`px-6 py-2 rounded-lg font-medium transition-all ${
+              className={`px-6 py-2 rounded-lg font-medium transition-all cursor-pointer ${
                 activeTab === 'individuals' 
                   ? 'bg-slate-900 text-white shadow-md' 
                   : 'text-slate-600 hover:bg-slate-50'

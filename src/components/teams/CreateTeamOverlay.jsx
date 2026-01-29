@@ -6,7 +6,7 @@ import Input from '@/components/ui/input'
 import Label from '@/components/ui/label'
 import Textarea from '@/components/ui/textarea'
 
-const DIVISIONS = ['Community', 'Corporate', 'Survivor', 'Student']
+const DIVISIONS = ['Community', 'Student']
 
 export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
       >
         <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <h2 className="text-xl font-bold text-slate-900">Create a New Team</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -76,6 +76,7 @@ export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
                 id="goal"
                 type="number"
                 min="0"
+                step="100"
                 required
                 className="pl-10"
                 placeholder="1000"
@@ -100,12 +101,12 @@ export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
           </div>
 
           <div className="pt-4 flex gap-3">
-            <Button type="button" variant="outline" className="flex-1" onClick={onClose}>
+            <Button type="button" variant="outline" className="flex-1 border-2 rounded-md cursor-pointer hover:bg-gray-100" onClick={onClose}>
               Cancel
             </Button>
             <Button 
               type="submit" 
-              className="flex-1 bg-pink-600 hover:bg-pink-700 text-white"
+              className="flex-1 bg-pink-600 hover:bg-pink-700 text-white rounded-md cursor-pointer"
               disabled={isLoading}
             >
               {isLoading ? 'Creating...' : 'Create Team'}

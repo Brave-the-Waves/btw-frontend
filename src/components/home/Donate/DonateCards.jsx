@@ -169,13 +169,13 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
                 </Button>
                 <button 
                   onClick={proceedToDonation}
-                  className="text-slate-500 hover:text-pink-600 text-sm font-medium transition-colors"
+                  className="text-slate-500 hover:text-pink-600 text-sm font-medium transition-colors cursor-pointer"
                 >
                   Continue as Guest
                 </button>
                 <button 
                   onClick={() => setShowLoginPrompt(false)}
-                  className="text-slate-400 hover:text-slate-600 text-xs mt-2"
+                  className="text-slate-400 hover:text-slate-600 text-xs mt-2 cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -202,7 +202,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
                 <button
                   key={preset}
                   onClick={() => { setAmount(preset); setIsCustom(false); }}
-                  className={`py-2 px-1 rounded-lg text-sm font-medium transition-all ${
+                  className={`py-2 px-1 rounded-lg text-sm font-medium transition-all cursor-pointer ${
                     amount === preset && !isCustom
                       ? 'bg-[#fc87a7] text-white shadow-md shadow-[#fc87a7]/50'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -326,7 +326,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
 
           <Button 
             size="lg" 
-            className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-xl py-3 text-lg shadow-lg shadow-[#fc87a7]/20 transition-all hover:scale-[1.02] text-center mt-auto disabled:opacity-70 disabled:cursor-not-allowed" 
+            className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-xl py-3 text-lg shadow-lg shadow-[#fc87a7]/20 transition-all hover:scale-[1.02] text-center mt-auto disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer" 
             onClick={handleDonateClick}
             disabled={isLoading || amount <= 0}
           >
@@ -366,7 +366,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           <Button 
             size="lg" 
             variant="outline" 
-            className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02] mt-auto" 
+            className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02] mt-auto cursor-pointer" 
             onClick={() => {
               if (isAuthenticated) {
                 navigate('/teams')

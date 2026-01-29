@@ -28,7 +28,7 @@ export default function DonateButton({ donationId, userName, variant = "default"
       onClick={handleDonateClick}
       variant={variant}
       size={size}
-      className={`bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-4 py-2 ${className}`}
+      className={`bg-[#fa6090] hover:bg-[#f94f85] text-white px-4 py-2 cursor-pointer ${className}`}
     >
       <Heart className="w-4 h-4 mr-2" />
       Donate to {userName ? userName.split(' ')[0] : 'Paddler'}

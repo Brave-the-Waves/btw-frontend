@@ -14,12 +14,12 @@ const footerLinks = {
     { label: 'Volunteer', href: '#contact' },
     { label: 'Sponsor', href: '#contact' },
   ],
-  resources: [
-    { label: "Women's Health Info", href: '#' },
-    { label: 'Dragon Boat Club', href: '#' },
-    { label: 'FAQs', href: '#' },
-    { label: 'Privacy Policy', href: '#' },
-  ],
+  // resources: [
+  //   { label: "Women's Health Info", href: '#' },
+  //   { label: 'Dragon Boat Club', href: '#' },
+  //   { label: 'FAQs', href: '#' },
+  //   { label: 'Privacy Policy', href: '#' },
+  // ],
 }
 
 export default function Footer() {
@@ -45,10 +45,7 @@ export default function Footer() {
             </div>
             <p className="text-slate-400 leading-relaxed mb-6 max-w-sm">An annual dragon boat charity event raising awareness and funds for women's health initiatives. Paddle with purpose.</p>
             <div className="flex gap-3">
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 hover:bg-[#fc87a7] flex items-center justify-center transition-colors"><Facebook className="w-4 h-4" /></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 hover:bg-[#fc87a7] flex items-center justify-center transition-colors"><Instagram className="w-4 h-4" /></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 hover:bg-[#fc87a7] flex items-center justify-center transition-colors"><Twitter className="w-4 h-4" /></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 hover:bg-[#fc87a7] flex items-center justify-center transition-colors"><Youtube className="w-4 h-4" /></a>
+              <a href="https://www.instagram.com/bravethewaves_/" className="w-10 h-10 rounded-full bg-slate-800 hover:bg-[#fc87a7] flex items-center justify-center transition-colors"><Instagram className="w-4 h-4" /></a>
             </div>
           </div>
 
@@ -56,7 +53,7 @@ export default function Footer() {
             <h4 className="font-semibold mb-4 text-white">Event</h4>
             <ul className="space-y-3">
               {footerLinks.event.map((link) => (
-                <li key={link.label}><button onClick={() => scrollToSection(link.href)} className="text-slate-400 hover:text-[#fc87a7] transition-colors">{link.label}</button></li>
+                <li key={link.label}><button onClick={() => scrollToSection(link.href)} className="text-slate-400 hover:text-[#fc87a7] transition-colors cursor-pointer">{link.label}</button></li>
               ))}
             </ul>
           </div>
@@ -65,19 +62,19 @@ export default function Footer() {
             <h4 className="font-semibold mb-4 text-white">Get Involved</h4>
             <ul className="space-y-3">
               {footerLinks.getInvolved.map((link) => (
-                <li key={link.label}><button onClick={() => scrollToSection(link.href)} className="text-slate-400 hover:text-[#fc87a7] transition-colors">{link.label}</button></li>
+                <li key={link.label}><button onClick={() => scrollToSection(link.href)} className="text-slate-400 hover:text-[#fc87a7] transition-colors cursor-pointer">{link.label}</button></li>
               ))}
             </ul>
           </div>
 
-          <div>
+          {/* <div>
             <h4 className="font-semibold mb-4 text-white">Resources</h4>
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
                 <li key={link.label}><button onClick={() => scrollToSection(link.href)} className="text-slate-400 hover:text-[#fc87a7] transition-colors">{link.label}</button></li>
               ))}
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
 
