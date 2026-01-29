@@ -6,7 +6,6 @@ const activities = [
   { title: 'Dragon Boat Races', description: 'Multiple divisions including corporate, community, and breast cancer survivor teams', icon: Trophy },
   { title: 'Live Entertainment', description: 'Local bands, cultural performances, and DJ sets throughout the day', icon: Music },
   { title: 'Food Festival', description: 'Diverse food vendors offering cuisines from around the world', icon: Utensils },
-  { title: 'Health Fair', description: 'Free screenings, wellness information, and health resources', icon: Award },
 ]
 
 export default function Activities() {
