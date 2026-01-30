@@ -46,6 +46,7 @@ export default function Footer() {
             <p className="text-slate-400 leading-relaxed mb-6 max-w-sm">An annual dragon boat charity event raising awareness and funds for women's health initiatives. Paddle with purpose.</p>
             <div className="flex gap-3">
               <a href="https://www.instagram.com/bravethewaves_/" className="w-10 h-10 rounded-full bg-slate-800 hover:bg-[#fc87a7] flex items-center justify-center transition-colors"><Instagram className="w-4 h-4" /></a>
+              <a href="https://www.facebook.com/profile.php?id=61584454839823" className="w-10 h-10 rounded-full bg-slate-800 hover:bg-[#fc87a7] flex items-center justify-center transition-colors"><Facebook className="w-4 h-4" /></a>
             </div>
           </div>
 

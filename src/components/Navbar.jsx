@@ -126,7 +126,7 @@ export default function Navbar() {
               </span>
             </button>
 
-            <div className="hidden xl:flex items-center gap-2">
+            <div className="hidden xl:flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
               {/* Home Sections Dropdown */}
               <div className="relative">
                 <button
@@ -206,7 +206,7 @@ export default function Navbar() {
               ) : (
                 <Button 
                   onClick={() => navigate('/login')}
-                  className={`shadow-lg whitespace-nowrap ${isScrolled ? 'bg-slate-600 text-white hover:bg-slate-700 rounded-full px-5' : 'bg-white/10 text-slate-600 hover:bg-white/20 backdrop-blur border border-slate-600/20 rounded-full px-5'}`}
+                  className={`shadow-lg whitespace-nowrap bg-slate-600 text-white hover:bg-slate-700 rounded-full px-5`}
                 >
                   <User className="w-4 h-4 mr-2" />
                   Log In

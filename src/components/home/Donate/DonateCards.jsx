@@ -192,7 +192,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
             <Heart className="w-8 h-8 text-white" />
           </div>
           <h3 className="text-2xl font-bold text-slate-900 mb-4">Support the Cause</h3>
-          <p className="text-slate-600 mb-6 leading-relaxed">Your donation directly supports women's health programs, survivor resources, and community education initiatives. Every dollar makes a difference.</p>
+          <p className="text-slate-600 mb-6 leading-relaxed">Your donation directly supports MTAC, supporting women’s breast cancer care. Every dollar makes a difference.</p>
 
           {/* Donation Amount Selector */}
           <div className="mb-8">
