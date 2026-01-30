@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion'
 
-import img1 from '../../../assets/images/2025Image1.jpg'
-import img2 from '../../../assets/images/2025Image2.jpg'
-import img3 from '../../../assets/images/2025Image3.jpg'
-import img4 from '../../../assets/images/2025Image4.jpg'
-import img5 from '../../../assets/images/2025Image5.jpg'
-import img6 from '../../../assets/images/2025Image6.jpg'
+import img1 from '../../../assets/images/2025/2025Image1.jpg'
+import img2 from '../../../assets/images/2025/2025Image2.jpg'
+import img3 from '../../../assets/images/2025/2025Image3.jpg'
+import img4 from '../../../assets/images/2025/2025Image4.jpg'
+import img5 from '../../../assets/images/2025/2025Image5.jpg'
+import img6 from '../../../assets/images/2025/2025Image6.jpg'
 
 const galleryImages = [img1, img2, img3, img4, img5, img6]
 

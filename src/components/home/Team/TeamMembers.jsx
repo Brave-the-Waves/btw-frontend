@@ -1,15 +1,63 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Linkedin, Mail } from 'lucide-react'
+import Allison from '../../../assets/images/headshots/Allison.jpg'
+import Geoffrey from '../../../assets/images/headshots/Geoffrey.jpg'
+import Anna from '../../../assets/images/headshots/Anna.jpg'
+import Eric from '../../../assets/images/headshots/Eric.jpg'
+import Kelly from '../../../assets/images/headshots/Kelly.jpg'
+import Kevin from '../../../assets/images/headshots/Kevin.jpg'
+//import Daphne from '../../../assets/images/headshots/Daphne.jpg'
+import Olivia from '../../../assets/images/headshots/Olivia.jpg'
+//import Andrea from '../../../assets/images/headshots/Andrea.jpg'
+//import Alyson from '../../../assets/images/headshots/Alyson.jpg'
+import Justine from '../../../assets/images/headshots/Justine.jpg'
+import Sabrina from '../../../assets/images/headshots/Sabrina.jpg'
+import Anny from '../../../assets/images/headshots/Anny.jpg'
+import Laetitia from '../../../assets/images/headshots/Laetitia.jpg'
+import Claire from '../../../assets/images/headshots/Claire.png'
+//import Derek from '../../../assets/images/headshots/Derek.jpg'
+import Sonny from '../../../assets/images/headshots/Sonny.jpg'
+import Holly from '../../../assets/images/headshots/Holly.jpg'
+import Wei from '../../../assets/images/headshots/Wei.jpg'
+//import Rebecca from '../../../assets/images/headshots/Rebecca.jpg'
+import BK from '../../../assets/images/headshots/BK.jpg'
+import Anthony from '../../../assets/images/headshots/Anthony.jpg'
+import Dory from '../../../assets/images/headshots/Dory.webp'
+import Lauren from '../../../assets/images/headshots/Lauren.png'
+
 
 const teamMembers = [
-  { name: 'Sarah Chen', role: 'Event Director', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80', bio: '10+ years organizing community events. Breast cancer survivor and dragon boat enthusiast.' },
-  { name: 'Michael Torres', role: 'Dragon Boat Club Liaison', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80', bio: 'Head coach at Harbor Dragon Boat Club. Certified IDBF coach with international racing experience.' },
-  { name: 'Dr. Amanda Williams', role: 'Health Partnership Lead', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80', bio: "Women's health advocate and practicing oncologist. Connects medical resources with community." },
-  { name: 'Jessica Park', role: 'Marketing & Outreach', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80', bio: "Digital marketing strategist passionate about amplifying voices in women's health advocacy." },
-  { name: 'David Nakamura', role: 'Operations Manager', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80', bio: 'Logistics expert ensuring seamless race day operations. Former event coordinator for city marathons.' },
-  { name: 'Lisa Rodriguez', role: 'Volunteer Coordinator', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80', bio: 'Community organizer who mobilizes 200+ volunteers annually. Builds bridges between teams and causes.' },
-]
+  { name: "Allison Engo", pronouns: "she/her", role: "Co-Director", photo: Allison },
+  { name: "Geoffrey Wang", pronouns: "he/him", role: "Co-Director", photo: Geoffrey },
+  { name: "Anna Li", pronouns: "she/her", role: "Co-Director", photo: Anna },
+  { name: "Eric Wang", pronouns: "he/him", role: "Co-Director", photo: Eric },
+
+  { name: "Kelly Zhu", pronouns: "she/her", role: "VP Communications", photo: Kelly },
+  { name: "Kevin Vong", pronouns: "he/him", role: "VP Communications", photo: Kevin },
+  { name: "Daphne Fung", pronouns: "she/her", role: "VP Communications", photo: '' },
+  { name: "Olivia Zhou", pronouns: "she/her", role: "VP Communications", photo: Olivia },
+
+  { name: "Andrea Lian", pronouns: "she/her", role: "VP External", photo: '' },
+  { name: "Alyson Jiang", pronouns: "she/her", role: "VP External", photo: '' },
+  { name: "Justine Lin", pronouns: "she/her", role: "VP External", photo: Justine },
+  { name: "Sabrina Fitz", pronouns: "she/her", role: "VP External", photo: Sabrina },
+ 
+  { name: "Yuan Yi (Anny) Wang", pronouns: "she/her", role: "VP Logistics", photo: Anny },
+  { name: "Laetitia Leung", pronouns: "she/her", role: "VP Logistics", photo: Laetitia },
+  { name: "Claire Hunter", pronouns: "she/her", role: "VP Logistics", photo: Claire },
+  { name: "Derek Skolnik", pronouns: "he/him", role: "VP Logistics", photo: '' },
+  { name: "Sonny Bigras-Dewan", pronouns: "he/him", role: "VP Logistics", photo: Sonny },
+
+  { name: "Holly Markomanolaki", pronouns: "she/her", role: "VP Volunteers", photo: Holly },
+  { name: "Wei Heng Gao", pronouns: "he/him", role: "VP Volunteers", photo: Wei },
+  { name: "Rebecca Li", pronouns: "she/her", role: "VP Volunteers", photo: '' },
+  { name: "Ba-Khang Nguyen", pronouns: "he/him", role: "VP Volunteers", photo: BK },
+  
+  { name: "Anthony Nguyen", pronouns: "he/him", role: "VP Tech", photo: Anthony },
+  { name: "Dory Song", pronouns: "he/him", role: "VP Tech", photo: Dory },
+
+  { name: "Lauren Engo", pronouns: "she/her", role: "Secretary", photo: Lauren }
+];
 
 export default function Team() {
   return (
@@ -19,11 +67,12 @@ export default function Team() {
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-50 to-[#fc87a7]/10 p-6 border border-slate-100 hover:border-[#fc87a7]/20 transition-all duration-500 hover:shadow-xl hover:shadow-[#fc87a7]/50">
             <div className="relative mb-6 mx-auto w-40 h-40">
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#fc87a7] to-[#fc87a7]/90 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
-              <img src={member.image} alt={member.name} className="relative w-full h-full object-cover rounded-full ring-4 ring-white shadow-lg" />
+              <img src={member.photo} alt={member.name} className="relative w-full h-full object-cover rounded-full ring-4 ring-white shadow-lg" />
             </div>
 
             <div className="text-center">
               <h3 className="text-xl font-bold text-slate-900 mb-1">{member.name}</h3>
+              <p className="text-slate-500 text-sm mb-2">{member.pronouns}</p>
               <p className="text-[#fc87a7] font-medium text-sm mb-3">{member.role}</p>
               {/* <p className="text-slate-600 text-sm leading-relaxed mb-4">{member.bio}</p> */}
 
