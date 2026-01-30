@@ -1,37 +1,62 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import Allison from '../../../assets/images/headshots/Allison.jpg'
+import Geoffrey from '../../../assets/images/headshots/Geoffrey.jpg'
+import Anna from '../../../assets/images/headshots/Anna.jpg'
+import Eric from '../../../assets/images/headshots/Eric.jpg'
+import Kelly from '../../../assets/images/headshots/Kelly.jpg'
+import Kevin from '../../../assets/images/headshots/Kevin.jpg'
+//import Daphne from '../../../assets/images/headshots/Daphne.jpg'
+import Olivia from '../../../assets/images/headshots/Olivia.jpg'
+//import Andrea from '../../../assets/images/headshots/Andrea.jpg'
+//import Alyson from '../../../assets/images/headshots/Alyson.jpg'
+import Justine from '../../../assets/images/headshots/Justine.jpg'
+import Sabrina from '../../../assets/images/headshots/Sabrina.jpg'
+import Anny from '../../../assets/images/headshots/Anny.jpg'
+import Laetitia from '../../../assets/images/headshots/Laetitia.jpg'
+import Claire from '../../../assets/images/headshots/Claire.png'
+//import Derek from '../../../assets/images/headshots/Derek.jpg'
+import Sonny from '../../../assets/images/headshots/Sonny.jpg'
+import Holly from '../../../assets/images/headshots/Holly.jpg'
+import Wei from '../../../assets/images/headshots/Wei.jpg'
+//import Rebecca from '../../../assets/images/headshots/Rebecca.jpg'
+import BK from '../../../assets/images/headshots/BK.jpg'
+import Anthony from '../../../assets/images/headshots/Anthony.jpg'
+import Dory from '../../../assets/images/headshots/Dory.webp'
+import Lauren from '../../../assets/images/headshots/Lauren.png'
+
 
 const teamMembers = [
-  { name: "Allison Engo", pronouns: "she/her", role: "Co-Director", photo: "https://drive.google.com/uc?export=view&id=1s-ZEVdsDo3D3EqtlmkfqBBl9FADYeB2Q" },
-  { name: "Geoffrey Wang", pronouns: "he/him", role: "Co-Director", photo: "https://drive.google.com/uc?export=view&id=1YVkOPDqen95lIKqnAkXzYxk1YHVcLeEs" },
-  { name: "Anna Li", pronouns: "she/her", role: "Co-Director", photo: "https://drive.google.com/uc?export=view&id=1sdRDMzdRmF8WYaooCQrSemfSh7iWe49i" },
-  { name: "Eric Wang", pronouns: "he/him", role: "Co-Director", photo: "https://drive.google.com/uc?export=view&id=1BDwLeANBi69t8xcL6GOQSLv3DuDGA3bg" },
+  { name: "Allison Engo", pronouns: "she/her", role: "Co-Director", photo: Allison },
+  { name: "Geoffrey Wang", pronouns: "he/him", role: "Co-Director", photo: Geoffrey },
+  { name: "Anna Li", pronouns: "she/her", role: "Co-Director", photo: Anna },
+  { name: "Eric Wang", pronouns: "he/him", role: "Co-Director", photo: Eric },
 
-  { name: "Kelly Zhu", pronouns: "she/her", role: "VP Communications", photo: "https://drive.google.com/uc?export=view&id=1az9cMV11-h0odxTCAS94bouNhBCGb51B" },
-  { name: "Kevin Vong", pronouns: "he/him", role: "VP Communications", photo: "https://drive.google.com/uc?export=view&id=1_GhUNWicYp54K_E1x0aHYUhcCx8Ubo4P" },
-  { name: "Daphne Fung", pronouns: "she/her", role: "VP Communications", photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80" },
-  { name: "Olivia Zhou", pronouns: "she/her", role: "VP Communications", photo: "https://drive.google.com/uc?export=view&id=1YJ7PM4oX4f3VIMcyohAtB3_eJsvyy-Hi" },
+  { name: "Kelly Zhu", pronouns: "she/her", role: "VP Communications", photo: Kelly },
+  { name: "Kevin Vong", pronouns: "he/him", role: "VP Communications", photo: Kevin },
+  { name: "Daphne Fung", pronouns: "she/her", role: "VP Communications", photo: '' },
+  { name: "Olivia Zhou", pronouns: "she/her", role: "VP Communications", photo: Olivia },
 
-  { name: "Andrea Lian", pronouns: "she/her", role: "VP External", photo: "https://drive.google.com/uc?export=view&id=136u59krbodBe-xYxpmOUBQXiC5Ca8sk2" },
-  { name: "Alyson Jiang", pronouns: "she/her", role: "VP External", photo: "https://drive.google.com/uc?export=view&id=1FDWIk81i5accx9res77Z67tOzNkAEZHk" },
-  { name: "Justine Lin", pronouns: "she/her", role: "VP External", photo: "https://drive.google.com/uc?export=view&id=1cLkH9TrM-n9KFxCvdOSiG2pHKvuh8bAx" },
-  { name: "Sabrina Fitz", pronouns: "she/her", role: "VP External", photo: "https://drive.google.com/uc?export=view&id=1d4E-iHIQazgv_nyaWAWMp2u9f196pvy4" },
+  { name: "Andrea Lian", pronouns: "she/her", role: "VP External", photo: '' },
+  { name: "Alyson Jiang", pronouns: "she/her", role: "VP External", photo: '' },
+  { name: "Justine Lin", pronouns: "she/her", role: "VP External", photo: Justine },
+  { name: "Sabrina Fitz", pronouns: "she/her", role: "VP External", photo: Sabrina },
+ 
+  { name: "Yuan Yi (Anny) Wang", pronouns: "she/her", role: "VP Logistics", photo: Anny },
+  { name: "Laetitia Leung", pronouns: "she/her", role: "VP Logistics", photo: Laetitia },
+  { name: "Claire Hunter", pronouns: "she/her", role: "VP Logistics", photo: Claire },
+  { name: "Derek Skolnik", pronouns: "he/him", role: "VP Logistics", photo: '' },
+  { name: "Sonny Bigras-Dewan", pronouns: "he/him", role: "VP Logistics", photo: Sonny },
 
-  { name: "Yuan Yi (Anny) Wang", pronouns: "she/her", role: "VP Logistics", photo: "https://drive.google.com/uc?export=view&id=1GunP6qJueupByogENgP60n8vqIYqBmfs" },
-  { name: "Laetitia Leung", pronouns: "she/her", role: "VP Logistics", photo: "https://drive.google.com/uc?export=view&id=11nISIvDigrn7W0ePakYecEKyJt12VRDm" },
-  { name: "Claire Hunter", pronouns: "she/her", role: "VP Logistics", photo: "https://drive.google.com/uc?export=view&id=1TICWgcjHLqH8xD9CiHLA33q0EoDFNcAn" },
-  { name: "Derek Skolnik", pronouns: "he/him", role: "VP Logistics", photo: "https://drive.google.com/uc?export=view&id=1u184ZVJ2d3B9HXcWS2ijyCNgxi0ryXLV" },
-  { name: "Sonny Bigras-Dewan", pronouns: "he/him", role: "VP Logistics", photo: "https://drive.google.com/uc?export=view&id=1xcQV-lVU7RwVt_P-rld16bJ7n2nYJuR4" },
+  { name: "Holly Markomanolaki", pronouns: "she/her", role: "VP Volunteers", photo: Holly },
+  { name: "Wei Heng Gao", pronouns: "he/him", role: "VP Volunteers", photo: Wei },
+  { name: "Rebecca Li", pronouns: "she/her", role: "VP Volunteers", photo: '' },
+  { name: "Ba-Khang Nguyen", pronouns: "he/him", role: "VP Volunteers", photo: BK },
+  
+  { name: "Anthony Nguyen", pronouns: "he/him", role: "VP Tech", photo: Anthony },
+  { name: "Dory Song", pronouns: "he/him", role: "VP Tech", photo: Dory },
 
-  { name: "Holly Markomanolaki", pronouns: "she/her", role: "VP Volunteers", photo: "https://drive.google.com/uc?export=view&id=167UllScMkYrWghym_aPwv8v5UFHRY8sQ" },
-  { name: "Wei Heng Gao", pronouns: "he/him", role: "VP Volunteers", photo: "https://drive.google.com/uc?export=view&id=1sQuYLYMsP270RGXkX19xv7Q42tjVld2B" },
-  { name: "Rebecca Li", pronouns: "she/her", role: "VP Volunteers", photo: "https://drive.google.com/uc?export=view&id=1nkS-504oAs_J-1HhNafyY33P6xXnqKO9" },
-  { name: "Ba-Khang Nguyen", pronouns: "he/him", role: "VP Volunteers", photo: "https://drive.google.com/uc?export=view&id=1VDecCHTMzic5HMqw2QQ98mEui5kiS_WV" },
-
-  { name: "Anthony Nguyen", pronouns: "he/him", role: "VP Tech", photo: "https://drive.google.com/uc?export=view&id=1CO8QvnvkAOJyeNpW0I1TIlUVkDlUf9Db" },
-  { name: "Dory Song", pronouns: "he/him", role: "VP Tech", photo: "https://drive.google.com/uc?export=view&id=1fLiYE1CgwpSjM7YNk42jCatljVhjPrC2" },
-
-  { name: "Lauren Engo", pronouns: "she/her", role: "Secretary", photo: "https://drive.google.com/uc?export=view&id=1yJk6UE6NYqJV__bBadbYTJKgKlgdtvQW" }
+  { name: "Lauren Engo", pronouns: "she/her", role: "Secretary", photo: Lauren }
 ];
 
 export default function Team() {
