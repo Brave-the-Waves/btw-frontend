@@ -221,7 +221,7 @@ export default function Navbar() {
                     document.getElementById('donate')?.scrollIntoView({ behavior: 'smooth' })
                   }
                 }}
-                className="bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-full px-6 shadow-lg shadow-[#c14a75]"
+                className="bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-full px-6"
               >
                 <Heart className="w-4 h-4 mr-2" />
                 Donate or Register
