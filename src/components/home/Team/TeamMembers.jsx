@@ -8,18 +8,18 @@ import Kelly from '../../../assets/images/headshots/Kelly.jpg'
 import Kevin from '../../../assets/images/headshots/Kevin.jpg'
 //import Daphne from '../../../assets/images/headshots/Daphne.jpg'
 import Olivia from '../../../assets/images/headshots/Olivia.jpg'
-//import Andrea from '../../../assets/images/headshots/Andrea.jpg'
-//import Alyson from '../../../assets/images/headshots/Alyson.jpg'
+import Andrea from '../../../assets/images/headshots/Andrea.jpg'
+import Alyson from '../../../assets/images/headshots/Alyson.jpg'
 import Justine from '../../../assets/images/headshots/Justine.jpg'
 import Sabrina from '../../../assets/images/headshots/Sabrina.jpg'
 import Anny from '../../../assets/images/headshots/Anny.jpg'
 import Laetitia from '../../../assets/images/headshots/Laetitia.jpg'
 import Claire from '../../../assets/images/headshots/Claire.png'
-//import Derek from '../../../assets/images/headshots/Derek.jpg'
+import Derek from '../../../assets/images/headshots/Derek.jpg'
 import Sonny from '../../../assets/images/headshots/Sonny.jpg'
 import Holly from '../../../assets/images/headshots/Holly.jpg'
 import Wei from '../../../assets/images/headshots/Wei.jpg'
-//import Rebecca from '../../../assets/images/headshots/Rebecca.jpg'
+import Rebecca from '../../../assets/images/headshots/Rebecca.jpg'
 import BK from '../../../assets/images/headshots/BK.jpg'
 import Anthony from '../../../assets/images/headshots/Anthony.jpg'
 import Dory from '../../../assets/images/headshots/Dory.webp'
@@ -37,20 +37,20 @@ const teamMembers = [
   { name: "Daphne Fung", pronouns: "she/her", role: "VP Communications", photo: '' },
   { name: "Olivia Zhou", pronouns: "she/her", role: "VP Communications", photo: Olivia },
 
-  { name: "Andrea Lian", pronouns: "she/her", role: "VP External", photo: '' },
-  { name: "Alyson Jiang", pronouns: "she/her", role: "VP External", photo: '' },
+  { name: "Andrea Lian", pronouns: "she/her", role: "VP External", photo: Andrea },
+  { name: "Alyson Jiang", pronouns: "she/her", role: "VP External", photo: Alyson },
   { name: "Justine Lin", pronouns: "she/her", role: "VP External", photo: Justine },
   { name: "Sabrina Fitz", pronouns: "she/her", role: "VP External", photo: Sabrina },
  
   { name: "Yuan Yi (Anny) Wang", pronouns: "she/her", role: "VP Logistics", photo: Anny },
   { name: "Laetitia Leung", pronouns: "she/her", role: "VP Logistics", photo: Laetitia },
   { name: "Claire Hunter", pronouns: "she/her", role: "VP Logistics", photo: Claire },
-  { name: "Derek Skolnik", pronouns: "he/him", role: "VP Logistics", photo: '' },
+  { name: "Derek Skolnik", pronouns: "he/him", role: "VP Logistics", photo: Derek },
   { name: "Sonny Bigras-Dewan", pronouns: "he/him", role: "VP Logistics", photo: Sonny },
 
   { name: "Holly Markomanolaki", pronouns: "she/her", role: "VP Volunteers", photo: Holly },
   { name: "Wei Heng Gao", pronouns: "he/him", role: "VP Volunteers", photo: Wei },
-  { name: "Rebecca Li", pronouns: "she/her", role: "VP Volunteers", photo: '' },
+  { name: "Rebecca Li", pronouns: "she/her", role: "VP Volunteers", photo: Rebecca },
   { name: "Ba-Khang Nguyen", pronouns: "he/him", role: "VP Volunteers", photo: BK },
   
   { name: "Anthony Nguyen", pronouns: "he/him", role: "VP Tech", photo: Anthony },
