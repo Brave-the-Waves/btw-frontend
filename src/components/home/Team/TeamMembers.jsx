@@ -7,10 +7,10 @@ const teamMembers = [
   { name: "Anna Li", pronouns: "she/her", role: "Co-Director", photo: "https://drive.google.com/uc?export=view&id=1sdRDMzdRmF8WYaooCQrSemfSh7iWe49i" },
   { name: "Eric Wang", pronouns: "he/him", role: "Co-Director", photo: "https://drive.google.com/uc?export=view&id=1BDwLeANBi69t8xcL6GOQSLv3DuDGA3bg" },
 
-  { name: "Zhu Kelly", pronouns: "she/her", role: "VP Communications", photo: "https://drive.google.com/uc?export=view&id=1az9cMV11-h0odxTCAS94bouNhBCGb51B" },
+  { name: "Kelly Zhu", pronouns: "she/her", role: "VP Communications", photo: "https://drive.google.com/uc?export=view&id=1az9cMV11-h0odxTCAS94bouNhBCGb51B" },
   { name: "Kevin Vong", pronouns: "he/him", role: "VP Communications", photo: "https://drive.google.com/uc?export=view&id=1_GhUNWicYp54K_E1x0aHYUhcCx8Ubo4P" },
   { name: "Daphne Fung", pronouns: "she/her", role: "VP Communications", photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80" },
-  { name: "Zhou, Olivia", pronouns: "she/her", role: "VP Communications", photo: "https://drive.google.com/uc?export=view&id=1YJ7PM4oX4f3VIMcyohAtB3_eJsvyy-Hi" },
+  { name: "Olivia Zhou", pronouns: "she/her", role: "VP Communications", photo: "https://drive.google.com/uc?export=view&id=1YJ7PM4oX4f3VIMcyohAtB3_eJsvyy-Hi" },
 
   { name: "Andrea Lian", pronouns: "she/her", role: "VP External", photo: "https://drive.google.com/uc?export=view&id=136u59krbodBe-xYxpmOUBQXiC5Ca8sk2" },
   { name: "Alyson Jiang", pronouns: "she/her", role: "VP External", photo: "https://drive.google.com/uc?export=view&id=1FDWIk81i5accx9res77Z67tOzNkAEZHk" },
