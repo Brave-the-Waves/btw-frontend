@@ -6,7 +6,7 @@ import Anna from '../../../assets/images/headshots/Anna.jpg'
 import Eric from '../../../assets/images/headshots/Eric.jpg'
 import Kelly from '../../../assets/images/headshots/Kelly.jpg'
 import Kevin from '../../../assets/images/headshots/Kevin.jpg'
-//import Daphne from '../../../assets/images/headshots/Daphne.jpg'
+import Daphne from '../../../assets/images/headshots/Daphne.jpg'
 import Olivia from '../../../assets/images/headshots/Olivia.jpg'
 import Andrea from '../../../assets/images/headshots/Andrea.jpg'
 import Alyson from '../../../assets/images/headshots/Alyson.jpg'
@@ -34,7 +34,7 @@ const teamMembers = [
 
   { name: "Kelly Zhu", pronouns: "she/her", role: "VP Communications", photo: Kelly },
   { name: "Kevin Vong", pronouns: "he/him", role: "VP Communications", photo: Kevin },
-  { name: "Daphne Fung", pronouns: "she/her", role: "VP Communications", photo: '' },
+  { name: "Daphne Fung", pronouns: "she/her", role: "VP Communications", photo: Daphne },
   { name: "Olivia Zhou", pronouns: "she/her", role: "VP Communications", photo: Olivia },
 
   { name: "Andrea Lian", pronouns: "she/her", role: "VP External", photo: Andrea },
