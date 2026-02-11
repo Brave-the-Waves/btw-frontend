@@ -369,14 +369,14 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
             className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02] mt-auto cursor-pointer" 
             onClick={() => {
               if (isAuthenticated) {
-                navigate('/teams')
+                navigate('/register')
               } else {
                 navigate('/login')
               }
             }}
           >
             <Users className="w-5 h-5 mr-2" />
-            {isAuthenticated ? 'Join or Create a Team' : 'Get Started'}
+            {isAuthenticated ? 'Register for the Event' : 'Create an Account or Log in'}
           </Button>
         </div>
       </motion.div>
