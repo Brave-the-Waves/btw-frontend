@@ -31,6 +31,7 @@ const handleFetchTeams = async () => {
 
 export default function Teams() {
   const { isAuthenticated, getAccessTokenSilently, user, refreshUser, isLoading } = useAuth()
+  const [showRegisterWarning, setShowRegisterWarning] = useState(false)
   const [teams, setTeams] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [showJoinModal, setShowJoinModal] = useState(false)
@@ -96,9 +97,21 @@ export default function Teams() {
     }
   }
 
+  const handleCreateClick = () => {
+    if (!isAuthenticated) {
+      navigate('/login')
+    } else if (!user?.isRegistered) {
+      setShowRegisterWarning(true)
+    } else {
+      setShowCreateModal(true)
+    }
+  }
+
   const handleJoinClick = () => {
     if (!isAuthenticated) {
       navigate('/login')
+    } else if (!user?.isRegistered) {
+      setShowRegisterWarning(true)
     } else {
       setShowJoinModal(true)
     }
@@ -149,11 +162,7 @@ export default function Teams() {
             </div>
             <div className="flex gap-2">
               <Button 
-                onClick={() => {
-                  if (user?.isRegistered === true) {
-                    setShowCreateModal(true)
-                  }
-                }} 
+                onClick={handleCreateClick} 
                 disabled={isLoading || !isAuthenticated || user?.team}
                 className="bg-[#fa6090] text-white hover:bg-pink-700 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer rounded-lg"
                 title={
@@ -167,11 +176,7 @@ export default function Teams() {
                 Create Team
               </Button>
               <Button 
-                onClick={() => {s
-                   if (user?.isRegistered === true) {
-                    handleJoinClick()
-                   }
-                }} 
+                onClick={handleJoinClick} 
                 disabled={isLoading || !isAuthenticated || user?.team}
                 className="bg-white text-black hover:bg-slate-100 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed rounded-lg cursor-pointer border-2"
                 title={
@@ -266,6 +271,36 @@ export default function Teams() {
           isLoading={isCreating}
         />
       )}
+
+      <AnimatePresence>
+        {showRegisterWarning && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 text-center"
+            >
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Complete Event Registration</h3>
+              <p className="text-slate-600 mb-6">You need to complete your event registration before creating or joining a team.</p>
+              <div className="flex flex-col gap-3">
+                <Button 
+                  onClick={() => navigate('/register')}
+                  className="w-full bg-[#fa6090] text-white hover:bg-pink-700"
+                >
+                  Complete Registration
+                </Button>
+                <button 
+                  onClick={() => setShowRegisterWarning(false)}
+                  className="text-slate-500 hover:text-pink-600 text-sm font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
