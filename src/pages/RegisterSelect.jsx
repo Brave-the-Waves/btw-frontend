@@ -46,11 +46,28 @@ export default function RegisterSelect() {
             </div>
           </div>
 
-          {/* Placeholder Card 2 */}
-          <div className="rounded-2xl p-8 border-2 bg-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80">
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6"></div>
-            <h3 className="text-xl font-bold text-slate-700 mb-2">Coming Soon</h3>
-            <p className="text-slate-500 text-sm mb-6">Details will be added here.</p>
+          {/* Corporate Card */}
+          <div className="rounded-2xl p-8 border-2 bg-white shadow-sm">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+              <svg className="w-8 h-8 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7h18"></path><path d="M3 12h18"></path><path d="M3 17h18"></path></svg>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Corporate</h3>
+            <p className="text-slate-500 text-sm mb-6">
+              Corporate registration requires a minimum team size and organization details for tax receipts.
+            </p>
+
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => navigate('/register/corporate')}
+                className="w-full bg-slate-800 hover:bg-slate-900 text-white py-3 rounded-xl"
+              >
+                Corporate Registration
+              </button>
+
+              <p className="text-xs text-slate-500 mt-2">
+                Note: A minimum of 16 paddlers is required to take part in this category.
+              </p>
+            </div>
           </div>
 
           {/* Placeholder Card 3 */}

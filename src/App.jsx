@@ -15,6 +15,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Register from './pages/Register'
 import RegisterSelect from './pages/RegisterSelect'
+import CorporateRegister from './pages/CorporateRegister'
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/register" element={<RegisterSelect />} />
         <Route path="/register/details" element={<Register />} />
+        <Route path="/register/corporate" element={<CorporateRegister />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
         <Route path="/teams" element={<Teams />} />
