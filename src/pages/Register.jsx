@@ -137,9 +137,12 @@ export default function Register() {
       
       <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-slate-900 mb-2 text-center">Event Registration</h1>
-        <p className="text-slate-600 text-center mb-10 max-w-lg mx-auto">
-          Choose how you would like to register. You can register just for yourself or bundle register for your whole team.
-        </p>
+                <p className="text-slate-600 text-center mb-4 max-w-lg mx-auto">
+                    Choose how you would like to register. You can register just for yourself or bundle register for your whole team.
+                </p>
+                <p className="text-sm text-slate-500 text-center mb-8">
+                    Early registration is open — Early registration deadline: <strong>MM/DD/YYYY</strong>.
+                </p>
 
         {/* Loading Overlay */}
         {(isPaymentLoading || isValidating) && (
@@ -151,7 +154,7 @@ export default function Register() {
              </div>
         )}
 
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Individual Card */}
             <div 
                 onClick={() => setSelectedMode('individual')}
@@ -169,12 +172,42 @@ export default function Register() {
                 <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-pink-200 transition-colors">
                     <User className="w-8 h-8 text-pink-600" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">Individual Registration</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Individual Registration<br/>(Early)</h3>
                 <p className="text-slate-500 text-sm mb-6">
                     Register just for yourself. You will be able to join a team or create one after payment.
                 </p>
                 <div className="flex items-end gap-1">
                     <span className="text-3xl font-bold text-slate-900">$25</span>
+                    <span className="text-slate-500 mb-1">CAD</span>
+                </div>
+            </div>
+
+            {/* Individual - Regular (disabled) */}
+            <div
+                className={`rounded-2xl p-8 border-2 transition-all relative overflow-hidden bg-slate-100 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            >
+                <div className="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-6">
+                    <User className="w-8 h-8 text-pink-300" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration (Regular)</h3>
+                <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>MM/DD/YYYY</strong>.</p>
+                <div className="flex items-end gap-1">
+                    <span className="text-3xl font-bold text-slate-700">$30</span>
+                    <span className="text-slate-500 mb-1">CAD</span>
+                </div>
+            </div>
+
+            {/* Individual - Late (disabled) */}
+            <div
+                className={`rounded-2xl p-8 border-2 transition-all relative overflow-hidden bg-slate-100 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            >
+                <div className="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-6">
+                    <User className="w-8 h-8 text-pink-300" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration<br/>(Late)</h3>
+                <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>MM/DD/YYYY</strong>.</p>
+                <div className="flex items-end gap-1">
+                    <span className="text-3xl font-bold text-slate-700">$35</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
             </div>
@@ -196,12 +229,42 @@ export default function Register() {
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
                     <Users className="w-8 h-8 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">Group Registration</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Group Registration (Early)</h3>
                 <p className="text-slate-500 text-sm mb-6">
                     Pay for multiple participants at once. Perfect to get your friends onboard at a reduced cost.
                 </p>
                 <div className="flex items-end gap-1">
                     <span className="text-3xl font-bold text-slate-900">$20</span>
+                    <span className="text-slate-500 mb-1">CAD / person</span>
+                </div>
+            </div>
+
+            {/* Group - Regular (disabled) */}
+            <div
+                className={`rounded-2xl p-8 border-2 transition-all relative overflow-hidden bg-slate-100 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            >
+                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+                    <Users className="w-8 h-8 text-blue-300" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Regular)</h3>
+                <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>MM/DD/YYYY</strong>.</p>
+                <div className="flex items-end gap-1">
+                    <span className="text-3xl font-bold text-slate-700">$25</span>
+                    <span className="text-slate-500 mb-1">CAD / person</span>
+                </div>
+            </div>
+
+            {/* Group - Late (disabled) */}
+            <div
+                className={`rounded-2xl p-8 border-2 transition-all relative overflow-hidden bg-slate-100 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            >
+                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+                    <Users className="w-8 h-8 text-blue-300" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Late)</h3>
+                <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>MM/DD/YYYY</strong>.</p>
+                <div className="flex items-end gap-1">
+                    <span className="text-3xl font-bold text-slate-700">$30</span>
                     <span className="text-slate-500 mb-1">CAD / person</span>
                 </div>
             </div>
