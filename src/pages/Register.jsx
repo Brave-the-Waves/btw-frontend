@@ -5,12 +5,16 @@ import Navbar from '@/components/Navbar'
 import Button from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAuth } from '@/contexts/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { API_BASE_URL } from '@/config'
 
 export default function Register() {
+    const [searchParams] = useSearchParams()
+    const isStudent = searchParams.get('student') === 'true'
   const { isAuthenticated, isLoading, initiateRegistrationPayment, isPaymentLoading, getAccessTokenSilently } = useAuth()
   const navigate = useNavigate()
+    const individualPrice = isStudent ? 15 : 25
+    const groupPricePer = isStudent ? 15 : 20
   
   const [selectedMode, setSelectedMode] = useState(null) // 'individual' | 'group'
   const [groupSize, setGroupSize] = useState(4)
@@ -54,7 +58,7 @@ export default function Register() {
   }
 
   const handleIndividualPayment = () => {
-    initiateRegistrationPayment()
+        initiateRegistrationPayment({ registrationType: 'individual', isStudent })
   }
 
   const handleGroupPayment = async () => {
@@ -120,7 +124,8 @@ export default function Register() {
         // 3. Initiate Logic
         initiateRegistrationPayment({
             emails: filledEmails,
-            registrationType: 'bundle'
+            registrationType: 'bundle',
+            isStudent
         })
 
     } catch (error) {
@@ -177,7 +182,7 @@ export default function Register() {
                     Register just for yourself. You will be able to join a team or create one after payment.
                 </p>
                 <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-900">$25</span>
+                    <span className="text-3xl font-bold text-slate-900">{'$'}{individualPrice}</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
             </div>
@@ -234,7 +239,7 @@ export default function Register() {
                     Pay for multiple participants at once. Perfect to get your friends onboard at a reduced cost.
                 </p>
                 <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-900">$20</span>
+                    <span className="text-3xl font-bold text-slate-900">{'$'}{groupPricePer}</span>
                     <span className="text-slate-500 mb-1">CAD / person</span>
                 </div>
             </div>
@@ -352,7 +357,7 @@ export default function Register() {
                             <div className="flex justify-between items-center p-4 bg-slate-50 rounded-xl">
                                 <span className="text-slate-600 font-medium">Total Amount</span>
                                 <span className="text-xl font-bold text-slate-900">
-                                    ${20 * (groupSize + 1)} CAD
+                                    {'$'}{groupPricePer * (groupSize + 1)} CAD
                                 </span>
                             </div>
                             <Button 

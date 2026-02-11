@@ -354,7 +354,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
             <Users className="w-8 h-8 text-white" />
           </div>
-          <h3 className="text-2xl font-bold mb-4">Register Your Team</h3>
+          <h3 className="text-2xl font-bold mb-4">Register for the Event</h3>
           <div className="mb-6 text-slate-300 leading-relaxed">
             <p className="mb-6">By creating an account and registering for the 2026 Brave the Waves competition, you’re not only securing your place on the water. You’re also directly supporting the fight against breast cancer. Here’s what your registration includes:</p>
             <ul className="list-disc list-outside pl-5 space-y-2 mb-6 text-sm">
