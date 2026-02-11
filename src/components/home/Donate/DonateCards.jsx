@@ -161,10 +161,10 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
               </p>
               
               <div className="flex flex-col gap-3">
-                <Button 
-                   onClick={() => navigate('/login')}
+                 <Button 
+                   onClick={() => navigate('/login', { state: { from: '/register' } })}
                    className="w-full bg-slate-900 text-white hover:bg-slate-800"
-                >
+                 >
                    Login / Register to Track
                 </Button>
                 <button 
@@ -371,7 +371,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
               if (isAuthenticated) {
                 navigate('/register')
               } else {
-                navigate('/login')
+                navigate('/login', { state: { from: '/register' } })
               }
             }}
           >

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '../components/ui/button'
 import { Input } from '../components/ui/input'
@@ -11,6 +11,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const { login, loginWithGoogle } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -18,7 +19,8 @@ export default function Login() {
       setError('')
       setLoading(true)
       await login(email, password)
-      navigate('/')
+      const redirectTo = location.state?.from || '/'
+      navigate(redirectTo)
     } catch (err) {
       setError('Failed to log in: ' + err.message)
     } finally {
@@ -31,7 +33,8 @@ export default function Login() {
       setError('')
       setLoading(true)
       await loginWithGoogle()
-      navigate('/')
+      const redirectTo = location.state?.from || '/'
+      navigate(redirectTo)
     } catch (err) {
       setError('Failed to log in with Google: ' + err.message)
     } finally {
