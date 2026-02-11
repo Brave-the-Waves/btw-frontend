@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '@/components/Navbar'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
+import { API_BASE_URL } from '@/config'
 
 export default function RegisterSelect() {
   const navigate = useNavigate()
@@ -70,14 +72,83 @@ export default function RegisterSelect() {
             </div>
           </div>
 
-          {/* Placeholder Card 3 */}
-          <div className="rounded-2xl p-8 border-2 bg-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80">
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6"></div>
-            <h3 className="text-xl font-bold text-slate-700 mb-2">Coming Soon</h3>
-            <p className="text-slate-500 text-sm mb-6">Details will be added here.</p>
-          </div>
+          {/* Sports Card */}
+          <SportsCard />
         </div>
       </div>
+    </div>
+  )
+}
+
+function SportsCard() {
+  const navigate = useNavigate()
+  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth()
+  const [showInput, setShowInput] = useState(false)
+  const [code, setCode] = useState('')
+  const [isVerifying, setIsVerifying] = useState(false)
+  const [error, setError] = useState(null)
+
+  const handleVerify = async () => {
+    setError(null)
+    if (!code.trim()) {
+      setError('Please enter your selection code.')
+      return
+    }
+    if (isLoading) return
+    if (!isAuthenticated) {
+      navigate('/login')
+      return
+    }
+
+    setIsVerifying(true)
+    try {
+      const token = await getAccessTokenSilently()
+      const res = await fetch(`${API_BASE_URL}/api/registrations/confirm-selection`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ code: code.trim() })
+      })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.message || 'Code verification failed')
+      }
+
+      navigate('/registration=success')
+    } catch (err) {
+      console.error('Selection verify error', err)
+      setError(err.message || 'Verification failed')
+    } finally {
+      setIsVerifying(false)
+    }
+  }
+
+  return (
+    <div className="rounded-2xl p-8 border-2 bg-white shadow-sm">
+      <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-6">
+        <svg className="w-8 h-8 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20l9-12H3z"></path></svg>
+      </div>
+      <h3 className="text-xl font-bold text-slate-900 mb-2">Sports</h3>
+      <p className="text-slate-500 text-sm mb-6">If you have been selected by your respective school team to paddle in this division.</p>
+
+      {!showInput ? (
+        <div className="flex flex-col gap-3">
+          <button onClick={() => setShowInput(true)} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">I have been selected!</button>
+          <p className="text-xs text-slate-500 mt-2">You'll be asked to provide a selection code issued by your school.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Enter selection code" className="w-full px-4 py-3 rounded-xl border border-slate-200" />
+          {error && <div className="text-sm text-red-600">{error}</div>}
+          <div className="flex gap-3">
+            <button onClick={handleVerify} disabled={isVerifying} className="px-4 py-3 bg-green-600 text-white rounded-xl">{isVerifying ? 'Verifying...' : 'Confirm'}</button>
+            <button onClick={() => { setShowInput(false); setCode(''); setError(null) }} className="px-4 py-3 bg-slate-100 rounded-xl">Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
