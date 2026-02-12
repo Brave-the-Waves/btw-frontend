@@ -24,7 +24,9 @@ export default function RegisterSelect() {
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">Community</h3>
             <p className="text-slate-500 text-sm mb-6">
-              Community registration is for participants associated with our community partners.
+            The Community Division is open to everyone and brings together friends, students, families and community groups who want to paddle for a meaningful cause. No experience required!<br/><br/>
+            Students pay a discounted price!<br/><br/>
+            Groups are limited to a maximum of 10 members. Teams of 20 to 30 paddlers will be formed by the Executive Rostering Committee to ensure balanced teams and fairness throughout the competition.
             </p>
 
             <div className="flex flex-col gap-3">
@@ -43,7 +45,7 @@ export default function RegisterSelect() {
               </button>
 
               <p className="text-xs text-slate-500 mt-2">
-                Note: Proof of student status will be required during the event.
+                Proof of student status will be required during the event.
               </p>
             </div>
           </div>
@@ -55,7 +57,7 @@ export default function RegisterSelect() {
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">Corporate</h3>
             <p className="text-slate-500 text-sm mb-6">
-              Corporate registration requires a minimum team size and organization details for tax receipts.
+              This division highlights organizations that give back to their community through an ardent commitment to an important cause.<br/> <br/> This entails a 600$ registration fee and a 1900$ mandatory donation with tax receipt. This includes the allocation of a full boat composed of 20 to 30 paddlers.
             </p>
 
             <div className="flex flex-col gap-3">
@@ -67,7 +69,7 @@ export default function RegisterSelect() {
               </button>
 
               <p className="text-xs text-slate-500 mt-2">
-                Note: A minimum of 16 paddlers is required to take part in this category.
+                A minimum of 16 paddlers is required to take part in this category.
               </p>
             </div>
           </div>
@@ -132,12 +134,12 @@ function SportsCard() {
         <svg className="w-8 h-8 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20l9-12H3z"></path></svg>
       </div>
       <h3 className="text-xl font-bold text-slate-900 mb-2">Sports</h3>
-      <p className="text-slate-500 text-sm mb-6">If you have been selected by your respective school team to paddle in this division.</p>
+      <p className="text-slate-500 text-sm mb-6">Registration by Invitation. For those who train with DBZ, DOD, CDBC or CsBUM, your captains will contact you if you have been selected to partake in this competitive roster.</p>
 
       {!showInput ? (
         <div className="flex flex-col gap-3">
           <button onClick={() => setShowInput(true)} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">I have been selected!</button>
-          <p className="text-xs text-slate-500 mt-2">You'll be asked to provide a selection code issued by your school.</p>
+          <p className="text-xs text-slate-500 mt-2">You'll be asked to provide a selection code issued by your captain.</p>
         </div>
       ) : (
         <div className="space-y-3">
