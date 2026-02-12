@@ -161,10 +161,10 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
               </p>
               
               <div className="flex flex-col gap-3">
-                <Button 
-                   onClick={() => navigate('/login')}
+                 <Button 
+                   onClick={() => navigate('/login', { state: { from: '/register' } })}
                    className="w-full bg-slate-900 text-white hover:bg-slate-800"
-                >
+                 >
                    Login / Register to Track
                 </Button>
                 <button 
@@ -354,14 +354,19 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
             <Users className="w-8 h-8 text-white" />
           </div>
-          <h3 className="text-2xl font-bold mb-4">Register Your Team</h3>
-          <p className="text-slate-300 mb-6 leading-relaxed">Assemble your crew and join the race! Whether corporate teams, community groups, or survivor squads – there's a division for everyone.</p>
-
-          <ul className="space-y-3 mb-8">
-            <li className="flex items-center gap-3 text-slate-300"><Waves className="w-5 h-5 text-[#fc87a7]" /><span>Multiple team divisions available</span></li>
-            <li className="flex items-center gap-3 text-slate-300"><Trophy className="w-5 h-5 text-[#fc87a7]" /><span>Prizes for top fundraising teams</span></li>
-            <li className="flex items-center gap-3 text-slate-300"><Users className="w-5 h-5 text-[#fc87a7]" /><span>Training sessions provided</span></li>
-          </ul>
+          <h3 className="text-2xl font-bold mb-4">Register for the Event</h3>
+          <div className="mb-6 text-slate-300 leading-relaxed">
+            <p className="mb-6">By creating an account and registering for the 2026 Brave the Waves competition, you’re not only securing your place on the water. You’re also directly supporting the fight against breast cancer. Here’s what your registration includes:</p>
+            <ul className="list-disc list-outside pl-5 space-y-2 mb-6 text-sm">
+              <li>Official race entry for the full day of dragon boat races</li>
+              <li>Boat, paddles, and a trained drummer/steer person, so no experience is required</li>
+              <li>Access to all on-site activities and entertainment throughout the event</li>
+              <li>Refreshments to keep you fueled on race day</li>
+              <li>Direct donation to MTAC, helping support breast cancer patient care</li>
+            </ul>
+            <p className="mb-6">Whether you’re racing to win or paddling for the cause, every registration makes a meaningful impact. Gather your crew, paddle with purpose, and help us turn teamwork into hope.</p>
+            <p className="text-sm text-slate-400">Note: Creating a Brave The Waves account allows you to track your donations throughout the years. In order to register to our yearly competition, you must pay the competition fee.</p>
+          </div>
 
           <Button 
             size="lg" 
@@ -369,14 +374,14 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
             className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02] mt-auto cursor-pointer" 
             onClick={() => {
               if (isAuthenticated) {
-                navigate('/teams')
+                navigate('/register')
               } else {
-                navigate('/login')
+                navigate('/login', { state: { from: '/register' } })
               }
             }}
           >
             <Users className="w-5 h-5 mr-2" />
-            {isAuthenticated ? 'Join or Create a Team' : 'Get Started'}
+            {isAuthenticated ? 'Register for the Event' : 'Create an Account and Register'}
           </Button>
         </div>
       </motion.div>

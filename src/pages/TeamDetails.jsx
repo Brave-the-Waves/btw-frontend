@@ -7,7 +7,7 @@ import { useAuth } from '../contexts/AuthContext'
 import JoinTeamOverlay from '../components/teams/JoinTeamOverlay'
 import DisplayMembers from '@/components/teams/DisplayMembers'
 import RecentDonations from '@/components/users/RecentDonations'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { API_BASE_URL } from '@/config'
 
 export default function TeamDetails() {
@@ -32,6 +32,7 @@ export default function TeamDetails() {
 
   const { getAccessTokenSilently, isAuthenticated, refreshUser, user } = useAuth()
   const navigate = useNavigate()
+  const [showRegisterWarning, setShowRegisterWarning] = useState(false)
   
   // Check membership directly from authenticated user context instead of re-fetching
   const isInTeam = isAuthenticated && user?.team?.name === teamName
@@ -312,12 +313,20 @@ export default function TeamDetails() {
                         )
                       ) : (
                         <>
-                          <button
-                            onClick={user && user.isRegistered ? () => setJoinModal(true) : console.log('register first')}
-                            className="px-3 py-1 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700 transition-colors cursor-pointer"
-                          >
-                            Join Team
-                          </button>
+                              <button
+                                onClick={() => {
+                                  if (!isAuthenticated) {
+                                    navigate('/login')
+                                  } else if (!user?.isRegistered) {
+                                    setShowRegisterWarning(true)
+                                  } else {
+                                    setJoinModal(true)
+                                  }
+                                }}
+                                className="px-3 py-1 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700 transition-colors cursor-pointer"
+                              >
+                                Join Team
+                              </button>
                           <AnimatePresence>
                             {joinModal && (
                               <JoinTeamOverlay 
@@ -328,6 +337,35 @@ export default function TeamDetails() {
                                   setRefreshKey(prev => !prev)
                                 }}
                               />
+                            )}
+                          </AnimatePresence>
+                          <AnimatePresence>
+                            {showRegisterWarning && (
+                              <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  exit={{ opacity: 0, scale: 0.95 }}
+                                  className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 text-center"
+                                >
+                                  <h3 className="text-xl font-bold text-slate-900 mb-2">Complete Event Registration</h3>
+                                  <p className="text-slate-600 mb-6">You need to complete your event registration before joining this team.</p>
+                                  <div className="flex flex-col gap-3">
+                                    <button
+                                      onClick={() => navigate('/register')}
+                                      className="w-full px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+                                    >
+                                      Complete Registration
+                                    </button>
+                                    <button
+                                      onClick={() => setShowRegisterWarning(false)}
+                                      className="text-slate-500 hover:text-pink-600 text-sm font-medium transition-colors"
+                                    >
+                                      Cancel
+                                    </button>
+                                  </div>
+                                </motion.div>
+                              </div>
                             )}
                           </AnimatePresence>
                         </>
