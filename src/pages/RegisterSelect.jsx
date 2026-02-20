@@ -22,11 +22,10 @@ export default function RegisterSelect() {
             <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-6">
               <svg className="w-8 h-8 text-pink-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"></path><path d="M6 20v-1a4 4 0 014-4h4a4 4 0 014 4v1"></path></svg>
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Community</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-2">The Community Division</h3>
             <p className="text-slate-500 text-sm mb-6">
             The Community Division is open to everyone and brings together friends, students, families and community groups who want to paddle for a meaningful cause. No experience required!<br/><br/>
-            Students pay a discounted price!<br/><br/>
-            Groups are limited to a maximum of 10 members. Teams of 20 to 30 paddlers will be formed by the Executive Rostering Committee to ensure balanced teams and fairness throughout the competition.
+            Teams of 20 to 30 paddlers will be formed by the Executive Rostering Committee to ensure balanced teams and fairness throughout the competition.
             </p>
 
             <div className="flex flex-col gap-3">
@@ -55,7 +54,7 @@ export default function RegisterSelect() {
             <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
               <svg className="w-8 h-8 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7h18"></path><path d="M3 12h18"></path><path d="M3 17h18"></path></svg>
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Corporate</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-2">The Corporate Division</h3>
             <p className="text-slate-500 text-sm mb-6">
               This division highlights organizations that give back to their community through an ardent commitment to an important cause.<br/> <br/> This entails a 600$ registration fee and a 1900$ mandatory donation with tax receipt. This includes the allocation of a full boat composed of 20 to 30 paddlers.
             </p>
@@ -67,10 +66,6 @@ export default function RegisterSelect() {
               >
                 Corporate Registration
               </button>
-
-              <p className="text-xs text-slate-500 mt-2">
-                A minimum of 16 paddlers is required to take part in this category.
-              </p>
             </div>
           </div>
 
@@ -133,13 +128,13 @@ function SportsCard() {
       <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-6">
         <svg className="w-8 h-8 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20l9-12H3z"></path></svg>
       </div>
-      <h3 className="text-xl font-bold text-slate-900 mb-2">Sports</h3>
+      <h3 className="text-xl font-bold text-slate-900 mb-2">The Sports Division</h3>
       <p className="text-slate-500 text-sm mb-6">Registration by Invitation. For those who train with DBZ, DOD, CDBC or CsBUM, your captains will contact you if you have been selected to partake in this competitive roster.</p>
 
       {!showInput ? (
         <div className="flex flex-col gap-3">
           <button onClick={() => setShowInput(true)} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">I have been selected!</button>
-          <p className="text-xs text-slate-500 mt-2">You'll be asked to provide a selection code issued by your captain.</p>
+          <p className="text-xs text-slate-500 mt-2">You will be asked to provide a selection code issued by your captain.</p>
         </div>
       ) : (
         <div className="space-y-3">
