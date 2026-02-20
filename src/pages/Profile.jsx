@@ -1,13 +1,15 @@
-import React, { useEffect,  useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '@/components/Navbar'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '@/components/ui/button'
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Camera, Plus } from 'lucide-react'
 import { motion} from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import UserProfileCard from '@/components/users/UserProfileCard'
 import RecentDonations from '@/components/users/RecentDonations'
 import { API_BASE_URL } from '@/config'
+import { storage } from '@/firebase'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 export default function Profile() {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently, initiateRegistrationPayment, isPaymentLoading, logout, refreshUser } = useAuth()
@@ -27,6 +29,9 @@ export default function Profile() {
     bio: ''
   })
   const [isProfileLoading, setIsProfileLoading] = useState(true)
+  const [showImageMenu, setShowImageMenu] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const fileInputRef = useRef(null)
 
   // Initialize form data when user loads from context
   useEffect(() => {
@@ -48,6 +53,40 @@ export default function Profile() {
       setIsProfileLoading(false)
     }
   }, [user])
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    setShowImageMenu(false)
+    setIsUploading(true)
+
+    try {
+      const storageRef = ref(storage, `profiles/${user._id}`)
+      await uploadBytes(storageRef, file)
+      const downloadURL = await getDownloadURL(storageRef)
+
+      const token = await getAccessTokenSilently()
+      const res = await fetch(`${API_BASE_URL}/api/users/me`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ picture: downloadURL })
+      })
+
+      if (!res.ok) throw new Error('Failed to save profile picture')
+
+      await refreshUser()
+    } catch (error) {
+      console.error('Error uploading image:', error)
+    } finally {
+      setIsUploading(false)
+      // Reset input so the same file can be re-selected if needed
+      e.target.value = ''
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -110,7 +149,51 @@ export default function Profile() {
             </div>
 
             <div className="flex flex-col md:flex-row gap-8 items-start">
-              <img src={user.picture} alt={user.name} className="w-32 h-32 rounded-full border-4 border-pink-100" />
+              {/* Interactive Avatar */}
+              <div className="relative flex-shrink-0">
+                <div
+                  onClick={() => setShowImageMenu(!showImageMenu)}
+                  className="w-32 h-32 rounded-full border-4 border-pink-100 bg-slate-100 flex items-center justify-center cursor-pointer overflow-hidden relative group"
+                >
+                  {isUploading ? (
+                    <div className="w-8 h-8 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin" />
+                  ) : user.picture ? (
+                    <>
+                      <img src={user.picture} alt={user.name} className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Camera className="w-8 h-8 text-white" />
+                      </div>
+                    </>
+                  ) : (
+                    <Plus className="w-10 h-10 text-pink-500" />
+                  )}
+                </div>
+
+                {/* Popup Menu */}
+                {showImageMenu && (
+                  <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-slate-100 py-2 z-10">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowImageMenu(false)
+                        fileInputRef.current?.click()
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                    >
+                      {user.picture ? 'Edit Image' : 'Add Image'}
+                    </button>
+                  </div>
+                )}
+
+                {/* Hidden File Input */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+              </div>
               
               <div className="flex-1 w-full">
                 {isEditing ? (

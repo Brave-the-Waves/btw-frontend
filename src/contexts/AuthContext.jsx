@@ -102,7 +102,9 @@ export default function AuthProvider({ children }) {
           uid: firebaseUser.uid,
           email: firebaseUser.email,
           name: firebaseUser.displayName,
-          picture: firebaseUser.photoURL
+          // Don't overwrite picture here — backend is the source of truth for custom uploads.
+          // Only fall back to Google's photo if the backend hasn't set one yet.
+          picture: prev?.picture || firebaseUser.photoURL
         }))
         setIsAuthenticated(true)
 
