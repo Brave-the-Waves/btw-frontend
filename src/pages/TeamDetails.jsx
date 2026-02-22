@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '@/components/Navbar'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Users, Trophy, Calendar, Copy, Pencil, Check, X } from 'lucide-react'
@@ -17,7 +16,7 @@ export default function TeamDetails() {
   const [copied, setCopied] = useState(false)
   const [confirmLeave, setConfirmLeave] = useState(false)
   const [refreshKey, setRefreshKey] = useState(false)
-  const { name } = useParams()
+  const { name, eventName } = useParams()
   const [joinModal, setJoinModal] = useState(false)
   
   const [isEditing, setIsEditing] = useState(false)
@@ -89,7 +88,7 @@ export default function TeamDetails() {
         // If name changed, we might need to navigate or update URL, but for now let's keep it simple
         // If name changes, URL /team/:name becomes invalid technically until reload or navigate
         if (updatedTeam.name !== teamName) {
-           navigate(`/teams/${encodeURIComponent(updatedTeam.name)}`, { replace: true })
+           navigate(`/event/${eventName}/teams/${encodeURIComponent(updatedTeam.name)}`, { replace: true })
         }
     } catch (error) {
         console.error('Error updating team:', error)
@@ -179,7 +178,7 @@ export default function TeamDetails() {
         throw new Error('Failed to leave team')
       }
       await refreshUser()
-      navigate('/teams')
+      navigate(`/event/${eventName}/teams`)
     } 
     catch (error) {
       console.error('Error leaving team:', error)
@@ -196,7 +195,6 @@ export default function TeamDetails() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
       <div className="pt-32 px-6 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-10 gap-6">
           {/* Main content area - 70% on large screens */}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Navbar from '@/components/Navbar'
 import { motion } from 'framer-motion'
 import { Trophy, Medal, TrendingUp } from 'lucide-react'
 import { API_BASE_URL } from '@/config'
@@ -58,8 +57,6 @@ export default function Leaderboard() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      
       <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">Fundraising Leaderboard</h1>

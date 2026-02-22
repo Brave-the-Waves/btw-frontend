@@ -1,6 +1,7 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom'
 import Home from './pages/Home'
+import EventLayout from './components/EventLayout'
 import Success from './pages/Success'
 import Cancel from './pages/Cancel'
 import Teams from './pages/Teams'
@@ -16,12 +17,15 @@ import Signup from './pages/Signup'
 import Register from './pages/Register'
 import RegisterSelect from './pages/RegisterSelect'
 import CorporateRegister from './pages/CorporateRegister'
+import Crew from './pages/Crew'
+import Event from './pages/Event'
 
 export default function App() {
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/crew" element={<Crew />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/register" element={<RegisterSelect />} />
@@ -29,12 +33,15 @@ export default function App() {
         <Route path="/register/corporate" element={<CorporateRegister />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
-        <Route path="/teams" element={<Teams />} />
-        <Route path="/teams/:name" element={<TeamDetails />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/event/:eventName" element={<EventLayout />}>
+          <Route index element={<Event />} />
+          <Route path="teams" element={<Teams />} />
+          <Route path="teams/:name" element={<TeamDetails />} />
+          <Route path="leaderboard" element={<Leaderboard />} />
+          <Route path="participants" element={<Participants />} />
+        </Route>
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:id" element={<ParticipantProfile />} />
-        <Route path="/participants" element={<Participants />} />
         <Route path="/registration=success" element={<RegistrationSuccess />} />
         <Route path="/registration=cancel" element={<RegistrationCancel />} />
       </Routes>

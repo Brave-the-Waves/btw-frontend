@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Navbar from '@/components/Navbar'
 import Button from '@/components/ui/button'
 import { Search } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -44,8 +43,6 @@ export default function Participants() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      
       <div className="pt-32 pb-20 px-6 max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
           <div>

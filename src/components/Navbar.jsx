@@ -1,24 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Button from './ui/button'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { Menu, X, User, Waves, Heart, ChevronDown } from 'lucide-react'
 
 const homeSections = [
   { label: 'Home', href: 'home' },
   { label: 'About', href: 'about' },
-  { label: 'Event', href: 'event' },
   { label: 'Past Events', href: 'past-events' },
-  { label: 'The Crew', href: 'team' },
   { label: 'Donate', href: 'donate' },
   { label: 'Contact', href: 'contact' },
-]
-
-const navLinks = [
-  { label: 'Teams', href: '/teams', isRoute: true },
-  { label: 'Leaderboard', href: '/leaderboard', isRoute: true },
-  { label: 'Participants', href: '/participants', isRoute: true },
 ]
 
 export default function Navbar() {
@@ -28,7 +20,25 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+  const { eventName } = useParams()
   const { user, isAuthenticated } = useAuth()
+
+  const [isEventsDropdownOpen, setIsEventsDropdownOpen] = useState(false)
+
+  const events = [
+    { label: 'Brave The Waves 2026', href: '/event/BraveTheWaves2026' },
+  ]
+
+  const navLinks = [
+    { label: 'The Crew', href: '/crew', isRoute: true },
+    {
+      label: 'Leaderboard',
+      href: eventName
+        ? `/event/${eventName}/leaderboard`
+        : `/event/BraveTheWaves2026/leaderboard`,
+      isRoute: true,
+    },
+  ]
 
   const isScrolled = isWindowScrolled || location.pathname !== '/'
 
@@ -134,8 +144,8 @@ export default function Navbar() {
                   onMouseLeave={() => setIsDropdownOpen(false)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 cursor-pointer ${
                     activeSection && location.pathname === '/'
-                      ? isScrolled ? 'bg-[#fc87a7]/10 text-[#fc87a7]' : 'bg-white/20 text-slate-600 hover:text-white'
-                      : isScrolled ? 'text-slate-600 hover:text-[#fc87a7] hover:bg-[#fc87a7]/5' : 'text-slate-600 hover:text-white hover:bg-white/10'
+                      ? isScrolled ? 'bg-[#fc87a7]/10 text-[#fc87a7]' : 'text-white bg-white/20 text-slate-600 hover:text-white'
+                      : isScrolled ? 'text-slate-600 hover:text-[#fc87a7] hover:bg-[#fc87a7]/5' : 'text-white hover:text-white hover:bg-white/10'
                   }`}
                 >
                   Home
@@ -175,9 +185,50 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
 
+              {/* Events Dropdown */}
+              <div className="relative">
+                <button
+                  onMouseEnter={() => setIsEventsDropdownOpen(true)}
+                  onMouseLeave={() => setIsEventsDropdownOpen(false)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 cursor-pointer ${
+                    isScrolled ? 'text-slate-600 hover:text-[#fc87a7] hover:bg-[#fc87a7]/5' : 'text-white hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  Events
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                <AnimatePresence>
+                  {isEventsDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      onMouseEnter={() => setIsEventsDropdownOpen(true)}
+                      onMouseLeave={() => setIsEventsDropdownOpen(false)}
+                      className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-200 py-2 overflow-hidden"
+                    >
+                      {events.map((event) => (
+                        <button
+                          key={event.label}
+                          onClick={() => { navigate(event.href); setIsEventsDropdownOpen(false) }}
+                          className={`w-full text-left px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${
+                            eventName && `/event/${eventName}` === event.href
+                              ? 'bg-[#fc87a7]/10 text-[#fc87a7]'
+                              : 'text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          {event.label}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
               {/* Other Navigation Links */}
               {navLinks.map((link) => {
-                const inactiveClass = isScrolled ? 'text-slate-600 hover:text-[#fc87a7] hover:bg-[#fc87a7]/5' : 'text-slate-600 hover:text-white hover:bg-white/10'
+                const inactiveClass = isScrolled ? 'text-slate-600 hover:text-[#fc87a7] hover:bg-[#fc87a7]/5' : 'text-white hover:text-white hover:bg-white/10'
 
                 return (
                   <button
@@ -194,7 +245,7 @@ export default function Navbar() {
             <div className="hidden xl:flex items-center gap-3 ml-6">
               {isAuthenticated ? (
                 <div className="flex items-center gap-3">
-                  <button onClick={() => navigate('/profile')} className={`flex items-center gap-2 text-sm font-medium cursor-pointer ${isScrolled ? 'text-slate-700 hover:text-[#fc87a7]' : 'text-slate-600 hover:text-[#fc87a7]/80'}`}>
+                  <button onClick={() => navigate('/profile')} className={`flex items-center gap-2 text-sm font-medium cursor-pointer ${isScrolled ? 'text-slate-700 hover:text-[#fc87a7]' : 'text-white hover:text-[#fc87a7]/80'}`}>
                     {user.picture ? (
                       <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full border border-slate-200" />
                     ) : (
@@ -213,7 +264,7 @@ export default function Navbar() {
                 </Button>
               )}
               
-              <Button 
+              {/* <Button 
                 onClick={() => {
                   if (location.pathname !== '/') {
                     navigate('/', { state: { scrollTo: 'donate' } })
@@ -225,7 +276,7 @@ export default function Navbar() {
               >
                 <Heart className="w-4 h-4 mr-2" />
                 Donate or Register
-              </Button>
+              </Button> */}
             </div>
 
             <button onClick={() => setIsOpen(!isOpen)} className={`xl:hidden p-2 rounded-xl transition-colors cursor-pointer ${isScrolled ? 'text-slate-900 hover:bg-slate-100' : 'text-slate-600 hover:bg-black/10'}`}>
@@ -258,6 +309,26 @@ export default function Navbar() {
                         }`}
                       >
                         {link.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Events */}
+                  <div className="mb-4">
+                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-4 mb-2">
+                      Events
+                    </div>
+                    {events.map((event) => (
+                      <button
+                        key={event.label}
+                        onClick={() => { navigate(event.href); setIsOpen(false) }}
+                        className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-colors cursor-pointer ${
+                          eventName && `/event/${eventName}` === event.href
+                            ? 'bg-[#fc87a7]/10 text-[#fc87a7]'
+                            : 'text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        {event.label}
                       </button>
                     ))}
                   </div>

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import Navbar from '@/components/Navbar'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '@/components/ui/button'
 import { Search, Users, Trophy, ArrowRight, Lock, Plus, Check } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import CreateTeamOverlay from '@/components/teams/CreateTeamOverlay'
 import JoinTeamOverlay from '@/components/teams/JoinTeamOverlay'
 import { API_BASE_URL } from '@/config'
@@ -30,6 +29,7 @@ const handleFetchTeams = async () => {
 
 
 export default function Teams() {
+  const { eventName } = useParams()
   const { isAuthenticated, getAccessTokenSilently, user, refreshUser, isLoading } = useAuth()
   const [showRegisterWarning, setShowRegisterWarning] = useState(false)
   const [teams, setTeams] = useState([])
@@ -141,7 +141,6 @@ export default function Teams() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
       <div className="pt-32 px-6 max-w-7xl mx-auto pb-20">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div>
@@ -228,7 +227,7 @@ export default function Teams() {
                 <Button 
                   variant="outline" 
                   className="flex-1 border-2 rounded-md text-slate-700 cursor-pointer hover:bg-gray-100"
-                  onClick={() => navigate(`/teams/${team.name}`)}
+                  onClick={() => navigate(`/event/${eventName}/teams/${team.name}`)}
                 >
                   View Details
                 </Button>
