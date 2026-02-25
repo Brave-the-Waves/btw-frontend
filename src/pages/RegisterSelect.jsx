@@ -136,7 +136,7 @@ function SportsCard() {
         <svg className="w-8 h-8 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20l9-12H3z"></path></svg>
       </div>
       <h3 className="text-xl font-bold text-slate-900 mb-2">The Sports Division</h3>
-      <p className="text-slate-500 text-sm mb-6">Registration by Invitation. For those who train with DBZ, DOD, CDBC or CsBUM, your captains will contact you if you have been selected to partake in this competitive roster.</p>
+      <p className="text-slate-500 text-sm mb-6">The sports division is for those who want to particpate competitely while supporting a good cause. For those who train with DBZ, DOD, CDBC or CsBUM, your captains will contact you if you have been selected to partake in this competitive roster.</p>
 
       {!showInput ? (
         <div className="flex flex-col gap-3">

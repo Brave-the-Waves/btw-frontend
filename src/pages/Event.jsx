@@ -7,7 +7,7 @@ import Activities from '@/components/home/EventInfo/Activities'
 import LocationMap from '@/components/home/EventInfo/LocationMap'
 import Donate from '@/components/home/Donate/index'
 import { useAuth } from '../contexts/AuthContext'
-import { Users, ImagePlus, Heart, CheckCircle2, Building2, GraduationCap, Sailboat, Info, Mail } from 'lucide-react'
+import { Users, ImagePlus, Heart, CheckCircle2, Building2, Sailboat, Info, Mail } from 'lucide-react'
 import Button from '@/components/ui/button'
 
 // Add new events here as they are created
@@ -274,11 +274,11 @@ export default function Event() {
               className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-4"
             >
               <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
-                <GraduationCap className="w-5 h-5 text-purple-600" />
+                <Users className="w-5 h-5 text-purple-600" />
               </div>
               <div>
-                <p className="text-xs font-semibold text-purple-600 uppercase tracking-wide mb-1">Student</p>
-                <h3 className="text-lg font-bold text-slate-900">Student Division</h3>
+                <p className="text-xs font-semibold text-purple-600 uppercase tracking-wide mb-1">Sports</p>
+                <h3 className="text-lg font-bold text-slate-900">Sports Division</h3>
               </div>
               <p className="text-sm text-slate-600 leading-relaxed flex-1">
                 A competitive inter-school division for Montreal's top university and college teams.
