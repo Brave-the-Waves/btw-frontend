@@ -114,6 +114,14 @@ function SportsCard() {
         throw new Error(data.message || 'Code verification failed')
       }
 
+      // Mark that a registration flow completed so the success page will render.
+      // The payment flow already sets this flag; selection-code flow needs to set it too.
+      try {
+        sessionStorage.setItem('registration_payment_initiated', 'true')
+      } catch (e) {
+        console.warn('Unable to set sessionStorage flag for registration success', e)
+      }
+
       navigate('/registration=success')
     } catch (err) {
       console.error('Selection verify error', err)
