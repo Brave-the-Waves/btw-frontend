@@ -25,7 +25,6 @@ export default function RegisterSelect() {
             <h3 className="text-xl font-bold text-slate-900 mb-2">The Community Division</h3>
             <p className="text-slate-500 text-sm mb-6">
             The Community Division is open to everyone and brings together friends, students, families and community groups who want to paddle for a meaningful cause. No experience required!<br/><br/>
-            Teams of 20 to 30 paddlers will be formed by the Executive Rostering Committee to ensure balanced teams and fairness throughout the competition.
             </p>
 
             <div className="flex flex-col gap-3">
@@ -56,7 +55,7 @@ export default function RegisterSelect() {
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">The Corporate Division</h3>
             <p className="text-slate-500 text-sm mb-6">
-              This division highlights organizations that give back to their community through an ardent commitment to an important cause.<br/> <br/> This entails a 600$ registration fee and a 1900$ mandatory donation with tax receipt. This includes the allocation of a full boat composed of 20 to 30 paddlers.
+              The Corporate Division highlights organizations that give back to their community through an ardent commitment to an important cause.<br/> <br/> 
             </p>
 
             <div className="flex flex-col gap-3">

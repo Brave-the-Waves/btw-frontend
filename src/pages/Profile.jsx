@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '@/components/Navbar'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '@/components/ui/button'
-import { AlertCircle, Camera, Plus, Copy, Check } from 'lucide-react'
+import { AlertCircle, Camera, Plus, Copy, Check, FileText, ShieldCheck } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import RecentDonations from '@/components/users/RecentDonations'
@@ -10,6 +10,8 @@ import DonateButton from '@/components/users/DonateButton'
 import { API_BASE_URL } from '@/config'
 import { storage } from '@/firebase'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import WaiverOverlay from '@/components/users/WaiverOverlay'
+import { Toaster } from 'sonner'
 
 export default function Profile() {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently, isPaymentLoading, logout, refreshUser } = useAuth()
@@ -30,6 +32,8 @@ export default function Profile() {
   const [isUploading, setIsUploading] = useState(false)
   const [activeTab, setActiveTab] = useState('donations')
   const [copySuccess, setCopySuccess] = useState(false)
+  const [showWaiverOverlay, setShowWaiverOverlay] = useState(false)
+  const [waiverStatus, setWaiverStatus] = useState(null)
   const fileInputRef = useRef(null)
 
   useEffect(() => {
@@ -48,6 +52,28 @@ export default function Profile() {
       setIsProfileLoading(false)
     }
   }, [user])
+
+  // Fetch waiver status when registration is confirmed
+  useEffect(() => {
+    if (!user?.isRegistered || !user?._id) return
+    let cancelled = false
+    const fetchWaiverStatus = async () => {
+      try {
+        const token = await getAccessTokenSilently()
+        const res = await fetch(`${API_BASE_URL}/api/waivers/${user._id}/status`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (res.ok && !cancelled) {
+          const data = await res.json()
+          setWaiverStatus(data)
+        }
+      } catch (err) {
+        console.error('Failed to fetch waiver status:', err)
+      }
+    }
+    fetchWaiverStatus()
+    return () => { cancelled = true }
+  }, [user?._id, user?.isRegistered])
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0]
@@ -120,6 +146,7 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <Toaster position="top-center" richColors />
       <Navbar />
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
         <div className="pt-28 px-6 max-w-6xl mx-auto pb-12">
@@ -174,6 +201,21 @@ export default function Profile() {
                 </span>
               )}
 
+              {/* Waiver status badge */}
+              {formData.isRegistered && waiverStatus?.exists && (
+                waiverStatus.completed ? (
+                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    Waiver Signed ✓
+                  </span>
+                ) : (
+                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700 flex items-center gap-1">
+                    <FileText className="w-3.5 h-3.5" />
+                    Waiver Pending
+                  </span>
+                )
+              )}
+
               {/* Info: view mode */}
               {!isEditing ? (
                 <div className="w-full space-y-2 text-sm">
@@ -226,6 +268,15 @@ export default function Profile() {
                 <Button variant="outline" onClick={() => setIsEditing(!isEditing)} className="w-full text-sm cursor-pointer border border-slate-200 rounded-xl">
                   {isEditing ? 'Cancel' : 'Edit Profile'}
                 </Button>
+                {formData.isRegistered && waiverStatus?.exists && !waiverStatus?.completed && (
+                  <Button
+                    onClick={() => setShowWaiverOverlay(true)}
+                    className="w-full text-sm bg-pink-600 text-white hover:bg-pink-700 rounded-xl flex items-center justify-center gap-1.5"
+                  >
+                    <FileText className="w-4 h-4" />
+                    Sign Waiver
+                  </Button>
+                )}
                 <Button variant="outline" onClick={() => logout()} className="w-full text-sm text-slate-500 hover:text-slate-800">
                   Log Out
                 </Button>
@@ -327,6 +378,23 @@ export default function Profile() {
           </div>
         </div>
       </motion.div>
+
+      {showWaiverOverlay && userId && (
+        <WaiverOverlay
+          userId={userId}
+          getToken={getAccessTokenSilently}
+          userEmail={formData.email}
+          onClose={() => setShowWaiverOverlay(false)}
+          onSigned={() => {
+            setWaiverStatus((prev) => ({
+              ...prev,
+              completed: true,
+              signedAt: new Date().toISOString(),
+            }))
+            setShowWaiverOverlay(false)
+          }}
+        />
+      )}
     </div>
   )
 }
