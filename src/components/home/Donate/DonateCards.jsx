@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import Checkbox from './CheckBox'
 import { API_BASE_URL } from '@/config'
 
-export default function DonateCards({ preFillDonationId, preFillName }) {
+export default function DonateCards({ preFillDonationId, preFillName, eventPage }) {
   const [amount, setAmount] = useState(25)
   const [isCustom, setIsCustom] = useState(false)
   const [donationID, setDonationID] = useState(preFillDonationId || '')
@@ -185,7 +185,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
         )}
       </AnimatePresence>
 
-      <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group md:col-span-3">
+      <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className={`relative group ${eventPage ? 'md:col-span-5 max-w-4xl mx-auto w-full' : 'md:col-span-3'}`}>
         <div className="absolute inset-0 bg-[#fc87a7] rounded-3xl blur-xl opacity-10 group-hover:opacity-20 transition-opacity" />
         <div className="relative bg-white rounded-3xl p-8 md:p-10 shadow-xl shadow-[#fc87a7]/50 border border-[#fc87a7]/10 h-full flex flex-col">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#fc87a7] to-[#fc87a7]/90 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -347,8 +347,8 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           </Button>
         </div>
       </motion.div>
-
-      <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group md:col-span-2">
+      {!eventPage && (
+          <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group md:col-span-2">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-900 rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity" />
         <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 md:p-10 shadow-xl h-full text-white flex flex-col">
           <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -379,6 +379,7 @@ export default function DonateCards({ preFillDonationId, preFillName }) {
           </Button>
         </div>
       </motion.div>
+      )}
     </div>
   )
 }

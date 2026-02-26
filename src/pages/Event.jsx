@@ -379,7 +379,7 @@ export default function Event() {
       </section>
 
       {/* ── Donate ── */}
-      <Donate />
+      <Donate eventPage={true} />
 
       {/* ── Map ── */}
       <section className="py-16 bg-white">

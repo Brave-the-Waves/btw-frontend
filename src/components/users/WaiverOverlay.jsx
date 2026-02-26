@@ -10,117 +10,69 @@ import { toast } from 'sonner'
 // Waiver Text
 // ─────────────────────────────────────────────────────────────────────────────
 
-const WAIVER_EN = `RELEASE OF LIABILITY, WAIVER OF CLAIMS, ASSUMPTION OF RISK, AND INDEMNITY AGREEMENT
+const WAIVER_EN = `WAIVER AND RELEASE OF LIABILITY
 
-Beat The Wave Dragon Boat Festival
+Scope of Activities
+This Waiver covers my participation in the 2026 edition of Brave The Wave on July 4th 2026.
 
-Please read this entire document carefully before signing.
+Assumption of Risk
+I acknowledge that participation in the above activities involves risks, dangers, and hazards. These may include, but are not limited to, boats capsizing or colliding in good or bad weather conditions. I am aware that by participating in these activities, I risk personal injury, death, or damage to property. I knowingly accept and assume all such risks. I understand that I must wear a personal flotation device (PFD) at all times during this event.
 
-1. NATURE OF ACTIVITY
+Release of Liability
+I hereby release the following companies and entities (collectively, the "Releasees"):
+a) 22Dragons
+b) Club Sportif de Bateau Dragon de l'Université de Montréal
+c) Women's Health Awareness Movement
+d) More Than A Cure
+l) The directors, officers, employees, agents, independent contractors, and volunteers of any of the above entities
+from any and all liability for loss, damage, injury, or expenses that I may suffer as a result of my participation in the activities described above, howsoever caused, including negligence on the part of any of the Releasees.
 
-Dragon boating is a physically demanding water-based team sport that involves inherent and significant risks. These risks include, but are not limited to: drowning, near-drowning, hypothermia, capsizing, collision with other vessels or fixed objects, overexertion, physical injury (including broken bones, sprains, concussions, and spinal injuries), and death. These risks exist regardless of the precautions taken by the organizers, officials, or other participants.
+No Contribution or Indemnity Claims
+If I commence any legal action for negligence, I agree not to seek contribution or indemnity from any of the Releasees. I further release the Releasees from all liability that could arise from such contribution or indemnity claims.
 
-2. ASSUMPTION OF RISK
+Indemnification
+I agree to hold harmless and indemnify the Releasees against any claims, liabilities, or legal expenses incurred directly or indirectly as a result of any claim brought by me against any person or entity for loss, damage, injury, or expenses suffered by me. For example, if I sue a member of another team, a coach, or a steersperson for negligence, and that person seeks contribution or indemnity from 22DRAGONS, CsBUM, WHAM or MTAC, I agree to be responsible for any liability claims and legal expenses incurred by those entities in connection with such claims.
 
-I, the undersigned participant (or the parent/legal guardian completing this waiver on behalf of the minor participant named above), freely, voluntarily, and without inducement acknowledge and assume all risks of injury, illness, or death associated with my participation in the Beat The Wave Dragon Boat Festival (the "Event"), including those risks described in Section 1 and any other risks not specifically mentioned herein.
+Age of Majority
+I confirm that I am at least 18 years of age, or, if under 18, that my parent or legal guardian has signed this Waiver.
 
-I understand that the Event takes place on open water and that conditions may be unpredictable. I confirm that I am in adequate physical condition to safely participate. I accept full responsibility for my own safety and well-being during the Event.
+Photography and Media Release
+I acknowledge that photographs and/or videos may be taken during the activities and that such media may be published on social media or other public platforms.
 
-3. WAIVER AND RELEASE OF LIABILITY
+Binding Agreement
+I acknowledge and agree that participation in the above activities is not permitted unless this Waiver is signed. I further agree that this Waiver is binding upon me and my heirs, executors, administrators, and legal representatives.`
 
-In consideration of being permitted to participate in the Event, I hereby release, waive, discharge, and covenant not to sue Beat The Wave, its directors, officers, employees, volunteers, sponsors, partners, venue owners, and all other associated persons and entities (collectively, the "Released Parties") from any and all liability, claims, demands, actions, or causes of action arising out of or related to any loss, damage, injury, illness, or death that may be sustained by me during, or arising out of, my participation in the Event, including losses caused by the negligence (including gross negligence) of the Released Parties.
+const WAIVER_FR = `RENONCIATION ET DÉCHARGE DE RESPONSABILITÉ
 
-4. INDEMNIFICATION
+Portée des activités
+La présente renonciation couvre ma participation à l'édition 2026 de Brave The Wave, qui aura lieu le 4 juillet 2026.
 
-I agree to indemnify and hold harmless the Released Parties against any and all claims, suits, losses, liabilities, damages, costs, and expenses (including legal fees) brought by third parties arising out of my participation in the Event or my breach of this Agreement.
+Acceptation des risques
+Je reconnais que la participation aux activités mentionnées ci-dessus comporte des risques, des dangers et des aléas. Ceux-ci peuvent inclure, sans s'y limiter, le chavirement d'embarcations ou des collisions, quelles que soient les conditions météorologiques. Je suis conscient(e) qu'en participant à ces activités, je m'expose à des risques de blessures corporelles, de décès ou de dommages matériels. J'accepte et assume volontairement tous ces risques. Je comprends que je dois porter une veste de sauvetage en tout temps durant cet événement.
 
-5. MEDICAL CONDITIONS AND AUTHORITY TO TREAT
+Décharge de responsabilité
+Par la présente, je libère les sociétés et entités suivantes (collectivement, les « Personnes libérées ») :
+a) 22Dragons
+b) Club Sportif de Bateau Dragon de l'Université de Montréal
+c) Women's Health Awareness Movement
+d) More Than A Cure
+l) ainsi que les administrateurs, dirigeants, employés, agents, contractuels indépendants et bénévoles de toute entité mentionnée ci-dessus,
+de toute responsabilité pour toute perte, tout dommage, toute blessure ou toute dépense que je pourrais subir en raison de ma participation aux activités décrites ci-dessus, quelle qu'en soit la cause, y compris en cas de négligence de la part de l'une ou l'autre des Personnes libérées.
 
-I represent that I am in suitable physical and mental condition to participate in the Event. I have not been advised by a physician to refrain from the activities associated with dragon boating. I authorize the Released Parties to seek emergency medical treatment on my behalf if I am unable to do so myself, and I agree to pay all costs associated with such treatment.
+Absence de réclamation pour contribution ou indemnisation
+Si j'intente une poursuite pour négligence, je m'engage à ne pas réclamer de contribution ou d'indemnisation de la part des Personnes libérées. Je libère également les Personnes libérées de toute responsabilité pouvant découler d'une telle réclamation en contribution ou en indemnisation.
 
-6. RULES AND SAFETY
+Indemnisation
+Je m'engage à tenir indemnes et à indemniser les Personnes libérées à l'égard de toute réclamation, responsabilité ou dépense juridique encourue directement ou indirectement à la suite d'une réclamation intentée par moi contre toute personne ou entité pour une perte, un dommage, une blessure ou des dépenses que j'aurais subis. Par exemple, si je poursuis un membre d'une autre équipe, un entraîneur ou un barreur pour négligence, et que cette personne réclame ensuite une contribution ou une indemnisation de la part de 22DRAGONS, CsBUM, WHAM ou MTAC, j'accepte d'assumer toute responsabilité et tous les frais juridiques engagés par ces entités en lien avec une telle réclamation.
 
-I agree to comply with all Event rules, instructions, and safety directives issued by officials, coaches, and organizers. I understand that failure to comply may result in removal from the Event without refund.
+Âge de la majorité
+Je confirme que j'ai au moins 18 ans ou, si j'ai moins de 18 ans, que mon parent ou tuteur légal a signé la présente renonciation.
 
-7. PHOTOGRAPHY AND MEDIA CONSENT
+Autorisation de captation et de diffusion d'images
+Je reconnais que des photographies et/ou des vidéos peuvent être prises durant les activités et que celles-ci peuvent être diffusées sur les réseaux sociaux ou toute autre plateforme publique.
 
-I grant the Released Parties an irrevocable, royalty-free, worldwide license to photograph, film, and record me during the Event and to use, reproduce, distribute, and display such materials in any media for promotional, educational, commercial, or any other lawful purpose, without further compensation or notification.
-
-8. COVID-19 AND COMMUNICABLE DISEASE ACKNOWLEDGEMENT
-
-I acknowledge that participation in any group outdoor event carries a risk of exposure to communicable diseases, including COVID-19. I voluntarily assume that risk and agree to comply with all applicable public health guidelines and Event health protocols.
-
-9. GOVERNING LAW
-
-This Agreement shall be governed by and construed in accordance with the laws of the Province of British Columbia and the applicable laws of Canada. Any disputes arising hereunder shall be subject to the exclusive jurisdiction of the courts of British Columbia.
-
-10. SEVERABILITY
-
-If any provision of this Agreement is found to be unenforceable or invalid, the remaining provisions shall continue in full force and effect.
-
-11. ENTIRE AGREEMENT
-
-This Agreement constitutes the entire agreement between the parties with respect to its subject matter and supersedes all prior negotiations, representations, or agreements, whether written or oral.
-
-12. ACKNOWLEDGEMENT OF UNDERSTANDING
-
-I HAVE READ THIS ENTIRE DOCUMENT. I UNDERSTAND ITS CONTENTS AND ACKNOWLEDGE THAT BY SIGNING BELOW I AM GIVING UP SUBSTANTIAL RIGHTS, INCLUDING THE RIGHT TO SUE THE RELEASED PARTIES. I AM SIGNING THIS AGREEMENT FREELY AND VOLUNTARILY WITHOUT ANY INDUCEMENT. I INTEND THIS TO BE A FULL AND FINAL RELEASE OF ALL LIABILITY TO THE GREATEST EXTENT PERMITTED BY LAW.`
-
-const WAIVER_FR = `DÉCHARGE DE RESPONSABILITÉ, RENONCIATION AUX RÉCLAMATIONS, ACCEPTATION DES RISQUES ET ACCORD D'INDEMNISATION
-
-Festival de pirogue Beat The Wave
-
-Veuillez lire l'intégralité de ce document attentivement avant de le signer.
-
-1. NATURE DE L'ACTIVITÉ
-
-La pratique de la pirogue est un sport d'équipe nautique physiquement exigeant comportant des risques inhérents et significatifs. Ces risques comprennent, sans s'y limiter : noyade, quasi-noyade, hypothermie, chavirement, collision avec d'autres embarcations ou obstacles fixes, effort excessif, blessures corporelles (y compris fractures, entorses, commotions cérébrales et blessures rachidiennes) et décès. Ces risques existent indépendamment des précautions prises par les organisateurs, officiels ou autres participants.
-
-2. ACCEPTATION DES RISQUES
-
-Je soussigné(e), participant(e) (ou parent/tuteur légal complétant cette décharge au nom du participant mineur nommé ci-dessus), reconnais librement, volontairement et sans contrainte, et assume tous les risques de blessure, maladie ou décès associés à ma participation au Festival de pirogue Beat The Wave (l'« Événement »), y compris les risques décrits à l'article 1 et tout autre risque non spécifiquement mentionné dans le présent document.
-
-Je comprends que l'Événement se déroule en eau libre et que les conditions peuvent être imprévisibles. Je confirme être en condition physique adéquate pour participer en toute sécurité. J'accepte l'entière responsabilité de ma propre sécurité et de mon bien-être pendant l'Événement.
-
-3. RENONCIATION ET DÉCHARGE DE RESPONSABILITÉ
-
-En contrepartie de ma participation à l'Événement, je décharge, libère, exonère et renonce à tout recours contre Beat The Wave, ses administrateurs, dirigeants, employés, bénévoles, commanditaires, partenaires, propriétaires de lieux et toutes autres personnes et entités associées (collectivement, les « Parties libérées ») de toute responsabilité, réclamation, demande, action ou cause d'action découlant de ou liée à toute perte, dommage, blessure, maladie ou décès que je pourrais subir pendant, ou découlant de, ma participation à l'Événement, y compris les pertes causées par la négligence (y compris la négligence grossière) des Parties libérées.
-
-4. INDEMNISATION
-
-Je m'engage à indemniser et à dégager les Parties libérées de toute réclamation, poursuite, perte, responsabilité, dommage, coût et dépense (y compris les honoraires d'avocat) présentés par des tiers découlant de ma participation à l'Événement ou du non-respect du présent Accord.
-
-5. CONDITIONS MÉDICALES ET AUTORISATION DE TRAITEMENT
-
-Je déclare être en condition physique et mentale appropriée pour participer à l'Événement. Aucun médecin ne m'a déconseillé de pratiquer les activités associées à la pirogue. J'autorise les Parties libérées à chercher un traitement médical d'urgence en mon nom si je suis dans l'incapacité de le faire moi-même, et j'accepte d'assumer tous les coûts associés à ce traitement.
-
-6. RÈGLEMENT ET SÉCURITÉ
-
-J'accepte de me conformer à toutes les règles de l'Événement, instructions et directives de sécurité émises par les officiels, entraîneurs et organisateurs. Je comprends que le non-respect de ces règles peut entraîner mon exclusion de l'Événement sans remboursement.
-
-7. CONSENTEMENT À LA PHOTOGRAPHIE ET AUX MÉDIAS
-
-J'accorde aux Parties libérées une licence irrévocable, libre de redevances et mondiale pour me photographier, me filmer et m'enregistrer pendant l'Événement et pour utiliser, reproduire, distribuer et afficher ces documents dans tout média à des fins promotionnelles, éducatives, commerciales ou à toute autre fin légale, sans compensation supplémentaire ni notification.
-
-8. RECONNAISSANCE CONCERNANT LA COVID-19 ET LES MALADIES TRANSMISSIBLES
-
-Je reconnais que la participation à tout événement de groupe en plein air comporte un risque d'exposition à des maladies transmissibles, y compris la COVID-19. J'assume volontairement ce risque et accepte de me conformer à toutes les directives de santé publique applicables et aux protocoles sanitaires de l'Événement.
-
-9. LOI APPLICABLE
-
-Le présent Accord est régi et interprété conformément aux lois de la province de Colombie-Britannique et aux lois applicables du Canada. Tout litige découlant des présentes sera soumis à la compétence exclusive des tribunaux de la Colombie-Britannique.
-
-10. DIVISIBILITÉ
-
-Si une disposition du présent Accord est jugée inapplicable ou invalide, les dispositions restantes continueront à être pleinement en vigueur.
-
-11. INTÉGRALITÉ DE L'ACCORD
-
-Le présent Accord constitue l'entente intégrale entre les parties concernant son objet et remplace toutes négociations, représentations ou ententes antérieures, qu'elles soient écrites ou verbales.
-
-12. RECONNAISSANCE DE COMPRÉHENSION
-
-J'AI LU L'INTÉGRALITÉ DU PRÉSENT DOCUMENT. J'EN COMPRENDS LE CONTENU ET RECONNAIS QU'EN SIGNANT CI-DESSOUS, JE RENONCE À DES DROITS SUBSTANTIELS, Y COMPRIS LE DROIT DE POURSUIVRE LES PARTIES LIBÉRÉES. JE SIGNE LE PRÉSENT ACCORD LIBREMENT ET VOLONTAIREMENT SANS AUCUNE CONTRAINTE. J'ENTENDS QUE CECI CONSTITUE UNE DÉCHARGE COMPLÈTE ET DÉFINITIVE DE TOUTE RESPONSABILITÉ DANS TOUTE LA MESURE PERMISE PAR LA LOI.`
+Caractère contraignant
+Je reconnais et accepte que la participation aux activités mentionnées ci-dessus est interdite sans la signature de la présente renonciation. Je reconnais également que cette renonciation est contraignante pour moi ainsi que pour mes héritiers, exécuteurs testamentaires, administrateurs et représentants légaux.`
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
@@ -155,6 +107,25 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
 
   const participantSigRef = useRef(null)
   const guardianSigRef = useRef(null)
+
+  const [touched, setTouched] = useState({})
+  const markTouched = (field) => setTouched((prev) => ({ ...prev, [field]: true }))
+
+  const getFieldError = (field) => {
+    if (!touched[field]) return null
+    const val = (formData[field] || '').trim()
+    if (!val) return null
+    const nameFields = ['firstName', 'lastName', 'parentGuardianName', 'emergencyContactName']
+    const emailFields = ['email', 'parentGuardianEmail']
+    const phoneFields = ['phone', 'emergencyContactPhone', 'parentGuardianPhone']
+    if (nameFields.includes(field) && !/^[a-zA-Z\u00C0-\u024F\s'\-.]+$/.test(val))
+      return 'Name contains invalid characters'
+    if (emailFields.includes(field) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val))
+      return 'Please enter a valid email address'
+    if (phoneFields.includes(field) && !/^[\d\s+\-().]+$/.test(val))
+      return 'Phone number contains invalid characters'
+    return null
+  }
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -241,6 +212,11 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
       const { parentGuardianName, parentGuardianPhone, parentGuardianEmail } = formData
       if (!parentGuardianName.trim() || !parentGuardianPhone.trim() || !parentGuardianEmail.trim()) return false
     }
+    // Format validation
+    const nameCheck = ['firstName', 'lastName', 'emergencyContactName', ...(isMinor ? ['parentGuardianName'] : [])]
+    if (nameCheck.some((f) => !/^[a-zA-Z\u00C0-\u024F\s'\-.]+$/.test(formData[f].trim()))) return false
+    const emailCheck = ['email', ...(isMinor ? ['parentGuardianEmail'] : [])]
+    if (emailCheck.some((f) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData[f].trim()))) return false
     return true
   }
 
@@ -350,20 +326,27 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
 
   const canClose = !isSubmitting && step < 4
 
-  const InputField = ({ label, type = 'text', field, required = true, placeholder, className = '' }) => (
-    <div className={className}>
-      <label className="block text-xs font-semibold text-slate-600 mb-1">
-        {label}{required && <span className="text-pink-500 ml-0.5">*</span>}
-      </label>
-      <input
-        type={type}
-        value={formData[field]}
-        onChange={(e) => setField(field, e.target.value)}
-        placeholder={placeholder}
-        className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white"
-      />
-    </div>
-  )
+  const InputField = ({ label, type = 'text', field, required = true, placeholder, className = '' }) => {
+    const error = getFieldError(field)
+    return (
+      <div className={className}>
+        <label className="block text-xs font-semibold text-slate-600 mb-1">
+          {label}{required && <span className="text-pink-500 ml-0.5">*</span>}
+        </label>
+        <input
+          type={type}
+          value={formData[field]}
+          onChange={(e) => { setField(field, e.target.value); markTouched(field) }}
+          onBlur={() => markTouched(field)}
+          placeholder={placeholder}
+          className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${
+            error ? 'border-red-400 bg-red-50' : 'border-slate-200'
+          }`}
+        />
+        {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
+      </div>
+    )
+  }
 
   // ─────────────────────────────────────────────────────────────────────────
   // Loading
@@ -447,12 +430,31 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
           <section>
             <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">Personal Details</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <InputField label="First Name" field="firstName" />
-              <InputField label="Last Name" field="lastName" />
-              <InputField label="Email" type="email" field="email" />
-              <InputField label="Phone Number" type="tel" field="phone" placeholder="e.g. 6041234567" />
+              {[{ label: 'First Name', field: 'firstName' }, { label: 'Last Name', field: 'lastName' }].map(({ label, field }) => (
+                <div key={field}>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">{label}<span className="text-pink-500 ml-0.5">*</span></label>
+                  <input type="text" value={formData[field]} onChange={(e) => { setField(field, e.target.value); markTouched(field) }} onBlur={() => markTouched(field)}
+                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError(field) ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                  {getFieldError(field) && <p className="mt-1 text-xs text-red-500">{getFieldError(field)}</p>}
+                </div>
+              ))}
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Email<span className="text-pink-500 ml-0.5">*</span></label>
+                <input type="email" value={formData.email} onChange={(e) => { setField('email', e.target.value); markTouched('email') }} onBlur={() => markTouched('email')}
+                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('email') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                {getFieldError('email') && <p className="mt-1 text-xs text-red-500">{getFieldError('email')}</p>}
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Phone Number<span className="text-pink-500 ml-0.5">*</span></label>
+                <input type="tel" value={formData.phone} onChange={(e) => { setField('phone', e.target.value); markTouched('phone') }} onBlur={() => markTouched('phone')}
+                  placeholder="e.g. 6041234567"
+                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('phone') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                {getFieldError('phone') && <p className="mt-1 text-xs text-red-500">{getFieldError('phone')}</p>}
+              </div>
               <div className="sm:col-span-2">
-                <InputField label="Date of Birth" type="date" field="dateOfBirth" required={false} />
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Date of Birth</label>
+                <input type="date" value={formData.dateOfBirth} onChange={(e) => setField('dateOfBirth', e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white" />
                 {isMinor && (
                   <p className="mt-1.5 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed">
                     <strong>Minor participant:</strong> As a minor, a parent or legal guardian must complete and sign this waiver on your behalf.
@@ -467,9 +469,24 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
             <section>
               <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">Parent / Guardian</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <InputField label="Parent/Guardian Full Name" field="parentGuardianName" className="sm:col-span-2" />
-                <InputField label="Parent/Guardian Phone" type="tel" field="parentGuardianPhone" />
-                <InputField label="Parent/Guardian Email" type="email" field="parentGuardianEmail" />
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Parent/Guardian Full Name<span className="text-pink-500 ml-0.5">*</span></label>
+                  <input type="text" value={formData.parentGuardianName} onChange={(e) => { setField('parentGuardianName', e.target.value); markTouched('parentGuardianName') }} onBlur={() => markTouched('parentGuardianName')}
+                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('parentGuardianName') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                  {getFieldError('parentGuardianName') && <p className="mt-1 text-xs text-red-500">{getFieldError('parentGuardianName')}</p>}
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Parent/Guardian Phone<span className="text-pink-500 ml-0.5">*</span></label>
+                  <input type="tel" value={formData.parentGuardianPhone} onChange={(e) => { setField('parentGuardianPhone', e.target.value); markTouched('parentGuardianPhone') }} onBlur={() => markTouched('parentGuardianPhone')}
+                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('parentGuardianPhone') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                  {getFieldError('parentGuardianPhone') && <p className="mt-1 text-xs text-red-500">{getFieldError('parentGuardianPhone')}</p>}
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Parent/Guardian Email<span className="text-pink-500 ml-0.5">*</span></label>
+                  <input type="email" value={formData.parentGuardianEmail} onChange={(e) => { setField('parentGuardianEmail', e.target.value); markTouched('parentGuardianEmail') }} onBlur={() => markTouched('parentGuardianEmail')}
+                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('parentGuardianEmail') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                  {getFieldError('parentGuardianEmail') && <p className="mt-1 text-xs text-red-500">{getFieldError('parentGuardianEmail')}</p>}
+                </div>
               </div>
             </section>
           )}
@@ -478,8 +495,18 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
           <section>
             <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">Emergency Contact</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <InputField label="Emergency Contact Name" field="emergencyContactName" />
-              <InputField label="Emergency Contact Phone" type="tel" field="emergencyContactPhone" />
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Emergency Contact Name<span className="text-pink-500 ml-0.5">*</span></label>
+                <input type="text" value={formData.emergencyContactName} onChange={(e) => { setField('emergencyContactName', e.target.value); markTouched('emergencyContactName') }} onBlur={() => markTouched('emergencyContactName')}
+                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('emergencyContactName') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                {getFieldError('emergencyContactName') && <p className="mt-1 text-xs text-red-500">{getFieldError('emergencyContactName')}</p>}
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Emergency Contact Phone<span className="text-pink-500 ml-0.5">*</span></label>
+                <input type="tel" value={formData.emergencyContactPhone} onChange={(e) => { setField('emergencyContactPhone', e.target.value); markTouched('emergencyContactPhone') }} onBlur={() => markTouched('emergencyContactPhone')}
+                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('emergencyContactPhone') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                {getFieldError('emergencyContactPhone') && <p className="mt-1 text-xs text-red-500">{getFieldError('emergencyContactPhone')}</p>}
+              </div>
             </div>
           </section>
 
