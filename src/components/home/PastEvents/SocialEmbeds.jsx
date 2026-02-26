@@ -15,7 +15,7 @@ export default function SocialEmbeds({ instagramUrl, facebookUrl, instagramPostU
                 title="instagram-post"
                 src={`${postBase}/embed`}
                 width="100%"
-                height="600"
+                height="700"
                 style={{ border: 'none', display: 'block', minHeight: 300 }}
                 scrolling="no"
                 frameBorder="0"
@@ -43,7 +43,7 @@ export default function SocialEmbeds({ instagramUrl, facebookUrl, instagramPostU
             title="Facebook Page"
             src={`https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(facebookUrl)}&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true`}
             width="100%"
-            height="600"
+            height="400"
             style={{ border: 'none', overflow: 'hidden', minHeight: 300 }}
             scrolling="no"
             frameBorder="0"
