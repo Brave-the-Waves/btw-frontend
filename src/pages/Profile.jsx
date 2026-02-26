@@ -14,7 +14,7 @@ import WaiverOverlay from '@/components/users/WaiverOverlay'
 import { Toaster } from 'sonner'
 
 export default function Profile() {
-  const { user, isAuthenticated, isLoading, getAccessTokenSilently, isPaymentLoading, logout, refreshUser } = useAuth()
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently, isPaymentLoading, logout, refreshUser, sendPasswordReset } = useAuth()
   const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
@@ -35,6 +35,9 @@ export default function Profile() {
   const [showWaiverOverlay, setShowWaiverOverlay] = useState(false)
   const [waiverStatus, setWaiverStatus] = useState(null)
   const fileInputRef = useRef(null)
+  const [resetLoading, setResetLoading] = useState(false)
+  const [resetMsg, setResetMsg] = useState('')
+  const [resetError, setResetError] = useState('')
 
   useEffect(() => {
     if (user) {
@@ -260,6 +263,16 @@ export default function Profile() {
                   <Button type="submit" className="w-full bg-slate-900 text-white hover:bg-slate-800 text-sm cursor-pointer">
                     Save Changes
                   </Button>
+
+                  <div className="mt-2">
+                    <button
+                      type="button"
+                      onClick={() => navigate('/change-password')}
+                      className="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm hover:bg-slate-50"
+                    >
+                      Change password
+                    </button>
+                  </div>
                 </form>
               )}
 

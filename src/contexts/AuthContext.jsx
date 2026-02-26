@@ -5,8 +5,9 @@ import {
   signOut, 
   onAuthStateChanged,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-  , sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset,
+  reauthenticateWithCredential, EmailAuthProvider, updatePassword
 } from 'firebase/auth'
 import { auth } from '../firebase'
 import { API_BASE_URL } from '../config'
@@ -197,6 +198,20 @@ export default function AuthProvider({ children }) {
     }
   }
 
+  const changePassword = async (currentPassword, newPassword) => {
+    if (!auth.currentUser || !auth.currentUser.email) {
+      throw new Error('No authenticated user')
+    }
+    try {
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, currentPassword)
+      await reauthenticateWithCredential(auth.currentUser, credential)
+      await updatePassword(auth.currentUser, newPassword)
+    } catch (err) {
+      console.error('changePassword error:', err)
+      throw err
+    }
+  }
+
   // Deprecated: use loginWithGoogle
   const loginWithRedirect = loginWithGoogle
 
@@ -278,6 +293,7 @@ export default function AuthProvider({ children }) {
     signup,
     sendPasswordReset,
     resetPassword,
+    changePassword,
     logout,
     getAccessTokenSilently,
     initiateRegistrationPayment,
