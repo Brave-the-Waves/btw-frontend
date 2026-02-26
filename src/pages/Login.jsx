@@ -101,11 +101,16 @@ export default function Login() {
         </Button>
 
         <div className="text-center text-sm">
-            <span className="text-gray-600">Don't have an account? </span>
-            <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-500">
-                Register here
-            </Link>
-        </div>
+        <span className="text-gray-600">Don't have an account? </span>
+        <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-500">
+          Register here
+        </Link>
+      
+
+      <div className="text-center mt-3 text-sm">
+        <Link to="/forgot-password" className="text-[#fc87a7] hover:underline">Forgot your password?</Link>
+      </div>
+      </div>
       </div>
     </div>
   )

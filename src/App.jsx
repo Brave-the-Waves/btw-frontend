@@ -14,6 +14,9 @@ import RegistrationSuccess from './pages/RegistrationSuccess'
 import RegistrationCancel from './pages/RegistrationCancel'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
+import ChangePassword from './pages/ChangePassword'
 import Register from './pages/Register'
 import RegisterSelect from './pages/RegisterSelect'
 import CorporateRegister from './pages/CorporateRegister'
@@ -27,6 +30,9 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/crew" element={<Crew />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/register" element={<RegisterSelect />} />
         <Route path="/register/details" element={<Register />} />
