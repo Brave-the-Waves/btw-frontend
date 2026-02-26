@@ -35,14 +35,11 @@ export default function Profile() {
   const [showWaiverOverlay, setShowWaiverOverlay] = useState(false)
   const [waiverStatus, setWaiverStatus] = useState(null)
   const fileInputRef = useRef(null)
-<<<<<<< feature/add-input-checking
-  const MAX_NAME_LENGTH = 30
-  const MAX_BIO_LENGTH = 300
-=======
   const [resetLoading, setResetLoading] = useState(false)
   const [resetMsg, setResetMsg] = useState('')
   const [resetError, setResetError] = useState('')
->>>>>>> main
+  const MAX_NAME_LENGTH = 30
+  const MAX_BIO_LENGTH = 300
 
   useEffect(() => {
     if (user) {
