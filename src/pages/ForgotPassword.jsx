@@ -27,7 +27,7 @@ export default function ForgotPassword() {
     try {
       // Use AuthContext to send the password reset email.
       await sendPasswordReset(emailTrim)
-      setSuccess('If an account with that email exists, a reset link has been sent.')
+      setSuccess('If an account with that email exists, a reset link has been sent. Check your spam folder if you don\'t see it soon.')
       // optionally navigate or keep on page
     } catch (err) {
       setError(err.message || 'Failed to request password reset')
@@ -52,9 +52,9 @@ export default function ForgotPassword() {
               <label className="block text-sm text-slate-700 mb-1">Email</label>
               <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
             </div>
-            <Button type="submit" className="w-full bg-pink-600 text-white" disabled={loading}>{loading ? 'Sending...' : 'Send reset link'}</Button>
+            <Button type="submit" className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-lg" disabled={loading}>{loading ? 'Sending...' : 'Send reset link'}</Button>
             <div className="text-center text-sm text-slate-500">
-              <button type="button" onClick={() => navigate('/login')} className="underline">Back to sign in</button>
+              <button type="button" onClick={() => navigate('/login')} className="hover:underline">Back to sign in</button>
             </div>
           </form>
         </div>

@@ -105,10 +105,11 @@ export default function Login() {
         <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-500">
           Register here
         </Link>
-      </div>
+      
 
       <div className="text-center mt-3 text-sm">
-        <Link to="/forgot-password" className="text-pink-600 hover:underline">Forgot your password?</Link>
+        <Link to="/forgot-password" className="text-[#fc87a7] hover:underline">Forgot your password?</Link>
+      </div>
       </div>
       </div>
     </div>
