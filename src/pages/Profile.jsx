@@ -35,9 +35,14 @@ export default function Profile() {
   const [showWaiverOverlay, setShowWaiverOverlay] = useState(false)
   const [waiverStatus, setWaiverStatus] = useState(null)
   const fileInputRef = useRef(null)
+<<<<<<< feature/add-input-checking
+  const MAX_NAME_LENGTH = 30
+  const MAX_BIO_LENGTH = 300
+=======
   const [resetLoading, setResetLoading] = useState(false)
   const [resetMsg, setResetMsg] = useState('')
   const [resetError, setResetError] = useState('')
+>>>>>>> main
 
   useEffect(() => {
     if (user) {
@@ -107,11 +112,15 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      // Sanitize name and bio before sending
+      const safeName = (editFormData.name || '').trim().replace(/[^\w\s\-'.]/g, '').slice(0, MAX_NAME_LENGTH)
+      const safeBio = (editFormData.bio || '').slice(0, MAX_BIO_LENGTH).replace(/<[^>]*>/g, '')
+
       const token = await getAccessTokenSilently()
       const res = await fetch(`${API_BASE_URL}/api/users/me`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(editFormData)
+        body: JSON.stringify({ name: safeName, bio: safeBio })
       })
       if (!res.ok) throw new Error('Failed to update profile')
       await refreshUser()
@@ -247,18 +256,28 @@ export default function Profile() {
                     <input
                       type="text"
                       value={editFormData.name}
-                      onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+                      onChange={(e) => {
+                        // Allow letters, numbers, spaces, hyphen, apostrophe, and periods
+                        const cleaned = e.target.value.replace(/[^\w\s\-'.]/g, '').slice(0, MAX_NAME_LENGTH)
+                        setEditFormData({ ...editFormData, name: cleaned })
+                      }}
                       className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none text-sm"
                     />
+                    <p className="text-xs text-slate-400 mt-1">{editFormData.name.length}/{MAX_NAME_LENGTH} characters</p>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-600 mb-1">Bio</label>
                     <textarea
                       value={editFormData.bio}
-                      onChange={(e) => setEditFormData({ ...editFormData, bio: e.target.value })}
+                      onChange={(e) => {
+                        // Strip HTML tags and limit length
+                        const cleaned = e.target.value.replace(/<[^>]*>/g, '').slice(0, MAX_BIO_LENGTH)
+                        setEditFormData({ ...editFormData, bio: cleaned })
+                      }}
                       className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none h-24 resize-none text-sm"
                       placeholder="Tell us why you paddle..."
                     />
+                    <p className="text-xs text-slate-400 mt-1">{editFormData.bio.length}/{MAX_BIO_LENGTH} characters</p>
                   </div>
                   <Button type="submit" className="w-full bg-slate-900 text-white hover:bg-slate-800 text-sm cursor-pointer">
                     Save Changes

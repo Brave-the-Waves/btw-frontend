@@ -31,7 +31,9 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
   }, [preFillDonationId])
 
   const handleMessageChange = (e) => {
-    const val = e.target.value.slice(0, maxMessageChars)
+    let val = e.target.value.slice(0, maxMessageChars)
+    // Remove any HTML tags to reduce injection/XSS risk
+    val = val.replace(/<[^>]*>/g, '')
     setMessage(val)
     const ta = textareaRef.current
     if (ta) {
@@ -47,6 +49,14 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
     setShowLoginPrompt(false)
 
     try {
+      // Basic validation & sanitization (client-side)
+      const safeDonationID = donationID ? donationID.trim().replace(/[^A-Za-z0-9-_]/g, '').slice(0, 32) : ''
+      if (donationID && safeDonationID !== donationID.trim()) {
+        throw new Error('Paddler ID contains invalid characters.')
+      }
+
+      const safeMessage = message ? message.slice(0, maxMessageChars).replace(/<[^>]*>/g, '') : ''
+
       // If user is authenticated, check for token
       let token = null
       if (isAuthenticated) {
@@ -57,7 +67,7 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
         }
       }
 
-      if (donationID) {
+      if (safeDonationID) {
         const resUser = await fetch(`${API_BASE_URL}/api/users`, {
           method: 'GET',
           headers: {
@@ -71,7 +81,7 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
 
         const userData = await resUser.json()
         const isValid = userData.some(u => 
-            u.donationId && u.donationId.trim() === donationID.trim() 
+          u.donationId && u.donationId.trim() === safeDonationID 
         )
 
         console.log('Paddler ID valid:', isValid)
@@ -89,10 +99,10 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
           ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
         body: JSON.stringify({ 
-          amount: amount,
+          amount: Math.round(amountNumber),
           currency: 'CAD',
-          donationId: donationID,
-          message: message,
+          donationId: safeDonationID,
+          message: safeMessage,
           isAnonymous: isAnonymous,
         }),
       })
@@ -105,7 +115,7 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
 
       // Redirect to Stripe Checkout URL provided by backend
       if (session.url) {
-        if (donationID) {
+        if (safeDonationID) {
             setIsSuccess(true)
             setTimeout(() => {
                 window.location.href = session.url
@@ -218,14 +228,18 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
                 <DollarSign className="h-4 w-4 text-slate-400" />
               </div>
               <input
+                type="number"
                 min="1"
+                step="1"
                 value={amount}
                 onChange={(e) => {
-                  setAmount(Number(e.target.value));
-                  setIsCustom(true);
+                  const parsed = Number(e.target.value)
+                  if (!Number.isFinite(parsed)) return
+                  // Clamp amount to a reasonable maximum to avoid accidental huge values
+                  const safeAmount = Math.max(1, Math.min(parsed, 100000))
+                  setAmount(safeAmount)
                 }}
-                onFocus={() => setIsCustom(true)}
-                className={`block w-full pl-9 pr-12 py-3 sm:text-sm rounded-xl border-slate-200 focus:ring-[#fc87a7] focus:border-[#fc87a7] ${isCustom ? 'border-[#fc87a7] ring-1 ring-[#fc87a7]' : 'border'}`}
+                className="block w-full pl-9 pr-12 py-3 sm:text-sm rounded-xl border border-slate-200 focus:ring-[#fc87a7] focus:border-[#fc87a7] outline-none"
                 placeholder="Custom amount"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -273,11 +287,13 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
                     type="text"
                     value={donationID}
                     onChange={(e) => {
-                        setDonationID(e.target.value)
+                        // Limit to alphanumeric, dash and underscore to prevent unsafe characters
+                        const cleaned = e.target.value.replace(/[^a-zA-Z0-9-_]/g, '').slice(0, 32)
+                        setDonationID(cleaned)
                         setDonationError('')
                     }}
                     disabled={isSuccess}
-                    className={`block w-full pl-10 pr-4 py-3 sm:text-sm rounded-xl border focus:ring-2 outline-none transition-colors duration-300 ${
+                    className={`block w-full pl-10 pr-4 py-3 sm:text-sm rounded-xl border focus:ring-0 outline-none transition-colors duration-300 ${
                         donationError 
                           ? 'border-red-500 focus:ring-red-200 bg-red-50' 
                           : 'border-slate-200 focus:ring-[#fc87a7] focus:border-[#fc87a7]'
@@ -354,16 +370,8 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
           <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
             <Users className="w-8 h-8 text-white" />
           </div>
-          <h3 className="text-2xl font-bold mb-4">Register for the Event</h3>
+          <h3 className="text-2xl font-bold mb-4">Register for the 2026 Event</h3>
           <div className="mb-6 text-slate-300 leading-relaxed">
-            <p className="mb-6">By creating an account and registering for the 2026 Brave the Waves competition, you’re not only securing your place on the water. You’re also directly supporting the fight against breast cancer. Here’s what your registration includes:</p>
-            <ul className="list-disc list-outside pl-5 space-y-2 mb-6 text-sm">
-              <li>Official race entry for the full day of dragon boat races</li>
-              <li>Boat, paddles, and a trained drummer/steer person, so no experience is required</li>
-              <li>Access to all on-site activities and entertainment throughout the event</li>
-              <li>Refreshments to keep you fueled on race day</li>
-              <li>Direct donation to MTAC, helping support breast cancer patient care</li>
-            </ul>
             <p className="mb-6">Whether you’re racing to win or paddling for the cause, every registration makes a meaningful impact. Gather your crew, paddle with purpose, and help us turn teamwork into hope.</p>
             <p className="text-sm text-slate-400">Note: Creating a Brave The Waves account allows you to track your donations throughout the years. In order to register to our yearly competition, you must pay the competition fee.</p>
           </div>
