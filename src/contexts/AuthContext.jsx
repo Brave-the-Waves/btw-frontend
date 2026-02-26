@@ -6,6 +6,7 @@ import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
+  , sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset
 } from 'firebase/auth'
 import { auth } from '../firebase'
 import { API_BASE_URL } from '../config'
@@ -177,6 +178,25 @@ export default function AuthProvider({ children }) {
     }
   }
 
+  const sendPasswordReset = async (email) => {
+    try {
+      return await sendPasswordResetEmail(auth, email)
+    } catch (err) {
+      console.error('sendPasswordReset error:', err)
+      throw err
+    }
+  }
+
+  const resetPassword = async (oobCode, newPassword) => {
+    try {
+      await verifyPasswordResetCode(auth, oobCode)
+      return await confirmPasswordReset(auth, oobCode, newPassword)
+    } catch (err) {
+      console.error('resetPassword error:', err)
+      throw err
+    }
+  }
+
   // Deprecated: use loginWithGoogle
   const loginWithRedirect = loginWithGoogle
 
@@ -256,6 +276,8 @@ export default function AuthProvider({ children }) {
     loginWithGoogle,
     login,
     signup,
+    sendPasswordReset,
+    resetPassword,
     logout,
     getAccessTokenSilently,
     initiateRegistrationPayment,
