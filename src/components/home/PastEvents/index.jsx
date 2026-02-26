@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import PastEventsMilestones from './Milestones'
 import PastEventsCarousel from './Carousel'
 import PastEventsGallery from './Gallery'
+import SocialEmbeds from './SocialEmbeds'
 
 export default function PastEvents() {
   
@@ -17,6 +18,7 @@ export default function PastEvents() {
         <PastEventsMilestones />
         <PastEventsCarousel />
         <PastEventsGallery />
+        <SocialEmbeds instagramUrl="https://www.instagram.com/bravethewaves_/" facebookUrl="https://www.facebook.com/profile.php?id=61584454839823" instagramPostUrl={"https://www.instagram.com/p/DVJZjA-Denr/?img_index=1"} />
 
         </div>
     </section>
