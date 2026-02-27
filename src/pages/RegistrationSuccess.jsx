@@ -9,11 +9,13 @@ export default function RegistrationSuccess() {
 
   useEffect(() => {
     const isInitiated = sessionStorage.getItem('registration_payment_initiated')
+    const viaSelection = sessionStorage.getItem('registration_via_selection') === 'true'
+    const teamName = sessionStorage.getItem('registration_team_name')
     if (!isInitiated) {
       navigate('/')
       return
     }
-    // sessionStorage.removeItem('registration_payment_initiated')
+    // keep flags for now; page will read and can navigate accordingly
   }, [navigate])
 
   return (
@@ -27,18 +29,43 @@ export default function RegistrationSuccess() {
           <CheckCircle className="w-10 h-10 text-green-600" />
         </div>
         
-        <h1 className="text-3xl font-bold text-slate-900 mb-4">Registration Complete!</h1>
-        <p className="text-slate-600 mb-8 text-lg">
-          Welcome aboard! Your registration fee has been processed successfully. You can now join an existing team or create your own.
-        </p>
+        {sessionStorage.getItem('registration_via_selection') === 'true' ? (
+          (() => {
+            const teamName = sessionStorage.getItem('registration_team_name')
+            const teamPath = teamName ? `/event/BraveTheWaves2026/teams/${encodeURIComponent(teamName)}` : '/profile'
+            return (
+              <>
+                <h1 className="text-3xl font-bold text-slate-900 mb-4">Registration Complete — You're On A Team!</h1>
+                <p className="text-slate-600 mb-8 text-lg">
+                  You've been added to <strong>{teamName || 'your team'}</strong> via the selection code. View your team details below.
+                </p>
 
-        <Button 
-          onClick={() => navigate('/event/BraveTheWaves2026/teams')}
-          className="w-full bg-slate-900 text-white hover:bg-slate-800 py-6 text-lg rounded-xl"
-        >
-          <Users className="w-5 h-5 mr-2" />
-          Find a Team
-        </Button>
+                <Button 
+                  onClick={() => navigate(teamPath)}
+                  className="w-full bg-slate-900 text-white hover:bg-slate-800 py-6 text-lg rounded-xl"
+                >
+                  <Users className="w-5 h-5 mr-2" />
+                  View My Team
+                </Button>
+              </>
+            )
+          })()
+        ) : (
+          <>
+            <h1 className="text-3xl font-bold text-slate-900 mb-4">Registration Complete!</h1>
+            <p className="text-slate-600 mb-8 text-lg">
+              Welcome aboard! Your registration fee has been processed successfully. You can now join an existing team or create your own.
+            </p>
+
+            <Button 
+              onClick={() => navigate('/event/BraveTheWaves2026/teams')}
+              className="w-full bg-slate-900 text-white hover:bg-slate-800 py-6 text-lg rounded-xl"
+            >
+              <Users className="w-5 h-5 mr-2" />
+              Find a Team
+            </Button>
+          </>
+        )}
       </motion.div>
     </div>
   )

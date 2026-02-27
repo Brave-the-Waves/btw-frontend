@@ -107,16 +107,24 @@ function SportsCard() {
         },
         body: JSON.stringify({ code: code.trim() })
       })
-
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
         throw new Error(data.message || 'Code verification failed')
       }
 
+      // Parse successful response which should include teamName
+      const data = await res.json().catch(() => ({}))
+      const teamName = data?.teamName || null
+
       // Mark that a registration flow completed so the success page will render.
       // The payment flow already sets this flag; selection-code flow needs to set it too.
       try {
         sessionStorage.setItem('registration_payment_initiated', 'true')
+        // Mark that this success came from a selection-code (no payment) flow
+        sessionStorage.setItem('registration_via_selection', 'true')
+        if (teamName) {
+          sessionStorage.setItem('registration_team_name', teamName)
+        }
       } catch (e) {
         console.warn('Unable to set sessionStorage flag for registration success', e)
       }
