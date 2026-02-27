@@ -58,7 +58,7 @@ export default function Register() {
   }
 
   const handleIndividualPayment = () => {
-        initiateRegistrationPayment({ registrationType: 'individual', isStudent })
+      initiateRegistrationPayment({ registrationType: 'individual', isStudent, amount: individualPrice })
   }
 
   const handleGroupPayment = async () => {
@@ -122,10 +122,13 @@ export default function Register() {
         }
 
         // 3. Initiate Logic
+        const totalAmount = groupPricePer * (groupSize + 1)
         initiateRegistrationPayment({
             emails: filledEmails,
             registrationType: 'bundle',
-            isStudent
+            isStudent,
+            amount: totalAmount,
+            groupPricePer
         })
 
     } catch (error) {
