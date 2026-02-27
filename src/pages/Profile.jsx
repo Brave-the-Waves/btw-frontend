@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Navbar from '@/components/Navbar'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '@/components/ui/button'
-import { AlertCircle, Camera, Plus, Copy, Check, FileText, ShieldCheck } from 'lucide-react'
+import { AlertCircle, Camera, Plus, Copy, Check, FileText, ShieldCheck, LogOut } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import RecentDonations from '@/components/users/RecentDonations'
@@ -324,9 +324,13 @@ export default function Profile() {
                     Sign Waiver
                   </Button>
                 )}
-                <Button variant="outline" onClick={() => logout()} className="w-full text-sm text-slate-500 hover:text-slate-800">
+                <button
+                  onClick={() => logout()}
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-xl text-sm font-medium shadow-sm"
+                >
+                  <LogOut className="w-4 h-4" />
                   Log Out
-                </Button>
+                </button>
               </div>
             </div>
 
