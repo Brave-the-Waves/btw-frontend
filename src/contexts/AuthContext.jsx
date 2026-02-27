@@ -219,17 +219,27 @@ export default function AuthProvider({ children }) {
     setIsPaymentLoading(true)
     try {
       const token = await auth.currentUser.getIdToken()
-      
       let url = `${API_BASE_URL}/api/create-registration-checkout`
-      let body = { amount: 25, currency: 'CAD', ...additionalData }
+
+      // Determine amount: prefer an explicit `additionalData.amount`, otherwise fall back to defaults.
+      const defaultIndividualAmount = 25
+      const amount = additionalData.amount ?? defaultIndividualAmount
+
+      let body = { amount, currency: 'CAD', ...additionalData }
 
       if (additionalData.registrationType === 'bundle') {
-          url = `${API_BASE_URL}/api/create-bundle-registration-checkout`
-          body = {
-              bundleEmails: additionalData.emails || [],
-              amount: 20 * (1 + (additionalData.emails?.length || 0)),
-              currency: 'CAD'
-          }
+        url = `${API_BASE_URL}/api/create-bundle-registration-checkout`
+        const emails = additionalData.emails || []
+        const participants = 1 + (emails.length || 0)
+        // Prefer an explicit group price per person if provided, otherwise use student pricing when flagged.
+        const perPerson = additionalData.groupPricePer ?? (additionalData.isStudent ? 15 : 20)
+        const bundleAmount = additionalData.amount ?? (perPerson * participants)
+        body = {
+          bundleEmails: emails,
+          amount: bundleAmount,
+          currency: 'CAD',
+          ...additionalData
+        }
       }
 
       const res = await fetch(url, {
