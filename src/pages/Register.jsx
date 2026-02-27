@@ -100,25 +100,22 @@ export default function Register() {
             body: JSON.stringify({ emails: filledEmails })
         })
 
+        const contentType = res.headers.get('content-type') || ''
+        if (!contentType.includes('application/json')) {
+            throw new Error(`Server error (${res.status}). Please try again.`)
+        }
+
+        const data = await res.json()
+
         if (!res.ok) {
-            const data = await res.json()
-             if (data.invalidEmails && data.invalidEmails.length > 0) {
-                setInvalidEmails(data.invalidEmails)
-                setValidationError('The following emails are not registered users yet. Please ensure they have accounts first.')
-                setIsValidating(false)
-                return
-            }
-             // Fallback for other errors
-             throw new Error(data.message || 'Validation failed')
-        } else {
-            // Check if response body has invalidEmails even on 200 OK (depending on API design)
-             const data = await res.json()
-             if (data.invalidEmails && data.invalidEmails.length > 0) {
-                setInvalidEmails(data.invalidEmails)
-                setValidationError('The following emails are not registered users yet. Please ensure they have accounts first.')
-                setIsValidating(false)
-                return
-             }
+            throw new Error(data.message || `Server error (${res.status}). Please try again.`)
+        }
+
+        if (data.invalidEmails && data.invalidEmails.length > 0) {
+            setInvalidEmails(data.invalidEmails)
+            setValidationError('The following emails are not registered users yet. Please ensure they have accounts first.')
+            setIsValidating(false)
+            return
         }
 
         // 3. Initiate Logic
