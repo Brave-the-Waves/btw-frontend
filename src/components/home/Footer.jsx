@@ -1,12 +1,12 @@
 import React from 'react'
 import { Heart, Waves, Facebook, Instagram, Twitter, Youtube } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const footerLinks = {
   event: [
     { label: 'About', href: '#about' },
-    { label: 'Event Info', href: '#event' },
     { label: 'Past Events', href: '#past-events' },
-    { label: 'Team', href: '#team' },
+    { label: 'Meet the Team', href: '/crew' },
   ],
   getInvolved: [
     { label: 'Donate', href: '#donate' },
@@ -23,8 +23,12 @@ const footerLinks = {
 }
 
 export default function Footer() {
+  const navigate = useNavigate()
+
   const scrollToSection = (href) => {
-    if (href.startsWith('#')) {
+    if (href.startsWith('/')) {
+      navigate(href)
+    } else if (href.startsWith('#')) {
       document.getElementById(href.slice(1))?.scrollIntoView({ behavior: 'smooth' })
     }
   }

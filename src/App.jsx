@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Outlet, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import EventLayout from './components/EventLayout'
 import Success from './pages/Success'
@@ -23,9 +23,16 @@ import CorporateRegister from './pages/CorporateRegister'
 import Crew from './pages/Crew'
 import Event from './pages/Event'
 
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  React.useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
+
 export default function App() {
   return (
     <Router basename={import.meta.env.BASE_URL}>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/crew" element={<Crew />} />

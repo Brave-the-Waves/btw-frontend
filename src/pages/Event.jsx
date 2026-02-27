@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import EventDetails from '@/components/home/EventInfo/EventDetails'
 import Schedule from '@/components/home/EventInfo/Schedule'
 import Activities from '@/components/home/EventInfo/Activities'
@@ -34,6 +34,9 @@ export default function Event() {
   const navigate = useNavigate()
   const location = useLocation()
   const { isAuthenticated } = useAuth()
+
+  const generalInfoRef = useRef(null)
+  const isGeneralInfoInView = useInView(generalInfoRef, { margin: '-600px 0px -300px 0px' })
 
   // Handle scroll-to after navigating from sidebar on a sub-page
   useEffect(() => {
@@ -143,7 +146,7 @@ export default function Event() {
       </section>
 
       {/* ── General Information ── */}
-      <section className="py-20 bg-white">
+      <section ref={generalInfoRef} className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -301,7 +304,7 @@ export default function Event() {
       </section>
 
            {/* ── Registration CTA ── */}
-      <section className="py-20 bg-gradient-to-br from-slate-800 to-slate-900">
+      <section id="registration-cta" className="py-20 bg-gradient-to-br from-slate-800 to-slate-900 scroll-mt-32">
         <div className="max-w-3xl mx-auto px-6 text-center text-white">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -380,6 +383,25 @@ export default function Event() {
 
       {/* ── Donate ── */}
       <Donate eventPage={true} />
+
+      {/* ── Floating register scroll button ── */}
+      <AnimatePresence>
+        {isGeneralInfoInView && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => document.getElementById('registration-cta')?.scrollIntoView({ behavior: 'smooth' })}
+            className="fixed bottom-8 left-56/100 -translate-x-1/2 z-40 flex flex-col items-center justify-center w-16 h-16 rounded-full bg-[#fc87a7] text-white shadow-lg shadow-[#fc87a7]/40 hover:bg-[#c14a75] hover:scale-110 transition-all cursor-pointer"
+          >
+            <span className="text-[9px] font-bold uppercase tracking-widest leading-none mb-0.5">Register</span>
+            <svg width="14" height="9" viewBox="0 0 14 9" fill="none" className="flex-shrink-0">
+              <path d="M1 1L7 7L13 1" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* ── Map ── */}
       <section className="py-16 bg-white">
