@@ -2,10 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Users, DollarSign, Heart, Calendar } from 'lucide-react'
 import Button from '../../ui/button'
-import prizeImage from '../../../assets/images/2025/Prize.jpg'
 
 const pastEvents = [
-  { year: '2025', image: prizeImage, teams: 29, raised: 18529, participants: 350, highlight: 'Our first-ever fundraiser event marked the beginning of our initiative.' },
+  { year: '2025', image: "https://firebasestorage.googleapis.com/v0/b/brave-the-waves-backend.firebasestorage.app/o/image_gallery%2FCZLF0955.png?alt=media&token=042ba090-14a3-494b-8ead-c4370ff8df57", teams: 29, raised: 18529, participants: 350, highlight: 'Our first-ever fundraiser event marked the beginning of our initiative.' },
 ]
 
 

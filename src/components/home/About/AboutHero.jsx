@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import peoplePaddling from '../../../assets/images/PeoplePaddling1.jpg'
 
 export default function AboutHero() {
   return (
@@ -13,7 +12,7 @@ export default function AboutHero() {
       >
         <div className="aspect-[7/5] rounded-4xl overflow-hidden relative z-10">
           <img
-            src={peoplePaddling}
+            src="https://firebasestorage.googleapis.com/v0/b/brave-the-waves-backend.firebasestorage.app/o/image_gallery%2FPeoplePaddling1.jpg?alt=media&token=207256a1-9887-4fac-94de-0e15852550c9"
             alt="Team paddling together"
             className="w-full h-full object-cover"
           />
