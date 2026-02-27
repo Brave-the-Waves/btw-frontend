@@ -17,6 +17,8 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
   const [isSuccess, setIsSuccess] = useState(false)
   const [message, setMessage] = useState('')
   const [isAnonymous, setIsAnonymous] = useState(false)
+  const [name, setName] = useState("")
+  const [nameError, setNameError] = useState(false)
   const [showLoginPrompt, setShowLoginPrompt] = useState(false)
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth()
   const navigate = useNavigate()
@@ -29,6 +31,13 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
       setDonationID(preFillDonationId)
     }
   }, [preFillDonationId])
+
+  // Pre-fill name from authenticated user
+  React.useEffect(() => {
+    if (user?.name && !name) {
+      setName(user.name)
+    }
+  }, [user])
 
   const handleMessageChange = (e) => {
     const val = e.target.value.slice(0, maxMessageChars)
@@ -58,7 +67,7 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
       }
 
       if (donationID) {
-        const resUser = await fetch(`${API_BASE_URL}/api/users`, {
+        const resUser = await fetch(`${API_BASE_URL}/api/participants`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -94,6 +103,7 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
           donationId: donationID,
           message: message,
           isAnonymous: isAnonymous,
+          donorName: isAnonymous ? '' : name.trim(),
         }),
       })
 
@@ -220,19 +230,15 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
               <input
                 min="1"
                 value={amount}
-                onChange={(e) => {
-                  setAmount(Number(e.target.value));
-                  setIsCustom(true);
-                }}
+                onChange={(e) => { setAmount(Number(e.target.value)); setIsCustom(true); }}
                 onFocus={() => setIsCustom(true)}
-                className={`block w-full pl-9 pr-12 py-3 sm:text-sm rounded-xl border-slate-200 focus:ring-[#fc87a7] focus:border-[#fc87a7] ${isCustom ? 'border-[#fc87a7] ring-1 ring-[#fc87a7]' : 'border'}`}
+                className={`block w-full pl-9 pr-12 py-3 sm:text-sm rounded-xl border-slate-200 focus:ring-[#fc87a7] focus:border-[#fc87a7] ${isCustom ? 'border-[#fc87a7] ring-1 ring-[#fc87a7] border' : 'border border-slate-200'}`}
                 placeholder="Custom amount"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                 <span className="text-slate-500 sm:text-sm">CAD</span>
               </div>
             </div>
-
             {/* Paddler ID Input */}
             <div className="mt-4">
               <label className="block text-sm font-medium text-slate-700 mb-2">Paddler ID (Optional)</label>
@@ -315,7 +321,45 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
             <div className="text-sm text-slate-500 mt-1 text-right">
                 {message.length}/{maxMessageChars} characters
             </div>
-            <Checkbox label="Make my donation anonymous" isChecked={isAnonymous} setIsChecked={setIsAnonymous}/>
+
+            {/* Name + Anonymous */}
+            <div className="mt-1">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Your Name <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className={`w-5 h-5 transition-colors ${isAnonymous ? 'text-slate-300' : nameError ? 'text-red-400' : 'text-slate-400'}`} />
+                </div>
+                <input
+                  type="text"
+                  value={isAnonymous ? '' : name}
+                  onChange={(e) => { setName(e.target.value); setNameError(false) }}
+                  onBlur={() => { if (!isAnonymous && !name.trim()) setNameError(true) }}
+                  disabled={isAnonymous}
+                  placeholder={isAnonymous ? 'Hidden — donation is anonymous' : 'Enter your name'}
+                  className={`block w-full pl-10 pr-4 py-3 sm:text-sm rounded-xl border outline-none transition-all duration-200 ${
+                    isAnonymous
+                      ? 'border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed'
+                      : nameError
+                      ? 'border-red-400 ring-1 ring-red-400 bg-red-50'
+                      : 'border-slate-200 focus:ring-2 focus:ring-[#fc87a7] focus:border-[#fc87a7]'
+                  }`}
+                />
+              </div>
+              {nameError && (
+                <motion.p
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-500 text-xs mt-1 ml-1"
+                >
+                  Please enter your name
+                </motion.p>
+              )}
+              <div className="mt-2">
+                <Checkbox label="Make my donation anonymous" isChecked={isAnonymous} setIsChecked={(val) => { setIsAnonymous(val); if (val) setNameError(false) }}/>
+              </div>
+            </div>
           </div>
 
           <ul className="space-y-3 mb-8">
@@ -328,7 +372,7 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
             size="lg" 
             className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-xl py-3 text-lg shadow-lg shadow-[#fc87a7]/20 transition-all hover:scale-[1.02] text-center mt-auto disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer" 
             onClick={handleDonateClick}
-            disabled={isLoading || amount <= 0}
+            disabled={isLoading || !amount || amount <= 0 || (!isAnonymous && !name.trim())}
           >
             {isLoading ? (
               <span className="flex items-center justify-center">
