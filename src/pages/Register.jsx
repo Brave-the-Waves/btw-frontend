@@ -14,7 +14,13 @@ export default function Register() {
   const { isAuthenticated, isLoading, initiateRegistrationPayment, isPaymentLoading, getAccessTokenSilently } = useAuth()
   const navigate = useNavigate()
     const individualPrice = isStudent ? 25 : 45
-    const groupPricePer = isStudent ? 15 : 20
+    const discountRate = 0.20
+    const discountedPerPerson = Math.round(individualPrice * (1 - discountRate))
+    const discountAmount = Math.round(individualPrice * discountRate)
+    const regularIndividualPrice = isStudent ? 30 : 50
+    const regularDiscountedPerPerson = Math.round(regularIndividualPrice * (1 - discountRate))
+    const lateIndividualPrice = isStudent ? 35 : 55
+    const lateDiscountedPerPerson = Math.round(lateIndividualPrice * (1 - discountRate))
   
   const [selectedMode, setSelectedMode] = useState(null) // 'individual' | 'group'
   const [groupSize, setGroupSize] = useState(4)
@@ -119,13 +125,13 @@ export default function Register() {
         }
 
         // 3. Initiate Logic
-        const totalAmount = groupPricePer * (groupSize + 1)
+        const totalAmount = discountedPerPerson * (groupSize + 1)
         initiateRegistrationPayment({
             emails: filledEmails,
             registrationType: 'bundle',
             isStudent,
             amount: totalAmount,
-            groupPricePer
+            groupPricePer: discountedPerPerson
         })
 
     } catch (error) {
@@ -197,7 +203,7 @@ export default function Register() {
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration (Regular)</h3>
                 <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>March 15</strong>.</p>
                 <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-700">$50</span>
+                    <span className="text-3xl font-bold text-slate-700">{'$'}{regularIndividualPrice}</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
             </div>
@@ -212,7 +218,7 @@ export default function Register() {
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration<br/>(Late)</h3>
                 <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>March 31</strong>.</p>
                 <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-700">$55</span>
+                    <span className="text-3xl font-bold text-slate-700">{'$'}{lateIndividualPrice}</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
             </div>
@@ -238,9 +244,13 @@ export default function Register() {
                 <p className="text-slate-500 text-sm mb-6">
                     Pay for multiple participants at once. Perfect to get your friends onboard at a reduced cost.
                 </p>
-                <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-900">{'$'}{groupPricePer}</span>
-                    <span className="text-slate-500 mb-1">CAD / person</span>
+                <div className="flex flex-col gap-1">
+                    <div className="text-sm text-slate-400 line-through">{'$'}{individualPrice} CAD</div>
+                    <div className="flex items-end gap-1">
+                        <span className="text-3xl font-bold text-slate-900">{'$'}{discountedPerPerson}</span>
+                        <span className="text-slate-500 mb-1">CAD / person</span>
+                    </div>
+                    <div className="text-xs text-blue-600 font-medium">20% off</div>
                 </div>
             </div>
 
@@ -253,9 +263,13 @@ export default function Register() {
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Regular)</h3>
                 <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>March 15</strong>.</p>
-                <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-700">$25</span>
-                    <span className="text-slate-500 mb-1">CAD / person</span>
+                <div className="flex flex-col gap-1">
+                    <div className="text-sm text-slate-400 line-through">{'$'}{regularIndividualPrice} CAD</div>
+                    <div className="flex items-end gap-1">
+                        <span className="text-3xl font-bold text-slate-700">{'$'}{regularDiscountedPerPerson}</span>
+                        <span className="text-slate-500 mb-1">CAD / person</span>
+                    </div>
+                    <div className="text-xs text-slate-500">20% off</div>
                 </div>
             </div>
 
@@ -268,9 +282,13 @@ export default function Register() {
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Late)</h3>
                 <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>March 31</strong>.</p>
-                <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-700">$30</span>
-                    <span className="text-slate-500 mb-1">CAD / person</span>
+                <div className="flex flex-col gap-1">
+                    <div className="text-sm text-slate-400 line-through">{'$'}{lateIndividualPrice} CAD</div>
+                    <div className="flex items-end gap-1">
+                        <span className="text-3xl font-bold text-slate-700">{'$'}{lateDiscountedPerPerson}</span>
+                        <span className="text-slate-500 mb-1">CAD / person</span>
+                    </div>
+                    <div className="text-xs text-slate-500">20% off</div>
                 </div>
             </div>
         </div>
@@ -315,8 +333,9 @@ export default function Register() {
                                 onChange={(e) => handleGroupSizeChange(Number(e.target.value))}
                                 className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none bg-slate-50"
                             >
-                                <option value={5}>5 Participants</option>
-                                <option value={10}>10 Participants</option>
+                                {[5,6,7,8,9,10].map(n => (
+                                    <option key={n} value={n}>{n} Participants</option>
+                                ))}
                             </select>
                         </div>
 
@@ -357,7 +376,7 @@ export default function Register() {
                             <div className="flex justify-between items-center p-4 bg-slate-50 rounded-xl">
                                 <span className="text-slate-600 font-medium">Total Amount</span>
                                 <span className="text-xl font-bold text-slate-900">
-                                    {'$'}{groupPricePer * (groupSize + 1)} CAD
+                                    {'$'}{discountedPerPerson * (groupSize + 1)} CAD
                                 </span>
                             </div>
                             <Button 
