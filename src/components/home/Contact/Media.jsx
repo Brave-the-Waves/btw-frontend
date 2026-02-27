@@ -26,14 +26,6 @@ export default function Media() {
                     </div>
                 </div>
             </div>
-
-            <div className="mb-10 lg:mb-0">
-                <p className="font-semibold text-slate-900 mb-4">Follow Us</p>
-                <div className="flex gap-3">
-                    <a href="https://www.instagram.com/bravethewaves_/" className="w-11 h-11 rounded-full bg-slate-200 hover:bg-[#fc87a7] flex items-center justify-center transition-colors group"><Instagram className="w-5 h-5 text-slate-600 group-hover:text-white transition-colors" /></a>
-                    <a href="https://www.facebook.com/profile.php?id=61584454839823" className="w-11 h-11 rounded-full bg-slate-200 hover:bg-[#fc87a7] flex items-center justify-center transition-colors group"><Facebook className="w-5 h-5 text-slate-600 group-hover:text-white transition-colors" /></a>
-                </div>
-            </div>
         </>
     )
 }

@@ -541,14 +541,14 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
         </div>
       </motion.div>
       {!eventPage && (
-          <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group md:col-span-2">
+          <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative group md:col-span-2 self-start">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-900 rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity" />
-        <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 md:p-10 shadow-xl h-full text-white flex flex-col">
-          <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+        <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-7 md:p-8 shadow-xl text-white flex flex-col">
+          <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
             <Users className="w-8 h-8 text-white" />
           </div>
           <h3 className="text-2xl font-bold mb-4">Register for the 2026 Event</h3>
-          <div className="mb-6 text-slate-300 leading-relaxed">
+          <div className="mb-10 text-slate-300 leading-relaxed">
             <p className="mb-6">Whether you’re racing to win or paddling for the cause, every registration makes a meaningful impact. Gather your crew, paddle with purpose, and help us turn teamwork into hope.</p>
             <p className="text-sm text-slate-400">Note: Creating a Brave The Waves account allows you to track your donations throughout the years. In order to register to our yearly competition, you must pay the competition fee.</p>
           </div>
@@ -556,7 +556,7 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
           <Button 
             size="lg" 
             variant="outline" 
-            className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02] mt-auto cursor-pointer" 
+            className="w-full border-2 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20 rounded-xl py-3 text-lg transition-all hover:scale-[1.02] mt-4 cursor-pointer" 
             onClick={() => navigate('/event/BraveTheWaves2026')}
           >
             <Users className="w-5 h-5 mr-2" />
