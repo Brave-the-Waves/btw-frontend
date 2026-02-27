@@ -13,7 +13,7 @@ export default function Register() {
     const isStudent = searchParams.get('student') === 'true'
   const { isAuthenticated, isLoading, initiateRegistrationPayment, isPaymentLoading, getAccessTokenSilently } = useAuth()
   const navigate = useNavigate()
-    const individualPrice = isStudent ? 15 : 25
+    const individualPrice = isStudent ? 25 : 45
     const groupPricePer = isStudent ? 15 : 20
   
   const [selectedMode, setSelectedMode] = useState(null) // 'individual' | 'group'
@@ -146,7 +146,7 @@ export default function Register() {
                     Choose how you would like to register. You can register just for yourself or bundle register for your whole team.
                 </p>
                 <p className="text-sm text-slate-500 text-center mb-8">
-                    Early registration is open — Early registration deadline: <strong>MM/DD/YYYY</strong>.
+                    Early registration is open — Early registration deadline: <strong>March 15</strong>.
                 </p>
 
         {/* Loading Overlay */}
@@ -195,9 +195,9 @@ export default function Register() {
                     <User className="w-8 h-8 text-pink-300" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration (Regular)</h3>
-                <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>MM/DD/YYYY</strong>.</p>
+                <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>March 15</strong>.</p>
                 <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-700">$30</span>
+                    <span className="text-3xl font-bold text-slate-700">$50</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
             </div>
@@ -210,9 +210,9 @@ export default function Register() {
                     <User className="w-8 h-8 text-pink-300" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration<br/>(Late)</h3>
-                <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>MM/DD/YYYY</strong>.</p>
+                <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>March 31</strong>.</p>
                 <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-700">$35</span>
+                    <span className="text-3xl font-bold text-slate-700">$55</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
             </div>
@@ -252,7 +252,7 @@ export default function Register() {
                     <Users className="w-8 h-8 text-blue-300" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Regular)</h3>
-                <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>MM/DD/YYYY</strong>.</p>
+                <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>March 15</strong>.</p>
                 <div className="flex items-end gap-1">
                     <span className="text-3xl font-bold text-slate-700">$25</span>
                     <span className="text-slate-500 mb-1">CAD / person</span>
@@ -267,7 +267,7 @@ export default function Register() {
                     <Users className="w-8 h-8 text-blue-300" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Late)</h3>
-                <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>MM/DD/YYYY</strong>.</p>
+                <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>March 31</strong>.</p>
                 <div className="flex items-end gap-1">
                     <span className="text-3xl font-bold text-slate-700">$30</span>
                     <span className="text-slate-500 mb-1">CAD / person</span>
