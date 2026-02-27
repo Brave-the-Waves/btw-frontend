@@ -260,7 +260,7 @@ export default function AuthProvider({ children }) {
       }
     } catch (error) {
       console.error('Payment initiation failed:', error)
-      alert('Failed to start payment. Please try again.')
+      alert('Failed to start payment. Please try again or check if you are already registered.')
     } finally {
       setIsPaymentLoading(false)
     }
