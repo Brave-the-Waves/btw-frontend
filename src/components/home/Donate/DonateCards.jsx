@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, Shield, Trophy, Users, Waves, DollarSign, Check, User, MessageSquare } from 'lucide-react'
+import { Heart, Shield, Trophy, Users, Waves, DollarSign, Check, User, MessageSquare, Mail, MapPin, FileText, Phone } from 'lucide-react'
 import Button from '@/components/ui/button'
 import { useAuth } from '../../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
@@ -19,6 +19,14 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
   const [isAnonymous, setIsAnonymous] = useState(false)
   const [name, setName] = useState("")
   const [nameError, setNameError] = useState(false)
+  const [fullName, setFullName] = useState("")
+  const [fullNameError, setFullNameError] = useState(false)
+  const [email, setEmail] = useState("")
+  const [emailError, setEmailError] = useState(false)
+  const [address, setAddress] = useState("")
+  const [addressError, setAddressError] = useState(false)
+  const [phone, setPhone] = useState("")
+  const [phoneError, setPhoneError] = useState(false)
   const [showLoginPrompt, setShowLoginPrompt] = useState(false)
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth()
   const navigate = useNavigate()
@@ -34,10 +42,14 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
 
   // Pre-fill name from authenticated user
   React.useEffect(() => {
-    if (user?.name && !name) {
-      setName(user.name)
-    }
+    if (user?.name && !name) setName(user.name)
+    if (user?.email && !email) setEmail(user.email)
+    if (user?.name && !fullName) setFullName(user.name)
   }, [user])
+
+  // Strips HTML tags and control characters from free-text inputs
+  const sanitizeText = (val, maxLen = 200) =>
+    val.replace(/<[^>]*>/g, '').replace(/[\x00-\x1F\x7F]/g, '').slice(0, maxLen)
 
   const handleMessageChange = (e) => {
     let val = e.target.value.slice(0, maxMessageChars)
@@ -65,6 +77,17 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
       }
 
       const safeMessage = message ? message.slice(0, maxMessageChars).replace(/<[^>]*>/g, '') : ''
+      const safeName     = sanitizeText(name, 100)
+      const safeFullName = sanitizeText(fullName, 150)
+      const safeAddress  = sanitizeText(address, 300)
+      const safePhone    = phone.trim().replace(/[^0-9+\-\s().]/g, '').slice(0, 20)
+      if (!safePhone || safePhone.replace(/\D/g, '').length < 7) {
+        throw new Error('Please enter a valid phone number.')
+      }
+      const safeEmail    = email.trim().toLowerCase().slice(0, 254)
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(safeEmail)) {
+        throw new Error('Please enter a valid email address.')
+      }
 
       // If user is authenticated, check for token
       let token = null
@@ -108,12 +131,16 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
           ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
         body: JSON.stringify({ 
-          amount: Math.round(amountNumber),
+          amount: Math.round(amount),
           currency: 'CAD',
           donationId: safeDonationID,
           message: safeMessage,
           isAnonymous: isAnonymous,
-          donorName: isAnonymous ? '' : name.trim(),
+          donorName: isAnonymous ? '' : safeName,
+          fullName: safeFullName,
+          email: safeEmail,
+          address: safeAddress,
+          phone: safePhone,
         }),
       })
 
@@ -258,7 +285,8 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
             </div>
             {/* Paddler ID Input */}
             <div className="mt-4">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Paddler ID (Optional)</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Paddler ID (Optional)</label>
+              <p className="text-xs text-slate-400 mb-2">Have a favourite paddler? Enter their ID to attribute your donation to their fundraising page — just like sponsoring a racer.</p>
               <div className="relative">
                   <AnimatePresence mode="wait">
                       {isSuccess ? (
@@ -341,11 +369,12 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
                 {message.length}/{maxMessageChars} characters
             </div>
 
-            {/* Name + Anonymous */}
-            <div className="mt-1">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Your Name <span className="text-red-500">*</span>
+            {/* Display Name + Anonymous */}
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Display Name <span className="text-red-500">*</span>
               </label>
+              <p className="text-xs text-slate-400 mb-2">This is the name shown publicly on the donation board.</p>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <User className={`w-5 h-5 transition-colors ${isAnonymous ? 'text-slate-300' : nameError ? 'text-red-400' : 'text-slate-400'}`} />
@@ -379,6 +408,107 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
                 <Checkbox label="Make my donation anonymous" isChecked={isAnonymous} setIsChecked={(val) => { setIsAnonymous(val); if (val) setNameError(false) }}/>
               </div>
             </div>
+
+            {/* Tax Receipt Section */}
+            <div className="mt-6 rounded-2xl border border-slate-100 bg-slate-50 p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <FileText className="w-4 h-4 text-[#fc87a7]" />
+                <span className="text-sm font-semibold text-slate-700">Tax Receipt Information</span>
+              </div>
+              <p className="text-xs text-slate-400 mb-4">As a registered charity, MTAC issues official tax receipts for all donations <span className="font-bold text-slate-500">over $10</span>. The following information is required to generate yours.</p>
+
+              {/* Full Name */}
+              <div className="mb-3">
+                <label className="block text-xs font-medium text-slate-600 mb-1">Full Legal Name <span className="text-red-500">*</span></label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <User className={`w-4 h-4 ${fullNameError ? 'text-red-400' : 'text-slate-400'}`} />
+                  </div>
+                  <input
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => { setFullName(sanitizeText(e.target.value, 150)); setFullNameError(false) }}
+                    onBlur={() => { if (!fullName.trim()) setFullNameError(true) }}
+                    placeholder="As it appears on official documents"
+                    className={`block w-full pl-9 pr-4 py-2.5 text-sm rounded-xl border outline-none transition-all duration-200 ${
+                      fullNameError
+                        ? 'border-red-400 ring-1 ring-red-400 bg-red-50'
+                        : 'border-slate-200 bg-white focus:ring-2 focus:ring-[#fc87a7] focus:border-[#fc87a7]'
+                    }`}
+                  />
+                </div>
+                {fullNameError && <p className="text-red-500 text-xs mt-1 ml-1">Required for tax receipt</p>}
+              </div>
+
+              {/* Email */}
+              <div className="mb-3">
+                <label className="block text-xs font-medium text-slate-600 mb-1">Email Address <span className="text-red-500">*</span></label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Mail className={`w-4 h-4 ${emailError ? 'text-red-400' : 'text-slate-400'}`} />
+                  </div>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); setEmailError(false) }}
+                    onBlur={() => { if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) setEmailError(true) }}
+                    placeholder="receipt@example.com"
+                    className={`block w-full pl-9 pr-4 py-2.5 text-sm rounded-xl border outline-none transition-all duration-200 ${
+                      emailError
+                        ? 'border-red-400 ring-1 ring-red-400 bg-red-50'
+                        : 'border-slate-200 bg-white focus:ring-2 focus:ring-[#fc87a7] focus:border-[#fc87a7]'
+                    }`}
+                  />
+                </div>
+                {emailError && <p className="text-red-500 text-xs mt-1 ml-1">A valid email is required for tax receipt delivery</p>}
+              </div>
+              
+              {/* Phone */}
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1">Phone Number <span className="text-red-500">*</span></label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Phone className={`w-4 h-4 ${phoneError ? 'text-red-400' : 'text-slate-400'}`} />
+                  </div>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => { setPhone(e.target.value.replace(/[^0-9+\-\s().]/g, '').slice(0, 20)); setPhoneError(false) }}
+                    onBlur={() => { if (!phone.trim() || phone.replace(/\D/g, '').length < 7) setPhoneError(true) }}
+                    placeholder="+1 (514) 555-0100"
+                    className={`block w-full pl-9 pr-4 py-2.5 text-sm rounded-xl border outline-none transition-all duration-200 ${
+                      phoneError
+                        ? 'border-red-400 ring-1 ring-red-400 bg-red-50'
+                        : 'border-slate-200 bg-white focus:ring-2 focus:ring-[#fc87a7] focus:border-[#fc87a7]'
+                    }`}
+                  />
+                </div>
+                {phoneError && <p className="text-red-500 text-xs mt-1 ml-1">A valid phone number is required for tax receipt</p>}
+              </div>
+
+              {/* Address */}
+              <div className="mb-3">
+                <label className="block text-xs font-medium text-slate-600 mb-1">Mailing Address <span className="text-red-500">*</span></label>
+                <div className="relative">
+                  <div className="absolute top-3 left-3 pointer-events-none">
+                    <MapPin className={`w-4 h-4 ${addressError ? 'text-red-400' : 'text-slate-400'}`} />
+                  </div>
+                  <textarea
+                    rows={2}
+                    value={address}
+                    onChange={(e) => { setAddress(sanitizeText(e.target.value, 300)); setAddressError(false) }}
+                    onBlur={() => { if (!address.trim()) setAddressError(true) }}
+                    placeholder="Street, City, Province, Postal Code"
+                    className={`block w-full pl-9 pr-4 py-2.5 text-sm rounded-xl border outline-none resize-none transition-all duration-200 ${
+                      addressError
+                        ? 'border-red-400 ring-1 ring-red-400 bg-red-50'
+                        : 'border-slate-200 bg-white focus:ring-2 focus:ring-[#fc87a7] focus:border-[#fc87a7]'
+                    }`}
+                  />
+                </div>
+                {addressError && <p className="text-red-500 text-xs mt-1 ml-1">Required for tax receipt</p>}
+              </div>
+            </div>
           </div>
 
           <ul className="space-y-3 mb-8">
@@ -391,7 +521,7 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
             size="lg" 
             className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-xl py-3 text-lg shadow-lg shadow-[#fc87a7]/20 transition-all hover:scale-[1.02] text-center mt-auto disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer" 
             onClick={handleDonateClick}
-            disabled={isLoading || !amount || amount <= 0 || (!isAnonymous && !name.trim())}
+            disabled={isLoading || !amount || amount <= 0 || (!isAnonymous && !name.trim()) || !fullName.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !address.trim() || phone.replace(/\D/g, '').length < 7}
           >
             {isLoading ? (
               <span className="flex items-center justify-center">
