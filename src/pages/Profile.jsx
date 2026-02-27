@@ -237,12 +237,30 @@ export default function Profile() {
                     {formData.bio || 'No bio yet'}
                   </p>
                   {formData.team && (
-                    <button
-                      onClick={() => navigate(`/event/${formData.team.event}/teams/${formData.team.name}`)}
-                      className="text-pink-600 font-medium hover:text-pink-700 transition-colors text-sm"
-                    >
-                      Team: {formData.team.name}
-                    </button>
+                    <div className="mt-3 w-full bg-pink-50 border border-pink-100 rounded-2xl p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs font-medium text-black uppercase tracking-wide">Team</p>
+                          <button
+                            onClick={() => navigate(`/event/${formData.team.event}/teams/${formData.team.name}`)}
+                            className="mt-1 text-lg font-semibold text-[#c14a75]"
+                          >
+                            {formData.team.name}
+                          </button>
+                          {formData.team.event && (
+                            <p className="text-sm text-slate-500 mt-1">Event: {formData.team.event}</p>
+                          )}
+                        </div>
+                        <div>
+                          <button
+                            onClick={() => navigate(`/event/${formData.team.event}/teams/${formData.team.name}`)}
+                            className="inline-flex items-center gap-2 px-3 py-2 bg-[#fc87a7] text-white rounded-xl hover:bg-[#c14a75]"
+                          >
+                            View Team
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </div>
               ) : (
