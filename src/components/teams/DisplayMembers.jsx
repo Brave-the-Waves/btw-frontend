@@ -7,7 +7,6 @@ import { API_BASE_URL } from '@/config'
 
 export default function DisplayMembers({ team, members, setMembers, onMemberChange, isEditing }) {
     const { user, getAccessTokenSilently } = useAuth()
-    const [confirmKickId, setConfirmKickId] = useState(null)
     const navigate = useNavigate()
 
     const currentUserId = user?._id || user?.id
@@ -48,41 +47,6 @@ export default function DisplayMembers({ team, members, setMembers, onMemberChan
                             }`}>{isMemberCaptain ? '👑 Captain' : 'Paddler'}</p>
                         </div>
                       </div>
-                      {isCaptain && !isMemberCaptain && isEditing && (
-                      <div className="flex items-center gap-2">
-                          {confirmKickId === member._id ? (
-                          <>
-                            <button
-                            onClick={async () => {
-                                try {
-                                const token = await getAccessTokenSilently()
-                                const res = await fetch(`${API_BASE_URL}/api/teams/${team.id}/members/${member.id}`, {
-                                    method: 'DELETE',
-                                    headers: {
-                                    'Content-Type': 'application/json',
-                                    Authorization: `Bearer ${token}`
-                                    }
-                                })
-                                if (!res.ok) throw new Error('Failed to remove member')
-                                setMembers(prev => prev.filter(m => m.id !== member.id))
-                                setConfirmKickId(null)
-                                onMemberChange()
-                                } catch (err) {
-                                console.error(err)
-                                setConfirmKickId(null)
-                                }
-                            }}
-                            className="bg-red-600 text-white px-3 py-1 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors cursor-pointer"
-                            >
-                            Confirm
-                            </button>
-                            <button onClick={() => setConfirmKickId(null)} className="px-3 py-1 rounded-lg border-2 border-slate-200 text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors cursor-pointer">Cancel</button>
-                        </>
-                        ) : (
-                        <button onClick={() => setConfirmKickId(member.id)} className="bg-red-50 text-red-600 px-3 py-1 rounded-lg text-sm font-medium border border-red-200 hover:bg-red-100 hover:border-red-300 transition-colors cursor-pointer">Kick</button>
-                        )}
-                    </div>
-                    )}
                     </div>
                 </div>
                 )
