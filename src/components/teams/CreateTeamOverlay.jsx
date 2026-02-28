@@ -7,6 +7,8 @@ import Label from '@/components/ui/label'
 import Textarea from '@/components/ui/textarea'
 
 const DIVISIONS = ['Community']
+const NAME_REGEX = /^[A-Za-z0-9 .'-]+$/
+const MAX_DESCRIPTION_LENGTH = 300
 
 export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
   const [formData, setFormData] = useState({
@@ -15,10 +17,51 @@ export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
     donationGoal: '',
     description: ''
   })
+  const [touched, setTouched] = useState({
+    teamName: false,
+    donationGoal: false,
+    description: false
+  })
+
+  const normalizedTeamName = formData.teamName.replace(/\s+/g, ' ').trim()
+
+  const getTeamNameError = () => {
+    if (!normalizedTeamName) return 'Team name is required'
+    if (normalizedTeamName.length < 2 || normalizedTeamName.length > 50) return 'Team name must be 2–50 characters'
+    if (!NAME_REGEX.test(normalizedTeamName)) return "Use letters, numbers, spaces, hyphen, apostrophe, or period only"
+    return ''
+  }
+
+  const teamNameError = getTeamNameError()
+
+  const getDescriptionError = () => {
+    if (formData.description.length > MAX_DESCRIPTION_LENGTH) return `Description must not exceed ${MAX_DESCRIPTION_LENGTH} characters`
+    return ''
+  }
+
+  const descriptionError = getDescriptionError()
+
+  const getDonationGoalError = () => {
+    if (formData.donationGoal === '') return 'Donation goal is required'
+    const goal = Number(formData.donationGoal)
+    if (goal < 0) return 'Donation goal must be greater than or equal to 0'
+    return ''
+  }
+
+  const donationGoalError = getDonationGoalError()
+  const isFormValid = !teamNameError && !donationGoalError && !descriptionError
+
+  const markTouched = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }))
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit(formData)
+    markTouched('teamName')
+    markTouched('donationGoal')
+    markTouched('description')
+    if (!isFormValid) return
+    onSubmit({ ...formData, teamName: normalizedTeamName })
   }
 
   return (
@@ -47,8 +90,13 @@ export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
                 placeholder="e.g. Wave Runners"
                 value={formData.teamName}
                 onChange={e => setFormData({...formData, teamName: e.target.value})}
+                onBlur={() => markTouched('teamName')}
+                aria-invalid={touched.teamName && !!teamNameError}
               />
             </div>
+            {touched.teamName && teamNameError && (
+              <p className="text-xs text-red-600">{teamNameError}</p>
+            )}
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="space-y-2">
@@ -82,8 +130,13 @@ export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
                 placeholder="1000"
                 value={formData.donationGoal}
                 onChange={e => setFormData({...formData, donationGoal: e.target.value})}
+                onBlur={() => markTouched('donationGoal')}
+                aria-invalid={touched.donationGoal && !!donationGoalError}
               />
             </div>
+            {touched.donationGoal && donationGoalError && (
+              <p className="text-xs text-red-600">{donationGoalError}</p>
+            )}
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="space-y-2">
@@ -95,9 +148,17 @@ export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
                 className="pl-10 min-h-[100px] focus:ring-2 focus:ring-[#fc87a7] border-slate-200 rounded-lg"
                 placeholder="Tell us about your team..."
                 value={formData.description}
-                onChange={e => setFormData({...formData, description: e.target.value})}
+                onChange={e => {
+                  const cleaned = e.target.value.replace(/<[^>]*>/g, '').slice(0, MAX_DESCRIPTION_LENGTH)
+                  setFormData({...formData, description: cleaned})
+                }}
+                onBlur={() => markTouched('description')}
               />
             </div>
+            {descriptionError && (
+              <p className="text-xs text-red-600">{descriptionError}</p>
+            )}
+            <p className="text-xs text-slate-400">{formData.description.length}/{MAX_DESCRIPTION_LENGTH} characters</p>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="pt-4 flex gap-3">
@@ -106,8 +167,8 @@ export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
             </Button>
             <Button 
               type="submit" 
-              className="flex-1 bg-[#fc87a7] text-white rounded-lg cursor-pointer font-semibold hover:shadow-lg hover:shadow-[#fc87a7]/30 transition-all"
-              disabled={isLoading}
+              className="flex-1 bg-[#fc87a7] text-white rounded-lg cursor-pointer font-semibold hover:shadow-lg hover:shadow-[#fc87a7]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isLoading || !isFormValid}
             >
               {isLoading ? 'Creating...' : 'Create Team'}
             </Button>

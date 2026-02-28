@@ -9,6 +9,9 @@ import RecentDonations from '@/components/users/RecentDonations'
 import { AnimatePresence, motion } from 'framer-motion'
 import { API_BASE_URL } from '@/config'
 
+const NAME_REGEX = /^[A-Za-z0-9 .'-]+$/
+const MAX_DESCRIPTION_LENGTH = 300
+
 export default function TeamDetails() {
 
   const [team, setTeam] = useState(null)
@@ -25,6 +28,10 @@ export default function TeamDetails() {
     description: '',
     division: ''
   })
+  const [touched, setTouched] = useState({
+    name: false,
+    description: false
+  })
   const [isSaving, setIsSaving] = useState(false)
   
   const teamName = decodeURIComponent(name)
@@ -36,6 +43,28 @@ export default function TeamDetails() {
   // Check membership directly from authenticated user context instead of re-fetching
   const isInTeam = isAuthenticated && user?.team?.name === teamName
   const isCaptain = user && team && (user._id === team.captain || user.id === team.captain)
+
+  const normalizedTeamName = editForm.name.replace(/\s+/g, ' ').trim()
+
+  const getTeamNameError = () => {
+    if (!normalizedTeamName) return 'Team name is required'
+    if (normalizedTeamName.length < 2 || normalizedTeamName.length > 50) return 'Team name must be 2–50 characters'
+    if (!NAME_REGEX.test(normalizedTeamName)) return "Use letters, numbers, spaces, hyphen, apostrophe, or period only"
+    return ''
+  }
+
+  const getDescriptionError = () => {
+    if (editForm.description.length > MAX_DESCRIPTION_LENGTH) return `Description must not exceed ${MAX_DESCRIPTION_LENGTH} characters`
+    return ''
+  }
+
+  const teamNameError = getTeamNameError()
+  const descriptionError = getDescriptionError()
+  const isFormValid = !teamNameError && !descriptionError
+
+  const markTouched = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }))
+  }
 
   const handleEditClick = () => {
     setEditForm({
@@ -51,7 +80,10 @@ export default function TeamDetails() {
   }
 
   const handleSaveEdit = async () => {
-    if (!editForm.name || !editForm.description) return 
+    markTouched('name')
+    markTouched('description')
+    
+    if (!isFormValid) return 
 
     setIsSaving(true)
     try {
@@ -65,7 +97,7 @@ export default function TeamDetails() {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                name: editForm.name,
+                name: normalizedTeamName,
                 description: editForm.description,
                 division: editForm.division
             })
@@ -223,26 +255,40 @@ export default function TeamDetails() {
                           type="text"
                           value={editForm.name}
                           onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))}
+                          onBlur={() => markTouched('name')}
                           className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-2 focus:ring-slate-200 outline-none transition-all font-bold text-lg"
+                          aria-invalid={touched.name && !!teamNameError}
                         />
+                        {touched.name && teamNameError && (
+                          <p className="text-xs text-red-600 mt-1">{teamNameError}</p>
+                        )}
                       </div>
 
                       <div>
                         <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Description</label>
                         <textarea
                           value={editForm.description}
-                          onChange={(e) => setEditForm(prev => ({ ...prev, description: e.target.value }))}
+                          onChange={(e) => {
+                            const cleaned = e.target.value.replace(/<[^>]*>/g, '').slice(0, MAX_DESCRIPTION_LENGTH)
+                            setEditForm(prev => ({ ...prev, description: cleaned }))
+                          }}
+                          onBlur={() => markTouched('description')}
                           rows={4}
                           className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-2 focus:ring-slate-200 outline-none transition-all resize-none"
+                          aria-invalid={touched.description && !!descriptionError}
                         />
+                        {descriptionError && (
+                          <p className="text-xs text-red-600 mt-1">{descriptionError}</p>
+                        )}
+                        <p className="text-xs text-slate-400 mt-1">{editForm.description.length}/{MAX_DESCRIPTION_LENGTH} characters</p>
                       </div>
 
                       <div className="flex gap-3 pt-2">
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           onClick={handleSaveEdit}
-                          disabled={isSaving}
-                          className="flex items-center gap-2 px-4 py-2 bg-[#fc87a7] text-white rounded-lg hover:shadow-lg hover:shadow-[#fc87a7]/30 transition-all disabled:opacity-50 font-medium"
+                          disabled={isSaving || !isFormValid}
+                          className="flex items-center gap-2 px-4 py-2 bg-[#fc87a7] text-white rounded-lg hover:shadow-lg hover:shadow-[#fc87a7]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                         >
                           {isSaving ? 'Saving...' : <><Check className="w-4 h-4" /> Save Changes</>}
                         </motion.button>
