@@ -95,7 +95,7 @@ export default function EventLayout() {
         </aside>
 
         {/* ── Mobile sidebar (horizontal tabs) ── */}
-        <div className="lg:hidden fixed top-[88px] left-0 right-0 z-30 bg-white border-b border-slate-200 overflow-x-auto">
+        <div className="lg:hidden fixed top-[110px] left-0 right-0 z-30 bg-white border-b border-slate-200 overflow-x-auto">
           <div className="flex items-center gap-1 px-4 py-2 min-w-max">
             {sidebarItems.map((item) => {
               const active = isActive(item)
