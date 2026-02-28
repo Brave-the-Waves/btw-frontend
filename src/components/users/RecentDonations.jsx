@@ -95,9 +95,9 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-2xl p-6 border border-slate-100">
+      <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 border border-slate-100">
         <div className="flex items-center justify-center py-8">
-          <div className="w-8 h-8 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin" />
+          <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} className="w-8 h-8 border-4 border-slate-200 border-t-[#fc87a7] rounded-full"></motion.div>
         </div>
       </div>
     )
@@ -105,9 +105,9 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
 
   if (donations.length === 0) {
     return (
-      <div className="bg-white rounded-2xl p-6 border border-slate-100">
+      <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 border border-slate-100">
         <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-          <Heart className="w-5 h-5 text-pink-500" />
+          <Heart className="w-5 h-5 text-[#fc87a7]" />
           {title || context === 'made' ? 'My Donations' : 'Recent Donations'}
         </h3>
         <p className="text-slate-500 text-center py-8">No donations yet. Be the first to contribute!</p>
@@ -116,10 +116,10 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
   }
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-slate-100">
+    <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 border border-slate-100">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-          <Heart className="w-5 h-5 text-pink-500" />
+          <Heart className="w-5 h-5 text-[#fc87a7]" />
           {title || (context === 'made' ? 'My Donations' : 'Recent Donations')}
         </h3>
         <span className="text-sm text-slate-500">
@@ -140,7 +140,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
             {currentDonations.map((donation, index) => (
               <div
                 key={`${donation._id || index}-${currentPage}`}
-                className="bg-white p-4 rounded-xl border border-pink-400 hover:border-pink-800 transition-colors"
+                className="bg-white/50 backdrop-blur p-4 rounded-xl border border-[#fc87a7]/30 hover:border-[#fc87a7]/60 hover:bg-white transition-all hover:shadow-md"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
@@ -151,7 +151,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
                           : (donation.isAnonymous ? 'Anonymous' : donation.donorName || 'Anonymous')
                         }
                       </p>
-                      <span className="text-pink-600 font-bold">
+                      <span className="text-[#fc87a7] font-bold">
                         ${donation.amount?.toLocaleString() || '0'}
                       </span>
                     </div>
@@ -184,20 +184,20 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
           <button
             onClick={goToPreviousPage}
             disabled={currentPage === 0}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-all font-medium cursor-pointer hover:shadow-sm"
           >
             <ChevronLeft className="w-4 h-4" />
             Previous
           </button>
           
-          <span className="text-sm text-slate-600">
+          <span className="text-sm font-medium text-slate-600">
             Page {currentPage + 1} of {totalPages}
           </span>
           
           <button
             onClick={goToNextPage}
             disabled={currentPage === totalPages - 1}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-all font-medium cursor-pointer hover:shadow-sm"
           >
             Next
             <ChevronRight className="w-4 h-4" />
