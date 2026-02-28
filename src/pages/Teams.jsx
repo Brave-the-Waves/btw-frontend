@@ -87,8 +87,9 @@ export default function Teams() {
       await refreshUser()
 
       setShowCreateModal(false)
-      // Optionally navigate to the new team page
-      // navigate(`/teams/${newTeam.name}`)
+      const createdEvent = newTeam?.formData?.team?.event || eventName
+      const createdTeamName = newTeam?.formData?.team?.name || newTeam?.team?.name || newTeam?.name || teamData.teamName
+      navigate(`/event/${createdEvent}/teams/${createdTeamName}`)
     } catch (error) {
       console.error('Failed to create team', error)
       alert('Failed to create team. Please try again.')
@@ -117,7 +118,7 @@ export default function Teams() {
     }
   }
 
-  const handleJoinSuccess = async () => {
+  const handleJoinSuccess = async (joinedData) => {
     await refreshUser()
     // refresh members list
     const data = await handleFetchTeams()
@@ -130,6 +131,15 @@ export default function Teams() {
       description: team.description,
     })))
 
+    const joinedTeamName =
+      joinedData?.formData?.team?.name ||
+      joinedData?.team?.name ||
+      joinedData?.teamName ||
+      user?.team?.name
+
+    if (joinedTeamName) {
+      navigate(`/event/${eventName}/teams/${encodeURIComponent(joinedTeamName)}`)
+    }
   }
 
   const filteredTeams = teams.filter(team => 
@@ -160,33 +170,43 @@ export default function Teams() {
               />
             </div>
             <div className="flex gap-2">
-              <Button 
-                onClick={handleCreateClick} 
-                disabled={isLoading || !isAuthenticated || user?.team}
-                className="bg-[#fc87a7] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer rounded-lg font-semibold transition-all"
-                title={
-                  !isAuthenticated ? "Log in first to create a team" :
-                  user?.team ? "You are already in a team" :
-                  !user?.isRegistered ? "Complete registration first to create a team" :
-                  "Create a new team"
-                }
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Create Team
-              </Button>
-              <Button 
-                onClick={handleJoinClick} 
-                disabled={isLoading || !isAuthenticated || user?.team}
-                className="bg-white text-slate-900 hover:bg-slate-50 shadow-md disabled:opacity-50 disabled:cursor-not-allowed rounded-lg cursor-pointer border-2 border-slate-200 font-semibold transition-all hover:border-[#fc87a7]/30"
-                title={
-                  !isAuthenticated ? "Log in first to join a team" :
-                  user?.team ? "You are already in a team" :
-                  !user?.isRegistered ? "Complete registration first to join a team" :
-                  "Join a team"
-                }
-              >
-                Join a Team
-              </Button>
+              {user?.team?.name ? (
+                <Button
+                  onClick={() => navigate(`/event/${eventName}/teams/${encodeURIComponent(user.team.name)}`)}
+                  className="bg-[#fc87a7] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 shadow-md rounded-lg cursor-pointer font-semibold transition-all"
+                >
+                  <Users className="w-4 h-4 mr-2" />
+                  My Team
+                </Button>
+              ) : (
+                <>
+                  <Button 
+                    onClick={handleCreateClick} 
+                    disabled={isLoading || !isAuthenticated}
+                    className="bg-[#fc87a7] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer rounded-lg font-semibold transition-all"
+                    title={
+                      !isAuthenticated ? "Log in first to create a team" :
+                      !user?.isRegistered ? "Complete registration first to create a team" :
+                      "Create a new team"
+                    }
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Team
+                  </Button>
+                  <Button 
+                    onClick={handleJoinClick} 
+                    disabled={isLoading || !isAuthenticated}
+                    className="bg-white text-slate-900 hover:bg-slate-50 shadow-md disabled:opacity-50 disabled:cursor-not-allowed rounded-lg cursor-pointer border-2 border-slate-200 font-semibold transition-all hover:border-[#fc87a7]/30"
+                    title={
+                      !isAuthenticated ? "Log in first to join a team" :
+                      !user?.isRegistered ? "Complete registration first to join a team" :
+                      "Join a team"
+                    }
+                  >
+                    Join a Team
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </motion.div>

@@ -33,10 +33,11 @@ export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
         const data = await response.json().catch(() => ({}))
         throw new Error(data.message || 'Invalid invite code')
       }
+      const joinedData = await response.json().catch(() => ({}))
       
       setIsSuccess(true)
       setTimeout(async () => {
-        if (onSuccess) await onSuccess()
+        if (onSuccess) await onSuccess(joinedData)
         onClose()
         setInviteCode('')
         setIsSuccess(false)
