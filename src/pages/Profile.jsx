@@ -31,6 +31,11 @@ export default function Profile() {
   const [showImageMenu, setShowImageMenu] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [activeTab, setActiveTab] = useState('donations')
+
+  // Unregistered users only have the contributions tab
+  useEffect(() => {
+    if (!formData.isRegistered) setActiveTab('contributions')
+  }, [formData.isRegistered])
   const [copySuccess, setCopySuccess] = useState(false)
   const [showWaiverOverlay, setShowWaiverOverlay] = useState(false)
   const [waiverStatus, setWaiverStatus] = useState(null)
@@ -361,75 +366,73 @@ export default function Profile() {
                   </Button>
                 </div>
               ) : (
-                <>
-                  {/* Top 1/4 — Stats boxes */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-                      <p className="text-3xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent">
-                        {formData.amountRaised?.toLocaleString() || '0'}
-                      </p>
-                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 mt-1">Amount Raised</p>
-                      {formData.donationId && (
-                        <div className="mt-3">
-                          <DonateButton donationId={formData.donationId} userName={formData.name} size="sm" className="rounded-full" />
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Donation ID</p>
-                      <div className="flex items-center gap-2">
-                        <p className="text-lg font-mono text-slate-700 bg-slate-50 px-3 py-1 rounded-lg border border-slate-200 font-bold">
-                          {formData.donationId || 'N/A'}
-                        </p>
-                        {formData.donationId && (
-                          <button
-                            type="button"
-                            onClick={handleCopyDonationId}
-                            className="text-slate-400 hover:text-slate-700 transition-colors"
-                          >
-                            {copySuccess ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                          </button>
-                        )}
+                /* Registered — Stats boxes */
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                    <p className="text-3xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent">
+                      {formData.amountRaised?.toLocaleString() || '0'}
+                    </p>
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 mt-1">Amount Raised</p>
+                    {formData.donationId && (
+                      <div className="mt-3">
+                        <DonateButton donationId={formData.donationId} userName={formData.name} size="sm" className="rounded-full" />
                       </div>
-                    </div>
+                    )}
                   </div>
 
-                  {/* Bottom 3/4 — Tabbed activity */}
-                  <div className="bg-gradient-to-br from-white to-slate-50 rounded-3xl shadow-sm border border-slate-100 flex flex-col flex-1 hover:shadow-md transition-shadow">
-                    {/* Tab bar */}
-                    <div className="flex border-b border-slate-100 px-6 pt-4">
-                      {['donations', 'contributions'].map((tab) => (
+                  <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Donation ID</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-lg font-mono text-slate-700 bg-slate-50 px-3 py-1 rounded-lg border border-slate-200 font-bold">
+                        {formData.donationId || 'N/A'}
+                      </p>
+                      {formData.donationId && (
                         <button
-                          key={tab}
                           type="button"
-                          onClick={() => setActiveTab(tab)}
-                          className="relative mr-8 pb-3 text-sm font-semibold capitalize transition-colors"
-                          style={{ color: activeTab === tab ? '#fc87a7' : '#94a3b8' }}
+                          onClick={handleCopyDonationId}
+                          className="text-slate-400 hover:text-slate-700 transition-colors"
                         >
-                          {tab === 'donations' ? 'Donations Received' : 'My Contributions'}
-                          {activeTab === tab && (
-                            <motion.div
-                              layoutId="tab-underline"
-                              className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-[#fc87a7]"
-                            />
-                          )}
+                          {copySuccess ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
                         </button>
-                      ))}
-                    </div>
-
-                    {/* Tab content */}
-                    <div className="p-4">
-                      {activeTab === 'donations' && userId && (
-                        <RecentDonations context="user" targetId={userId} itemsPerPage={5} title="" />
-                      )}
-                      {activeTab === 'contributions' && userId && (
-                        <RecentDonations context="made" targetId={userId} itemsPerPage={5} title="" />
                       )}
                     </div>
                   </div>
-                </>
+                </div>
               )}
+
+              {/* Tabbed activity — always visible */}
+              <div className="bg-gradient-to-br from-white to-slate-50 rounded-3xl shadow-sm border border-slate-100 flex flex-col flex-1 hover:shadow-md transition-shadow">
+                {/* Tab bar */}
+                <div className="flex border-b border-slate-100 px-6 pt-4">
+                  {(formData.isRegistered ? ['donations', 'contributions'] : ['contributions']).map((tab) => (
+                    <button
+                      key={tab}
+                      type="button"
+                      onClick={() => setActiveTab(tab)}
+                      className="relative mr-8 pb-3 text-sm font-semibold capitalize transition-colors"
+                      style={{ color: activeTab === tab ? '#fc87a7' : '#94a3b8' }}
+                    >
+                      {tab === 'donations' ? 'Donations Received' : 'My Contributions'}
+                      {activeTab === tab && (
+                        <motion.div
+                          layoutId="tab-underline"
+                          className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-[#fc87a7]"
+                        />
+                      )}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Tab content */}
+                <div className="p-4">
+                  {activeTab === 'donations' && userId && formData.isRegistered && (
+                    <RecentDonations context="user" targetId={userId} itemsPerPage={5} title="" />
+                  )}
+                  {activeTab === 'contributions' && userId && (
+                    <RecentDonations context="made" targetId={userId} itemsPerPage={5} title="" />
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>

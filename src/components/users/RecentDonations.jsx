@@ -56,7 +56,13 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
         // Fetch user names for target users
         const donationsWithNames = donationsArray.map( (donation) => {
           if (donation.targetUser) {
-            return { ...donation, targetUserName: donation.targetUser.name }
+            console.log("The targetUser: ", donation.targetUser)
+            const name = typeof donation.targetUser === 'object'
+              ? donation.targetUser.name
+              : null
+
+            console.log("name: ", name)
+            return { ...donation, targetUserName: name }
             }
             return { ...donation, targetUserName: 'Brave the Waves' }
         })
@@ -147,7 +153,7 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
                     <div className="flex items-center gap-2 mb-1">
                       <p className="font-semibold text-slate-900">
                         {context === 'made' 
-                          ? `To: ${donation.targetUserName || 'Unknown Cause'}`
+                          ? `To: ${donation.targetUserName || 'Brave the Waves'}`
                           : (donation.isAnonymous ? 'Anonymous' : donation.donorName || 'Anonymous')
                         }
                       </p>
