@@ -10,6 +10,7 @@ export default function Participants() {
   const [participants, setParticipants] = useState([])
   const [selectedParticipantId, setSelectedParticipantId] = useState(null)
   const [itemsToShow, setItemsToShow] = useState(20)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -28,6 +29,8 @@ export default function Participants() {
         })))
       } catch (error) {
         console.error('Error fetching participants:', error)
+      } finally {
+        setIsLoading(false)
       }
     }
     fetchParticipants()
@@ -42,88 +45,105 @@ export default function Participants() {
   const hasMore = filteredParticipants.length > itemsToShow
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <div className="pt-32 pb-20 px-6 max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
           <div>
-            <h1 className="text-4xl font-bold text-slate-900 mb-2">All Participants</h1>
-            <p className="text-slate-600">Meet the paddlers making a difference.</p>
+            <h1 className="text-5xl font-bold text-slate-900 mb-2">All Participants</h1>
+            <p className="text-slate-600 text-lg">Meet the paddlers making a difference.</p>
           </div>
           
-          <div className="relative w-full md:w-72">
+          <div className="relative w-full md:w-80">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input 
               type="text" 
               placeholder="Search by name or team..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none"
+              className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:ring-2 focus:ring-[#fc87a7] focus:border-[#fc87a7] outline-none bg-white transition-all"
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {displayedParticipants.map((p, index) => (
-            <motion.div
-              key={p.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.05 }}
-              className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-xl font-bold text-slate-400">
-                  {p.name.charAt(0)}
+        {isLoading ? (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center justify-center py-20">
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} className="w-12 h-12 border-4 border-slate-200 border-t-[#fc87a7] rounded-full"></motion.div>
+          </motion.div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayedParticipants.map((p, index) => (
+              <motion.div
+                key={p.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                className="group relative bg-gradient-to-br from-white to-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-[#fc87a7]/30 shadow-sm hover:shadow-lg hover:shadow-[#fc87a7]/10 transition-all duration-300"
+              >
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#fc87a7]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative z-10 flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#fc87a7] to-[#c14a75] flex items-center justify-center text-lg font-bold text-white group-hover:scale-110 transition-transform">
+                    {p.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-slate-900 group-hover:text-[#fc87a7] transition-colors">{p.name}</h3>
+                    {
+                      p.team !== "No Team" ? (
+                        <p className="text-sm text-slate-500 group-hover:text-slate-600">{p.team}</p>
+                      ) : null
+                    }
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-bold text-slate-900">{p.name}</h3>
-                  {
-                    p.team !== "No Team" ? (
-                      <p className="text-sm text-slate-500">{p.team}</p>
-                    ) : null
-                  }
+                <div className="relative z-10">
                   {
                     p.amountRaised > 0 ? (
-                      <p className="text-sm text-pink-600 font-medium mt-1">
-                        Raised: ${p.amountRaised.toLocaleString()}
+                      <p className="text-sm font-semibold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent mb-4">
+                        ${p.amountRaised.toLocaleString()} Raised
                       </p>
                     ) : (
-                      <p className="text-sm text-slate-500 mt-1">
+                      <p className="text-sm text-slate-500 mb-4">
                         Raised: $0
                       </p>
                     )
                   }
+                  <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                      p.role === 'Captain' ? 'bg-[#fc87a7]/10 text-[#fc87a7] border border-[#fc87a7]/20' : 'bg-slate-100 text-slate-600'
+                    }`}>
+                      {p.role}
+                    </span>
+                    <motion.button 
+                      whileHover={{ scale: 1.05 }}
+                      className="text-sm font-semibold text-[#fc87a7] hover:text-[#c14a75] cursor-pointer transition-colors" 
+                      onClick={() => setSelectedParticipantId(p.id)}
+                    >
+                      View Profile →
+                    </motion.button>
+                  </div>
                 </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-slate-50 flex justify-between items-center">
-                <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                  p.role === 'Captain' ? 'bg-pink-100 text-pink-700' : 'bg-slate-100 text-slate-600'
-                }`}>
-                  {p.role}
-                </span>
-                <button className="text-sm font-medium text-pink-600 hover:text-pink-700 cursor-pointer" onClick = { () => setSelectedParticipantId(p.id) }>
-                  View Profile
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {hasMore && (
-          <div className="flex justify-center mt-8">
-            <Button
-              onClick={() => setItemsToShow(prev => prev + 20)}
-              className="px-6 py-3 bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200"
-            >
-              Load More ({filteredParticipants.length - itemsToShow} remaining)
-            </Button>
+              </motion.div>
+            ))}
           </div>
         )}
 
+        {hasMore && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-center mt-8">
+            <Button
+              onClick={() => setItemsToShow(prev => prev + 20)}
+              className="px-6 py-3 bg-[#fc87a7]/10 text-[#fc87a7] hover:bg-[#fc87a7]/20 border-2 border-[#fc87a7]/30 rounded-lg cursor-pointer font-semibold transition-all"
+            >
+              Load More ({filteredParticipants.length - itemsToShow} remaining)
+            </Button>
+          </motion.div>
+        )}
+
         {filteredParticipants.length === 0 && (
-          <div className="text-center py-20 text-slate-500">
-            No participants found matching "{searchTerm}"
-          </div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 mb-4">
+              <Search className="w-6 h-6 text-slate-400" />
+            </div>
+            <p className="text-slate-500 text-lg">No participants found matching "{searchTerm}"</p>
+          </motion.div>
         )}
       </div>
 

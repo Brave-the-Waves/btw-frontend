@@ -187,19 +187,19 @@ export default function TeamDetails() {
 
   if (!team) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5 flex items-center justify-center">
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} className="w-12 h-12 border-4 border-slate-200 border-t-[#fc87a7] rounded-full"></motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="pt-32 px-6 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-10 gap-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
+      <div className="pt-32 px-6 max-w-7xl mx-auto pb-20">
+        <div className="grid lg:grid-cols-10 gap-6 pb-20">
           {/* Main content area - 70% on large screens */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-white to-slate-50 rounded-3xl p-8 md:p-10 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
               <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
                 <div className="w-full max-w-2xl">
                   {isEditing ? (
@@ -238,16 +238,17 @@ export default function TeamDetails() {
                       </div>
 
                       <div className="flex gap-3 pt-2">
-                        <button
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
                           onClick={handleSaveEdit}
                           disabled={isSaving}
-                          className="flex items-center gap-2 px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors disabled:opacity-50"
+                          className="flex items-center gap-2 px-4 py-2 bg-[#fc87a7] text-white rounded-lg hover:shadow-lg hover:shadow-[#fc87a7]/30 transition-all disabled:opacity-50 font-medium"
                         >
                           {isSaving ? 'Saving...' : <><Check className="w-4 h-4" /> Save Changes</>}
-                        </button>
+                        </motion.button>
                         <button
                           onClick={handleCancelEdit}
-                          className="flex items-center gap-2 px-4 py-2 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 border-2 border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 hover:border-[#fc87a7]/30 transition-all font-medium"
                         >
                           <X className="w-4 h-4" /> Cancel
                         </button>
@@ -256,54 +257,62 @@ export default function TeamDetails() {
                   ) : (
                     <>
                       {isCaptain && !isEditing && (
-                        <button 
+                        <motion.button 
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
                           onClick={handleEditClick}
-                          className="mb-4 flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors"
+                          className="mb-4 flex items-center gap-2 text-slate-500 hover:text-[#fc87a7] transition-colors group"
                         >
-                          <div className="p-2 bg-slate-100 rounded-lg">
+                          <div className="p-2 bg-slate-100 group-hover:bg-[#fc87a7]/10 rounded-lg transition-colors">
                             <Pencil className="w-4 h-4" />
                           </div>
                           <span className="text-sm font-medium">Edit Details</span>
-                        </button>
+                        </motion.button>
                       )}
                       <div className="flex items-center gap-3 mb-4">
-                        <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-900 text-sm font-medium">
+                        <span className="px-3 py-1 rounded-full bg-gradient-to-r from-[#fc87a7]/10 to-transparent text-slate-900 text-sm font-semibold border border-[#fc87a7]/20">
                           {team.division} Division
                         </span>
                       </div>
-                      <h1 className="text-4xl font-bold text-slate-900 mb-4">{team.name}</h1>
+                      <h1 className="text-5xl font-bold text-slate-900 mb-4">{team.name}</h1>
                       {
                         team.inviteCode && (
-                          <h2 
+                          <motion.h2 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
                             onClick={copyInviteCode}
-                            className="flex items-center gap-2 text-slate-600 mb-4 cursor-pointer hover:text-slate-900 transition-colors"
+                            className="flex items-center gap-2 text-slate-700 mb-4 cursor-pointer hover:text-[#fc87a7] transition-colors font-mono text-sm bg-slate-50 px-4 py-2 rounded-lg border border-slate-200 hover:border-[#fc87a7]/30 w-fit group"
                             title="Click to copy invite code"
                           >
                             {team.inviteCode}
-                            {copied ? <span className="text-xs">✓ Copied!</span> : <Copy className="w-4 h-4" />}
-                          </h2>
+                            {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-slate-400 group-hover:text-[#fc87a7]" />}
+                          </motion.h2>
                         )
                       }
-                      <p className="text-slate-600 max-w-2xl text-lg mb-4">{team.description}</p>
+                      <p className="text-slate-600 max-w-2xl text-lg mb-6">{team.description}</p>
                       {isInTeam ? (
                         !confirmLeave ? (
-                          <button
+                          <motion.button
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
                             onClick={() => setConfirmLeave(true)}
-                            className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                            className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
                           >
                             Leave Team
-                          </button>
+                          </motion.button>
                         ) : (
                           <div className="flex items-center gap-2">
-                            <button
+                            <motion.button
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
                               onClick={leaveTeam}
-                              className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                              className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
                             >
                               Confirm Leave
-                            </button>
+                            </motion.button>
                             <button
                               onClick={() => setConfirmLeave(false)}
-                              className="px-3 py-1 text-sm border border-slate-300 text-slate-700 rounded-md hover:bg-slate-50 transition-colors"
+                              className="px-4 py-2 text-sm border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
                             >
                               Cancel
                             </button>
@@ -311,20 +320,22 @@ export default function TeamDetails() {
                         )
                       ) : (
                         <>
-                              <button
-                                onClick={() => {
-                                  if (!isAuthenticated) {
-                                    navigate('/login')
-                                  } else if (!user?.isRegistered) {
-                                    setShowRegisterWarning(true)
-                                  } else {
-                                    setJoinModal(true)
-                                  }
-                                }}
-                                className="px-3 py-1 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700 transition-colors cursor-pointer"
-                              >
-                                Join Team
-                              </button>
+                          <motion.button
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            onClick={() => {
+                              if (!isAuthenticated) {
+                                navigate('/login')
+                              } else if (!user?.isRegistered) {
+                                setShowRegisterWarning(true)
+                              } else {
+                                setJoinModal(true)
+                              }
+                            }}
+                            className="px-4 py-2 text-sm bg-[#fc87a7] text-white rounded-lg hover:shadow-lg hover:shadow-[#fc87a7]/30 transition-all font-medium cursor-pointer"
+                          >
+                            Join Team
+                          </motion.button>
                           <AnimatePresence>
                             {joinModal && (
                               <JoinTeamOverlay 
@@ -339,7 +350,7 @@ export default function TeamDetails() {
                           </AnimatePresence>
                           <AnimatePresence>
                             {showRegisterWarning && (
-                              <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
+                              <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
                                 <motion.div
                                   initial={{ opacity: 0, scale: 0.95 }}
                                   animate={{ opacity: 1, scale: 1 }}
@@ -349,15 +360,16 @@ export default function TeamDetails() {
                                   <h3 className="text-xl font-bold text-slate-900 mb-2">Complete Event Registration</h3>
                                   <p className="text-slate-600 mb-6">You need to complete your event registration before joining this team.</p>
                                   <div className="flex flex-col gap-3">
-                                    <button
+                                    <motion.button
+                                      whileHover={{ scale: 1.02 }}
                                       onClick={() => navigate('/register')}
-                                      className="w-full px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+                                      className="w-full px-4 py-3 bg-[#fc87a7] text-white rounded-lg hover:shadow-lg hover:shadow-[#fc87a7]/30 font-semibold transition-all"
                                     >
                                       Complete Registration
-                                    </button>
+                                    </motion.button>
                                     <button
                                       onClick={() => setShowRegisterWarning(false)}
-                                      className="text-slate-500 hover:text-pink-600 text-sm font-medium transition-colors"
+                                      className="text-slate-500 hover:text-[#fc87a7] text-sm font-medium transition-colors"
                                     >
                                       Cancel
                                     </button>
@@ -372,14 +384,19 @@ export default function TeamDetails() {
                   )}
                 </div>
                 
-                <div className="bg-slate-50 p-6 rounded-2xl min-w-[250px]">
-                  <p className="text-sm text-slate-500 mb-1">Total Raised</p>
-                  <p className="text-3xl font-bold text-slate-900 mb-2">${team.raised.toLocaleString()}</p>
-                  <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mb-2">
-                    <div className="bg-pink-600 h-full rounded-full" style={{ width: `${(team.raised / team.goal) * 100}%` }} />
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-gradient-to-br from-[#fc87a7]/10 to-[#fc87a7]/5 p-6 rounded-2xl border border-[#fc87a7]/20">
+                  <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-2">Total Raised</p>
+                  <p className="text-4xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent mb-3">\${team.raised.toLocaleString()}</p>
+                  <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden mb-3">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(team.raised / team.goal) * 100}%` }}
+                      transition={{ duration: 1, ease: 'easeOut' }}
+                      className="bg-gradient-to-r from-[#fc87a7] to-[#c14a75] h-full rounded-full" 
+                    />
                   </div>
-                  <p className="text-xs text-slate-500">of ${team.goal.toLocaleString()} goal</p>
-                </div>
+                  <p className="text-xs text-slate-600">of \${team.goal.toLocaleString()} goal</p>
+                </motion.div>
               </div>
 
               <DisplayMembers 
@@ -389,7 +406,7 @@ export default function TeamDetails() {
                 onMemberChange={() => setRefreshKey(prev => !prev)}
                 isEditing={isEditing}
               />
-            </div>
+            </motion.div>
           </div>
 
           {/* Donations sidebar - 30% on large screens */}

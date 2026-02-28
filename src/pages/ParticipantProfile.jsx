@@ -5,6 +5,7 @@ import UserProfileCard from '@/components/users/UserProfileCard'
 import RecentDonations from '@/components/users/RecentDonations'
 import Button from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { API_BASE_URL } from '@/config'
 
 export default function ParticipantProfile() {
@@ -40,23 +41,26 @@ export default function ParticipantProfile() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin" />
-          <p className="text-slate-500 font-medium">Loading profile...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
+        <motion.div className="flex flex-col items-center gap-4">
+          <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} className="w-12 h-12 border-4 border-slate-200 border-t-[#fc87a7] rounded-full"></motion.div>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-slate-500 font-medium">Loading profile...</motion.p>
+        </motion.div>
       </div>
     )
   }
 
   if (error || !userData) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
         <Navbar />
         <div className="pt-32 px-6 max-w-3xl mx-auto text-center">
-          <h1 className="text-2xl font-bold text-slate-900 mb-4">User Not Found</h1>
-          <p className="text-slate-600 mb-6">{error || 'This user does not exist.'}</p>
-          <Button onClick={() => navigate(-1)} variant="outline">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 mb-4 mx-auto">
+            <ArrowLeft className="w-8 h-8 text-slate-400" />
+          </div>
+          <h1 className="text-3xl font-bold text-slate-900 mb-4">User Not Found</h1>
+          <p className="text-slate-600 mb-8">{error || 'This user does not exist.'}</p>
+          <Button onClick={() => navigate(-1)} className="bg-[#fc87a7] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 font-semibold">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Go Back
           </Button>
@@ -66,23 +70,23 @@ export default function ParticipantProfile() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <Navbar />
-      <div className="pt-32 px-6 max-w-3xl mx-auto">
-        <div className="mb-6">
-          <Button onClick={() => navigate(-1)} variant="outline" className="text-slate-600 hover:text-slate-900">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+      <div className="pt-32 px-6 max-w-3xl mx-auto pb-20">
+        <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="mb-8">
+          <Button onClick={() => navigate(-1)} className="flex items-center gap-2 bg-white text-slate-600 hover:text-[#fc87a7] border-2 border-slate-200 hover:border-[#fc87a7]/30 rounded-lg font-medium transition-all">
+            <ArrowLeft className="w-4 h-4" />
             Back
           </Button>
-        </div>
+        </motion.div>
         
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-white to-slate-50 rounded-3xl p-8 md:p-10 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold text-slate-900">User Profile</h1>
+            <h1 className="text-4xl font-bold text-slate-900">User Profile</h1>
           </div>
 
           <div className="flex flex-col md:flex-row gap-8 items-start">
-            <div className="w-32 h-32 rounded-full border-4 border-pink-100 bg-pink-100 flex items-center justify-center text-pink-600 font-bold text-4xl">
+            <div className="w-40 h-40 rounded-full border-4 border-[#fc87a7]/20 bg-gradient-to-br from-[#fc87a7]/10 to-[#fc87a7]/5 flex items-center justify-center text-[#fc87a7] font-bold text-5xl flex-shrink-0">
               {userData.name.charAt(0).toUpperCase()}
             </div>
             
@@ -94,7 +98,7 @@ export default function ParticipantProfile() {
               />
             </div>
           </div>
-        </div>
+        </motion.div>
         {
           console.log("Attempting to render RecentDonations for user:", id)
         }

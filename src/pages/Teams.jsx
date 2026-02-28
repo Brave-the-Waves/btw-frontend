@@ -140,12 +140,12 @@ export default function Teams() {
   const hasMore = filteredTeams.length > itemsToShow
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <div className="pt-32 px-6 max-w-7xl mx-auto pb-20">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div>
-            <h1 className="text-4xl font-bold text-slate-900 mb-4">All Teams</h1>
-            <p className="text-slate-600 max-w-2xl">Find a team to join or support. Together we are making waves for women's health.</p>
+            <h1 className="text-5xl font-bold text-slate-900 mb-4">All Teams</h1>
+            <p className="text-slate-600 max-w-2xl text-lg">Find a team to join or support. Together we are making waves for women's health.</p>
           </div>
           
           <div className="flex gap-4 w-full md:w-auto">
@@ -156,14 +156,14 @@ export default function Teams() {
                 placeholder="Search teams..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#fc87a7] focus:border-[#fc87a7] outline-none bg-white"
               />
             </div>
             <div className="flex gap-2">
               <Button 
                 onClick={handleCreateClick} 
                 disabled={isLoading || !isAuthenticated || user?.team}
-                className="bg-[#fa6090] text-white hover:bg-pink-700 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer rounded-lg"
+                className="bg-[#fc87a7] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer rounded-lg font-semibold transition-all"
                 title={
                   !isAuthenticated ? "Log in first to create a team" :
                   user?.team ? "You are already in a team" :
@@ -177,7 +177,7 @@ export default function Teams() {
               <Button 
                 onClick={handleJoinClick} 
                 disabled={isLoading || !isAuthenticated || user?.team}
-                className="bg-white text-black hover:bg-slate-100 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed rounded-lg cursor-pointer border-2"
+                className="bg-white text-slate-900 hover:bg-slate-50 shadow-md disabled:opacity-50 disabled:cursor-not-allowed rounded-lg cursor-pointer border-2 border-slate-200 font-semibold transition-all hover:border-[#fc87a7]/30"
                 title={
                   !isAuthenticated ? "Log in first to join a team" :
                   user?.team ? "You are already in a team" :
@@ -189,44 +189,48 @@ export default function Teams() {
               </Button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayedTeams.map((team) => (
+          {displayedTeams.map((team, index) => (
             <motion.div 
               key={team.id}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="group relative bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 border border-slate-100 hover:border-[#fc87a7]/30 shadow-sm hover:shadow-lg hover:shadow-[#fc87a7]/10 transition-all duration-300 h-full"
             >
-              <div className="flex justify-between items-start mb-4">
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  team.division === 'Corporate' ? 'bg-blue-100 text-blue-600' :
-                  team.division === 'Survivor' ? 'bg-pink-100 text-pink-600' :
-                  'bg-green-100 text-green-600'
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#fc87a7]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              
+              <div className="relative z-10 flex justify-between items-start mb-4">
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                  team.division === 'Corporate' ? 'bg-blue-100 text-blue-700' :
+                  team.division === 'Survivor' ? 'bg-pink-100 text-[#fc87a7]' :
+                  'bg-emerald-100 text-emerald-700'
                 }`}>
                   {team.division}
                 </span>
                 <Trophy className="w-5 h-5 text-yellow-500" />
               </div>
               
-              <h3 className="text-xl font-bold text-slate-900 mb-2">{team.name}</h3>
-              <p className="text-slate-500 text-sm mb-6 line-clamp-2">{team.description}</p>
+              <h3 className="relative z-10 text-xl font-bold text-slate-900 mb-2 group-hover:text-[#fc87a7] transition-colors">{team.name}</h3>
+              <p className="relative z-10 text-slate-600 text-sm mb-6 line-clamp-2">{team.description}</p>
               
-              <div className="flex items-center gap-6 text-sm text-slate-600 mb-6">
+              <div className="relative z-10 flex items-center gap-6 text-sm text-slate-600 mb-6">
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4" />
-                  <span>{team.members} Members</span>
+                  <span>{team.members} Member{team.members !== 1 ? 's' : ''}</span>
                 </div>
-                <div className="font-medium text-slate-900">
-                  ${team.raised.toLocaleString()} Raised
+                <div className="font-semibold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent">
+                  ${team.raised.toLocaleString()}
                 </div>
               </div>
 
-              <div className="flex gap-3">
+              <div className="relative z-10 flex gap-3">
                 <Button 
                   variant="outline" 
-                  className="flex-1 border-2 rounded-md text-slate-700 cursor-pointer hover:bg-gray-100"
+                  className="flex-1 border-2 border-slate-200 text-slate-700 rounded-lg cursor-pointer hover:border-[#fc87a7]/30 hover:bg-[#fc87a7]/5 transition-all font-medium"
                   onClick={() => navigate(`/event/${eventName}/teams/${team.name}`)}
                 >
                   View Details
@@ -237,20 +241,23 @@ export default function Teams() {
         </div>
 
         {hasMore && (
-          <div className="flex justify-center mt-8">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-center mt-8">
             <Button
               onClick={() => setItemsToShow(prev => prev + 20)}
-              className="px-6 py-3 bg-[#fc87a7]/10 text-pink-700 hover:bg-pink-100 border-2 rounded-lg cursor-pointer"
+              className="px-6 py-3 bg-[#fc87a7]/10 text-[#fc87a7] hover:bg-[#fc87a7]/20 border-2 border-[#fc87a7]/30 rounded-lg cursor-pointer font-semibold transition-all"
             >
               Load More ({filteredTeams.length - itemsToShow} remaining)
             </Button>
-          </div>
+          </motion.div>
         )}
 
         {filteredTeams.length === 0 && (
-          <div className="text-center py-20 text-slate-500">
-            No teams found matching "{searchTerm}"
-          </div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 mb-4">
+              <Users className="w-6 h-6 text-slate-400" />
+            </div>
+            <p className="text-slate-500 text-lg">No teams found matching "{searchTerm}"</p>
+          </motion.div>
         )}
       </div>
 

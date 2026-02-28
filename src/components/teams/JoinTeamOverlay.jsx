@@ -66,14 +66,14 @@ export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="relative bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl z-10"
+        className="relative bg-gradient-to-br from-white to-slate-50 rounded-3xl p-8 max-w-md w-full shadow-2xl z-10 border border-slate-100"
       >
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">{displayTitle}</h2>
-        <p className="text-slate-600 mb-6">Enter the invite code provided by your team captain.</p>
+        <h2 className="text-3xl font-bold text-slate-900 mb-2">{displayTitle}</h2>
+        <p className="text-slate-600 text-base mb-8">Enter the invite code provided by your team captain.</p>
         
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
-            <label className="block text-sm font-medium text-slate-700 mb-2">Invite Code</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-3">Invite Code</label>
             <div className="relative">
               <AnimatePresence mode="wait">
                 {isSuccess ? (
@@ -84,7 +84,7 @@ export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
                     exit={{ scale: 0, opacity: 0 }}
                     className="absolute left-3 top-1/2 -translate-y-1/2 z-10"
                   >
-                    <Check className="w-5 h-5 text-green-500" />
+                    <Check className="w-5 h-5 text-emerald-500" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -94,7 +94,7 @@ export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
                     exit={{ scale: 0, opacity: 0 }}
                     className="absolute left-3 top-1/2 -translate-y-1/2 z-10"
                   >
-                    <Lock className="w-5 h-5 text-slate-400" />
+                    <Lock className="w-5 h-5 text-[#fc87a7]" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -102,9 +102,9 @@ export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
                 animate={
                   isShaking ? { x: [-10, 10, -10, 10, 0] } : 
                   isSuccess ? { 
-                    borderColor: '#22c55e', 
+                    borderColor: '#10b981', 
                     backgroundColor: '#f0fdf4',
-                    boxShadow: '0 0 0 2px #bbf7d0'
+                    boxShadow: '0 0 0 2px #d1fae5'
                   } : {}
                 }
                 transition={{ duration: 0.33 }}
@@ -115,10 +115,10 @@ export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
                   setJoinError('')
                 }}
                 disabled={isSuccess || isLoading}
-                className={`w-full pl-10 pr-4 py-3 rounded-xl border focus:ring-2 outline-none uppercase tracking-widest transition-colors duration-300 ${
+                className={`w-full pl-10 pr-4 py-3 rounded-lg border-2 focus:ring-2 outline-none uppercase tracking-widest transition-all duration-300 font-semibold ${
                   joinError 
-                    ? 'border-red-500 focus:ring-red-200 bg-red-50' 
-                    : 'border-slate-200 focus:ring-pink-500'
+                    ? 'border-red-400 focus:ring-red-200 bg-red-50 focus:border-red-400' 
+                    : 'border-slate-200 focus:ring-[#fc87a7] focus:border-[#fc87a7]'
                 }`}
                 placeholder="ABC123"
                 required
@@ -128,7 +128,7 @@ export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
               <motion.p 
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-red-500 text-sm mt-2 ml-1"
+                className="text-red-500 text-sm mt-2 ml-1 font-medium"
               >
                 {joinError}
               </motion.p>
@@ -138,8 +138,7 @@ export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
           <div className="flex gap-3">
             <Button 
               type="button" 
-              variant="outline" 
-              className="flex-1" 
+              className="flex-1 border-2 border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 rounded-lg font-semibold transition-all cursor-pointer" 
               onClick={onClose}
               disabled={isLoading}
             >
@@ -147,7 +146,7 @@ export default function JoinTeamOverlay({ onClose, onSuccess, teamName }) {
             </Button>
             <Button 
               type="submit" 
-              className="flex-1 bg-pink-500 text-white hover:bg-pink-600"
+              className="flex-1 bg-[#fc87a7] text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-[#fc87a7]/30 transition-all cursor-pointer"
               disabled={isLoading || isSuccess}
             >
               {isLoading ? 'Joining...' : 'Join Team'}

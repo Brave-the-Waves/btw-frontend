@@ -56,32 +56,36 @@ export default function Leaderboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">Fundraising Leaderboard</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
+      <div className="pt-32 pb-20 px-6 max-w-5xl mx-auto">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
+          <div className="inline-flex items-center justify-center gap-3 mb-4">
+            <Trophy className="w-8 h-8 text-[#fc87a7]" />
+            <h1 className="text-4xl md:text-5xl font-bold text-slate-900">Fundraising Leaderboard</h1>
+            <Trophy className="w-8 h-8 text-[#fc87a7]" />
+          </div>
           <p className="text-slate-600 text-lg">Celebrating our top contributors and teams</p>
-        </div>
+        </motion.div>
 
         {/* Toggle */}
         <div className="flex justify-center mb-12">
-          <div className="bg-white p-1 rounded-xl shadow-sm border border-slate-200 inline-flex">
+          <div className="bg-white p-1.5 rounded-xl shadow-md border border-slate-200 inline-flex backdrop-blur">
             <button
               onClick={() => setActiveTab('teams')}
-              className={`px-6 py-2 rounded-lg font-medium transition-all cursor-pointer ${
+              className={`px-8 py-2.5 rounded-lg font-semibold transition-all duration-300 cursor-pointer ${
                 activeTab === 'teams' 
-                  ? 'bg-slate-900 text-white shadow-md' 
-                  : 'text-slate-600 hover:bg-slate-50'
+                  ? 'bg-[#fc87a7] text-white shadow-lg shadow-[#fc87a7]/30' 
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               Top Teams
             </button>
             <button
               onClick={() => setActiveTab('individuals')}
-              className={`px-6 py-2 rounded-lg font-medium transition-all cursor-pointer ${
+              className={`px-8 py-2.5 rounded-lg font-semibold transition-all duration-300 cursor-pointer ${
                 activeTab === 'individuals' 
-                  ? 'bg-slate-900 text-white shadow-md' 
-                  : 'text-slate-600 hover:bg-slate-50'
+                  ? 'bg-[#fc87a7] text-white shadow-lg shadow-[#fc87a7]/30' 
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               Top Individuals
@@ -95,33 +99,50 @@ export default function Leaderboard() {
             <motion.div
               key={`${item.name}-${index}`}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6 hover:shadow-md transition-shadow"
+              className="group relative bg-gradient-to-br from-white to-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-[#fc87a7]/30 shadow-sm hover:shadow-lg hover:shadow-[#fc87a7]/10 transition-all duration-300 flex items-center gap-6"
             >
-              <div className={`text-2xl font-bold w-12 text-center ${getMedalColor(index)}`}>
-                {index + 1}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#fc87a7]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              
+              <div className="relative">
+                <div className={`text-3xl font-bold w-16 text-center ${getMedalColor(index)} drop-shadow-sm`}>
+                  {index === 0 && <Trophy className="w-8 h-8 inline" />}
+                  {index === 1 && <Medal className="w-8 h-8 inline" />}
+                  {index === 2 && <Medal className="w-8 h-8 inline" />}
+                  {index > 2 && (index + 1)}
+                </div>
               </div>
               
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-slate-900">{item.name}</h3>
+              <div className="flex-1 relative z-10">
+                <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#fc87a7] transition-colors">{item.name}</h3>
                 {activeTab === 'individuals' && (
-                  <p className="text-sm text-slate-500">{item.team}</p>
+                  <p className="text-sm text-slate-500 group-hover:text-slate-600">{item.team || '—'}</p>
                 )}
                 {activeTab === 'teams' && (
-                  <p className="text-sm text-slate-500">{item.members} members</p>
+                  <p className="text-sm text-slate-500 group-hover:text-slate-600">{item.members} member{item.members !== 1 ? 's' : ''}</p>
                 )}
               </div>
 
-              <div className="text-right">
-                <div className="text-2xl font-bold text-pink-600">
+              <div className="text-right relative z-10">
+                <div className="text-3xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent">
                   ${item.raised.toLocaleString()}
                 </div>
-                <div className="text-xs text-slate-400 font-medium uppercase tracking-wider">Raised</div>
+                <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Raised</div>
               </div>
             </motion.div>
           ))}
         </div>
+
+        {data.teams.length === 0 && data.individuals.length === 0 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 mb-4">
+              <TrendingUp className="w-8 h-8 text-slate-400" />
+            </div>
+            <p className="text-slate-500 text-lg">Loading leaderboard data...</p>
+          </motion.div>
+        )}
       </div>
     </div>
   )
