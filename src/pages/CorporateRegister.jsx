@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { motion } from 'framer-motion'
 import Navbar from '@/components/Navbar'
 import Button from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -112,74 +113,80 @@ export default function CorporateRegister() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
         <Navbar />
-        <div className="pt-32 pb-20 px-6 max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-4">Thank you for registering</h2>
-          <p className="text-slate-600 mb-4">We received your corporate registration. You will hear back from us soon.</p>
-          <p className="text-sm text-slate-500">Note: The team captain will receive all competition information by e-mail and is responsible for relaying it to the team.</p>
-          <div className="mt-6">
-            <Button onClick={() => navigate('/')} className="bg-slate-800 text-white">Return Home</Button>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <div className="pt-32 pb-20 px-6 max-w-3xl mx-auto text-center">
+            <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-10 border border-slate-100 shadow-md">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-4">Thank you for registering</h2>
+              <p className="text-slate-600 mb-4">We received your corporate registration. You will hear back from us soon.</p>
+              <p className="text-sm text-slate-500">Note: The team captain will receive all competition information by e-mail and is responsible for relaying it to the team.</p>
+              <div className="mt-6">
+                <Button onClick={() => navigate('/')} className="bg-slate-800 hover:bg-slate-900 text-white px-8 py-2.5 rounded-lg shadow-lg shadow-slate-800/30 font-semibold transition-all hover:shadow-xl">Return Home</Button>
+              </div>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <Navbar />
-      <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-slate-900 mb-6 text-center">Corporate Registration</h1>
-        <p className="text-slate-600 text-center mb-8 max-w-lg mx-auto">Please fill the form below. A minimum of 16 paddlers is required.</p>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-6 text-center">Corporate Registration</h1>
+          <p className="text-slate-600 text-center mb-8 max-w-lg mx-auto">Please fill the form below. A minimum of 16 paddlers is required.</p>
 
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+        <form onSubmit={handleSubmit} className="bg-gradient-to-br from-white to-slate-50 p-8 rounded-2xl border border-slate-100 shadow-md">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3">
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
               <div className="text-sm text-red-700">{error}</div>
             </div>
           )}
 
           <div className="grid md:grid-cols-2 gap-4 mb-4">
-            <Input placeholder="Captain First Name" value={captainFirstName} onChange={(e) => setCaptainFirstName(e.target.value)} />
-            <Input placeholder="Captain Last Name" value={captainLastName} onChange={(e) => setCaptainLastName(e.target.value)} />
-            <Input type="email" placeholder="Captain Email" value={captainEmail} onChange={(e) => setCaptainEmail(e.target.value)} />
-            <Input placeholder="Organization Name" value={organizationName} onChange={(e) => setOrganizationName(e.target.value)} />
+            <Input placeholder="Captain First Name" value={captainFirstName} onChange={(e) => setCaptainFirstName(e.target.value)} className="focus:ring-2 focus:ring-slate-500 transition-all" />
+            <Input placeholder="Captain Last Name" value={captainLastName} onChange={(e) => setCaptainLastName(e.target.value)} className="focus:ring-2 focus:ring-slate-500 transition-all" />
+            <Input type="email" placeholder="Captain Email" value={captainEmail} onChange={(e) => setCaptainEmail(e.target.value)} className="focus:ring-2 focus:ring-slate-500 transition-all" />
+            <Input placeholder="Organization Name" value={organizationName} onChange={(e) => setOrganizationName(e.target.value)} className="focus:ring-2 focus:ring-slate-500 transition-all" />
           </div>
 
           <div className="grid md:grid-cols-2 gap-4 mb-6">
-            <Input placeholder="Organization Address" value={orgAddress} onChange={(e) => setOrgAddress(e.target.value)} />
-            <Input placeholder="Organization Phone" value={orgPhone} onChange={(e) => setOrgPhone(e.target.value)} />
+            <Input placeholder="Organization Address" value={orgAddress} onChange={(e) => setOrgAddress(e.target.value)} className="focus:ring-2 focus:ring-slate-500 transition-all" />
+            <Input placeholder="Organization Phone" value={orgPhone} onChange={(e) => setOrgPhone(e.target.value)} className="focus:ring-2 focus:ring-slate-500 transition-all" />
           </div>
 
           <div className="mb-4">
-            <h4 className="font-medium mb-2">Team Members (minimum 16)</h4>
+            <h4 className="font-semibold text-slate-900 mb-3">Team Members (minimum 16)</h4>
             <div className="space-y-3">
               {members.map((m, i) => (
                 <div key={i} className="grid md:grid-cols-3 gap-2 items-center">
-                  <Input placeholder={`First name #${i + 1}`} value={m.firstName} onChange={(e) => handleMemberChange(i, 'firstName', e.target.value)} />
-                  <Input placeholder={`Last name #${i + 1}`} value={m.lastName} onChange={(e) => handleMemberChange(i, 'lastName', e.target.value)} />
+                  <Input placeholder={`First name #${i + 1}`} value={m.firstName} onChange={(e) => handleMemberChange(i, 'firstName', e.target.value)} className="focus:ring-2 focus:ring-slate-500 transition-all" />
+                  <Input placeholder={`Last name #${i + 1}`} value={m.lastName} onChange={(e) => handleMemberChange(i, 'lastName', e.target.value)} className="focus:ring-2 focus:ring-slate-500 transition-all" />
                   <div className="flex gap-2 items-center">
-                    <Input type="email" placeholder={`Email #${i + 1}`} value={m.email} onChange={(e) => handleMemberChange(i, 'email', e.target.value)} />
-                    <button type="button" onClick={() => removeMember(i)} className="text-red-500 px-2">Remove</button>
+                    <Input type="email" placeholder={`Email #${i + 1}`} value={m.email} onChange={(e) => handleMemberChange(i, 'email', e.target.value)} className="focus:ring-2 focus:ring-slate-500 transition-all" />
+                    <button type="button" onClick={() => removeMember(i)} className="text-red-500 hover:text-red-600 px-2 font-medium transition-colors">Remove</button>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="mt-3 flex gap-3">
-              <button type="button" onClick={addMember} className="px-4 py-2 bg-slate-100 rounded">Add member</button>
-              <div className="text-sm text-slate-500 self-center">Members: {members.length}</div>
+            <div className="mt-4 flex gap-3 items-center">
+              <button type="button" onClick={addMember} className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-lg font-medium transition-colors">Add member</button>
+              <div className="text-sm text-slate-600 font-medium">Members: {members.length}</div>
             </div>
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button type="submit" disabled={isSubmitting} className="bg-slate-800 text-white">
-              {isSubmitting ? (<><Loader2 className="w-4 h-4 animate-spin mr-2"/>Submitting</>) : 'Submit Registration'}
+            <Button type="submit" disabled={isSubmitting} className="bg-slate-800 hover:bg-slate-900 text-white px-8 py-2.5 rounded-lg shadow-lg shadow-slate-800/30 font-semibold transition-all hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+              {isSubmitting ? (<><Loader2 className="w-4 h-4 animate-spin mr-2 inline"/>Submitting</>) : 'Submit Registration'}
             </Button>
           </div>
         </form>
       </div>
+      </motion.div>
     </div>
   )
 }

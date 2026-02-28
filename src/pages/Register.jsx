@@ -143,11 +143,11 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <Navbar />
-      
-      <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2 text-center">Event Registration</h1>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-[#fc87a7] bg-clip-text text-transparent mb-2 text-center">Event Registration</h1>
                 <p className="text-slate-600 text-center mb-4 max-w-lg mx-auto">
                     Choose how you would like to register. You can register just for yourself or bundle register for your whole team.
                 </p>
@@ -157,9 +157,9 @@ export default function Register() {
 
         {/* Loading Overlay */}
         {(isPaymentLoading || isValidating) && (
-             <div className="fixed inset-0 z-50 bg-white/80 backdrop-blur-sm flex items-center justify-center flex-col">
-                <Loader2 className="w-12 h-12 text-pink-600 animate-spin mb-4" />
-                <p className="text-pink-600 font-medium text-lg">
+             <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center flex-col">
+                <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} className="w-12 h-12 border-4 border-slate-200 border-t-[#fc87a7] rounded-full mb-4"></motion.div>
+                <p className="text-white font-semibold text-lg">
                     {isValidating ? 'Validating emails...' : 'Processing payment...'}
                 </p>
              </div>
@@ -167,38 +167,44 @@ export default function Register() {
 
         <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Individual Card */}
-            <div 
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
                 onClick={() => setSelectedMode('individual')}
-                className={`cursor-pointer rounded-2xl p-8 border-2 transition-all relative overflow-hidden group ${
+                className={`cursor-pointer rounded-2xl p-8 border transition-all relative overflow-hidden group ${
                     selectedMode === 'individual' 
-                    ? 'border-pink-500 bg-white shadow-xl scale-[1.02]' 
-                    : 'border-slate-200 bg-white hover:border-pink-200 hover:shadow-lg'
+                    ? 'border-[#fc87a7] bg-gradient-to-br from-white to-slate-50 shadow-xl scale-[1.02]' 
+                    : 'border-slate-200 bg-gradient-to-br from-white to-slate-50 hover:border-[#fc87a7]/30 hover:shadow-lg'
                 }`}
             >
                 {selectedMode === 'individual' && (
-                    <div className="absolute top-4 right-4 bg-pink-500 text-white p-1 rounded-full">
+                    <div className="absolute top-4 right-4 bg-[#fc87a7] text-white p-1.5 rounded-full shadow-lg">
                         <Check className="w-4 h-4" />
                     </div>
                 )}
-                <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-pink-200 transition-colors">
-                    <User className="w-8 h-8 text-pink-600" />
+                <div className="w-16 h-16 bg-gradient-to-br from-[#fc87a7] to-[#c14a75] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-[#fc87a7]/30">
+                    <User className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">Individual Registration<br/>(Early)</h3>
                 <p className="text-slate-500 text-sm mb-6">
                     Register just for yourself. You will be able to join a team or create one after payment.
                 </p>
                 <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-900">{'$'}{individualPrice}</span>
-                    <span className="text-slate-500 mb-1">CAD</span>
+                    <span className="text-3xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent">{'$'}{individualPrice}</span>
+                    <span className="text-slate-500 mb-1 font-medium">CAD</span>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Individual - Regular (disabled) */}
-            <div
-                className={`rounded-2xl p-8 border-2 transition-all relative overflow-hidden bg-slate-100 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
             >
-                <div className="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-6">
-                    <User className="w-8 h-8 text-pink-300" />
+                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
+                    <User className="w-8 h-8 text-slate-400" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration (Regular)</h3>
                 <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>March 15</strong>.</p>
@@ -206,14 +212,17 @@ export default function Register() {
                     <span className="text-3xl font-bold text-slate-700">{'$'}{regularIndividualPrice}</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Individual - Late (disabled) */}
-            <div
-                className={`rounded-2xl p-8 border-2 transition-all relative overflow-hidden bg-slate-100 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
             >
-                <div className="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-6">
-                    <User className="w-8 h-8 text-pink-300" />
+                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
+                    <User className="w-8 h-8 text-slate-400" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration<br/>(Late)</h3>
                 <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>March 31</strong>.</p>
@@ -221,24 +230,27 @@ export default function Register() {
                     <span className="text-3xl font-bold text-slate-700">{'$'}{lateIndividualPrice}</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Group Card */}
-            <div 
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
                 onClick={() => setSelectedMode('group')}
-                className={`cursor-pointer rounded-2xl p-8 border-2 transition-all relative overflow-hidden group ${
+                className={`cursor-pointer rounded-2xl p-8 border transition-all relative overflow-hidden group ${
                     selectedMode === 'group' 
-                    ? 'border-blue-500 bg-white shadow-xl scale-[1.02]' 
-                    : 'border-slate-200 bg-white hover:border-blue-200 hover:shadow-lg'
+                    ? 'border-blue-500 bg-gradient-to-br from-white to-slate-50 shadow-xl scale-[1.02]' 
+                    : 'border-slate-200 bg-gradient-to-br from-white to-slate-50 hover:border-blue-300 hover:shadow-lg'
                 }`}
             >
                  {selectedMode === 'group' && (
-                    <div className="absolute top-4 right-4 bg-blue-500 text-white p-1 rounded-full">
+                    <div className="absolute top-4 right-4 bg-blue-500 text-white p-1.5 rounded-full shadow-lg">
                         <Check className="w-4 h-4" />
                     </div>
                 )}
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-blue-200 transition-colors">
-                    <Users className="w-8 h-8 text-blue-600" />
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/30">
+                    <Users className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">Group Registration (Early)</h3>
                 <p className="text-slate-500 text-sm mb-6">
@@ -247,19 +259,22 @@ export default function Register() {
                 <div className="flex flex-col gap-1">
                     <div className="text-sm text-slate-400 line-through">{'$'}{individualPrice} CAD</div>
                     <div className="flex items-end gap-1">
-                        <span className="text-3xl font-bold text-slate-900">{'$'}{discountedPerPerson}</span>
-                        <span className="text-slate-500 mb-1">CAD / person</span>
+                        <span className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">{'$'}{discountedPerPerson}</span>
+                        <span className="text-slate-500 mb-1 font-medium">CAD / person</span>
                     </div>
-                    <div className="text-xs text-blue-600 font-medium">20% off</div>
+                    <div className="text-xs text-blue-600 font-semibold">20% off</div>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Group - Regular (disabled) */}
-            <div
-                className={`rounded-2xl p-8 border-2 transition-all relative overflow-hidden bg-slate-100 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
             >
-                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6">
-                    <Users className="w-8 h-8 text-blue-300" />
+                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
+                    <Users className="w-8 h-8 text-slate-400" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Regular)</h3>
                 <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>March 15</strong>.</p>
@@ -271,14 +286,17 @@ export default function Register() {
                     </div>
                     <div className="text-xs text-slate-500">20% off</div>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Group - Late (disabled) */}
-            <div
-                className={`rounded-2xl p-8 border-2 transition-all relative overflow-hidden bg-slate-100 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
             >
-                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6">
-                    <Users className="w-8 h-8 text-blue-300" />
+                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
+                    <Users className="w-8 h-8 text-slate-400" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Late)</h3>
                 <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>March 31</strong>.</p>
@@ -290,7 +308,7 @@ export default function Register() {
                     </div>
                     <div className="text-xs text-slate-500">20% off</div>
                 </div>
-            </div>
+            </motion.div>
         </div>
 
         {/* Section Content */}
@@ -307,7 +325,7 @@ export default function Register() {
                         <Button 
                             onClick={handleIndividualPayment}
                             disabled={isPaymentLoading}
-                            className="w-full bg-pink-600 hover:bg-pink-700 text-white py-6 text-lg rounded-xl shadow-lg shadow-pink-200"
+                            className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white py-6 text-lg rounded-lg shadow-lg shadow-[#fc87a7]/30 font-semibold transition-all hover:shadow-xl cursor-pointer"
                         >
                             Pay Registration Fee
                         </Button>
@@ -320,7 +338,7 @@ export default function Register() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm"
+                        className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
                     >
                         <h3 className="text-lg font-bold text-slate-900 mb-6">Bundle Details</h3>
                         
@@ -331,7 +349,7 @@ export default function Register() {
                             <select 
                                 value={groupSize + 1} 
                                 onChange={(e) => handleGroupSizeChange(Number(e.target.value))}
-                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none bg-slate-50"
+                                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none bg-white transition-all"
                             >
                                 {[5,6,7,8,9,10].map(n => (
                                     <option key={n} value={n}>{n} Participants</option>
@@ -351,14 +369,14 @@ export default function Register() {
                                         placeholder={`Paddler ${index + 1} Email`}
                                         value={email}
                                         onChange={(e) => handleEmailChange(index, e.target.value)}
-                                        className={`pl-9 ${invalidEmails.includes(email) ? 'border-red-300 bg-red-50' : ''}`}
+                                        className={`pl-9 focus:ring-2 focus:ring-blue-500 ${invalidEmails.includes(email) ? 'border-red-300 bg-red-50' : ''}`}
                                     />
                                 </div>
                             ))}
                         </div>
 
                         {validationError && (
-                            <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3">
+                            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
                                 <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
                                 <div className="text-sm text-red-700">
                                     <p className="font-medium">Validation Error</p>
@@ -373,16 +391,16 @@ export default function Register() {
                         )}
 
                         <div className="flex flex-col gap-4">
-                            <div className="flex justify-between items-center p-4 bg-slate-50 rounded-xl">
-                                <span className="text-slate-600 font-medium">Total Amount</span>
-                                <span className="text-xl font-bold text-slate-900">
+                            <div className="flex justify-between items-center p-4 bg-gradient-to-r from-slate-50 to-blue-50/30 rounded-xl border border-slate-200">
+                                <span className="text-slate-600 font-semibold">Total Amount</span>
+                                <span className="text-xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
                                     {'$'}{discountedPerPerson * (groupSize + 1)} CAD
                                 </span>
                             </div>
                             <Button 
                                 onClick={handleGroupPayment}
                                 disabled={isPaymentLoading || isValidating}
-                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg rounded-xl shadow-lg shadow-blue-200"
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg rounded-lg shadow-lg shadow-blue-500/30 font-semibold transition-all hover:shadow-xl cursor-pointer"
                             >
                                 Submit & Pay Bundle
                             </Button>
@@ -392,6 +410,7 @@ export default function Register() {
             </AnimatePresence>
         </div>
       </div>
+      </motion.div>
     </div>
   )
 }
