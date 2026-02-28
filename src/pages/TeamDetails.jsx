@@ -18,6 +18,10 @@ export default function TeamDetails() {
   const [members, setMembers] = useState([])
   const [copied, setCopied] = useState(false)
   const [confirmLeave, setConfirmLeave] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [showRemoveMembers, setShowRemoveMembers] = useState(false)
+  const [removingMemberId, setRemovingMemberId] = useState(null)
+  const [promotingMemberId, setPromotingMemberId] = useState(null)
   const [refreshKey, setRefreshKey] = useState(false)
   const { name, eventName } = useParams()
   const [joinModal, setJoinModal] = useState(false)
@@ -217,6 +221,81 @@ export default function TeamDetails() {
     }
   }
 
+  const deleteTeam = async () => {
+    try {
+      const token = await getAccessTokenSilently()
+      const response = await fetch(`${API_BASE_URL}/api/teams/${team.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      if (!response.ok) {
+        throw new Error('Failed to delete team')
+      }
+      await refreshUser()
+      navigate(`/event/${eventName}/teams`)
+    }
+    catch (error) {
+      console.error('Error deleting team:', error)
+    }
+  }
+
+  const removeMember = async (memberId) => {
+    try {
+      const token = await getAccessTokenSilently()
+      const response = await fetch(`${API_BASE_URL}/api/teams/${team.id}/members/${memberId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      if (!response.ok) {
+        throw new Error('Failed to remove member')
+      }
+      setRemovingMemberId(null)
+      setRefreshKey(prev => !prev)
+    }
+    catch (error) {
+      console.error('Error removing member:', error)
+    }
+  }
+
+  const transferCaptaincy = async (newCaptainId) => {
+    try {
+      const token = await getAccessTokenSilently()
+      const response = await fetch(`${API_BASE_URL}/api/teams/${team.id}/transfer-captain`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ newCaptainId })
+      })
+      if (!response.ok) {
+        throw new Error('Failed to transfer captaincy')
+      }
+      const data = await response.json()
+      setPromotingMemberId(null)
+      setShowRemoveMembers(false)
+      await refreshUser()
+      setRefreshKey(prev => !prev)
+    }
+    catch (error) {
+      console.error('Error transferring captaincy:', error)
+    }
+  }
+
+  // Reset confirmation states when modal closes
+  useEffect(() => {
+    if (!showRemoveMembers) {
+      setRemovingMemberId(null)
+      setPromotingMemberId(null)
+    }
+  }, [showRemoveMembers])
+
   if (!team) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5 flex items-center justify-center">
@@ -338,32 +417,73 @@ export default function TeamDetails() {
                       }
                       <p className="text-slate-600 max-w-2xl text-lg mb-6">{team.description}</p>
                       {isInTeam ? (
-                        !confirmLeave ? (
-                          <motion.button
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            onClick={() => setConfirmLeave(true)}
-                            className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
-                          >
-                            Leave Team
-                          </motion.button>
+                        isCaptain ? (
+                          !confirmDelete ? (
+                            <div className="flex items-center gap-2">
+                              <motion.button
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                onClick={() => setShowRemoveMembers(true)}
+                                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+                              >
+                                <Users className="w-4 h-4" />
+                                Manage Members
+                              </motion.button>
+                              <motion.button
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                onClick={() => setConfirmDelete(true)}
+                                className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                              >
+                                Delete Team
+                              </motion.button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <motion.button
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                onClick={deleteTeam}
+                                className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                              >
+                                Confirm Delete
+                              </motion.button>
+                              <button
+                                onClick={() => setConfirmDelete(false)}
+                                className="px-4 py-2 text-sm border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          )
                         ) : (
-                          <div className="flex items-center gap-2">
+                          !confirmLeave ? (
                             <motion.button
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              onClick={leaveTeam}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              onClick={() => setConfirmLeave(true)}
                               className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
                             >
-                              Confirm Leave
+                              Leave Team
                             </motion.button>
-                            <button
-                              onClick={() => setConfirmLeave(false)}
-                              className="px-4 py-2 text-sm border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
-                            >
-                              Cancel
-                            </button>
-                          </div>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <motion.button
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                onClick={leaveTeam}
+                                className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                              >
+                                Confirm Leave
+                              </motion.button>
+                              <button
+                                onClick={() => setConfirmLeave(false)}
+                                className="px-4 py-2 text-sm border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          )
                         )
                       ) : (
                         <>
@@ -462,6 +582,111 @@ export default function TeamDetails() {
           </div>
         </div>
       </div>
+
+      {/* Remove Members Modal */}
+      <AnimatePresence>
+        {showRemoveMembers && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowRemoveMembers(false)}
+            className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => {
+                e.stopPropagation()
+                setRemovingMemberId(null)
+                setPromotingMemberId(null)
+              }}
+              className="bg-gradient-to-br from-white to-slate-50 rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 max-h-[80vh] overflow-y-auto"
+            >
+              <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-50 to-slate-100/50">
+                <h2 className="text-2xl font-bold text-slate-900">Manage Members</h2>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setShowRemoveMembers(false)
+                  }}
+                  className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                >
+                  <X className="w-6 h-6" />
+                </motion.button>
+              </div>
+
+              <div className="p-6 space-y-3">
+                {members.length === 1 ? (
+                  <p className="text-slate-600 text-center py-8">No other members to manage</p>
+                ) : (
+                  members
+                    .filter(member => member._id !== team.captain && member.id !== team.captain)
+                    .map((member) => (
+                      <motion.div
+                        key={member._id || member.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors"
+                      >
+                        <div className="flex items-center gap-3 flex-1">
+                          {member.picture && (
+                            <img
+                              src={member.picture}
+                              alt={member.name}
+                              className="w-10 h-10 rounded-full object-cover"
+                            />
+                          )}
+                          <div>
+                            <p className="font-medium text-slate-900">{member.name}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              promotingMemberId === (member._id || member.id)
+                                ? transferCaptaincy(member._id || member.id)
+                                : setPromotingMemberId(member._id || member.id)
+                            }}
+                            className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
+                              promotingMemberId === (member._id || member.id)
+                                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                            }`}
+                          >
+                            {promotingMemberId === (member._id || member.id) ? 'Confirm' : 'Make Captain'}
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              removingMemberId === (member._id || member.id)
+                                ? removeMember(member._id || member.id)
+                                : setRemovingMemberId(member._id || member.id)
+                            }}
+                            className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
+                              removingMemberId === (member._id || member.id)
+                                ? 'bg-red-600 text-white hover:bg-red-700'
+                                : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                            }`}
+                          >
+                            {removingMemberId === (member._id || member.id) ? 'Confirm' : 'Remove'}
+                          </motion.button>
+                        </div>
+                      </motion.div>
+                    ))
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

@@ -14,22 +14,48 @@ export default function ChangePassword() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
+  const [touched, setTouched] = useState({
+    currentPassword: false,
+    newPassword: false,
+    confirm: false
+  })
   const navigate = useNavigate()
 
-  const validate = () => {
-    if (newPassword.length < 6) return 'New password must be at least 6 characters.'
-    if (newPassword !== confirm) return 'Passwords do not match.'
-    if (!currentPassword) return 'Please enter your current password.'
-    return null
+  const getPasswordError = () => {
+    if (!newPassword) return 'New password is required'
+    if (newPassword.length < 8) return 'Password must be at least 8 characters'
+    if (!/[A-Z]/.test(newPassword)) return 'Password must include at least 1 uppercase letter, 1 lowercase letter, and 1 number'
+    if (!/[a-z]/.test(newPassword)) return 'Password must include at least 1 uppercase letter, 1 lowercase letter, and 1 number'
+    if (!/\d/.test(newPassword)) return 'Password must include at least 1 uppercase letter, 1 lowercase letter, and 1 number'
+    return ''
+  }
+
+  const getConfirmError = () => {
+    if (!confirm) return 'Please confirm your password'
+    if (newPassword !== confirm) return 'Passwords do not match'
+    return ''
+  }
+
+  const passwordError = getPasswordError()
+  const confirmError = getConfirmError()
+  const currentPasswordError = !currentPassword ? 'Current password is required' : ''
+  const isFormValid = !currentPasswordError && !passwordError && !confirmError
+
+  const markTouched = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     setSuccess('')
-    const v = validate()
-    if (v) {
-      setError(v)
+    
+    markTouched('currentPassword')
+    markTouched('newPassword')
+    markTouched('confirm')
+    
+    if (!isFormValid) {
+      setError('Please fix the highlighted fields')
       return
     }
     setLoading(true)
@@ -59,19 +85,28 @@ export default function ChangePassword() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Current password</label>
-              <Input type="password" required value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} placeholder="Current password" />
+              <Input type="password" required value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} onBlur={() => markTouched('currentPassword')} placeholder="Current password" aria-invalid={touched.currentPassword && !!currentPasswordError} />
+              {touched.currentPassword && currentPasswordError && (
+                <p className="mt-1 text-xs text-red-600">{currentPasswordError}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">New password</label>
-              <Input type="password" required value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="••••••" minLength={6} />
+              <Input type="password" required value={newPassword} onChange={(e) => setNewPassword(e.target.value)} onBlur={() => markTouched('newPassword')} placeholder="••••••" minLength={8} aria-invalid={touched.newPassword && !!passwordError} />
+              {touched.newPassword && passwordError && (
+                <p className="mt-1 text-xs text-red-600">{passwordError}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Confirm new password</label>
-              <Input type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="••••••" minLength={6} />
+              <Input type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} onBlur={() => markTouched('confirm')} placeholder="••••••" minLength={8} aria-invalid={touched.confirm && !!confirmError} />
+              {touched.confirm && confirmError && (
+                <p className="mt-1 text-xs text-red-600">{confirmError}</p>
+              )}
             </div>
           </div>
 
-          <Button type="submit" className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-lg" disabled={loading}>
+          <Button type="submit" className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-lg" disabled={loading || !isFormValid}>
             {loading ? 'Saving...' : 'Change Password'}
           </Button>
         </form>
