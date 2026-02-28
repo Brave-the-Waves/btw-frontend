@@ -124,7 +124,6 @@ export default function CreateTeamOverlay({ onClose, onSubmit, isLoading }) {
                 id="goal"
                 type="number"
                 min="0"
-                step="100"
                 required
                 className="pl-10 focus:ring-2 focus:ring-[#fc87a7] border-slate-200 rounded-lg"
                 placeholder="1000"
