@@ -143,6 +143,10 @@ export default function Event() {
             <Activities />
           </div>
         </div>
+              {/* ── Map ── */}
+        <div className="max-w-7xl mx-auto px-6 mt-12">
+          <LocationMap />
+        </div>
       </section>
 
       {/* ── General Information ── */}
@@ -402,13 +406,6 @@ export default function Event() {
           </motion.button>
         )}
       </AnimatePresence>
-
-      {/* ── Map ── */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <LocationMap />
-        </div>
-      </section>
     </div>
   )
 }
