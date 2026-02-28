@@ -5,6 +5,7 @@ import Button from '../components/ui/button'
 import { Input } from '../components/ui/input'
 
 export default function Signup() {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -16,6 +17,12 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    const trimmedName = name.trim()
+
+    if (!trimmedName) {
+      return setError('Please enter your name')
+    }
+
     if (password !== confirmPassword) {
       return setError('Passwords do not match')
     }
@@ -23,7 +30,7 @@ export default function Signup() {
     try {
       setError('')
       setLoading(true)
-      await signup(email, password)
+      await signup(email, password, trimmedName)
       navigate('/')
     } catch (err) {
       setError('Failed to create an account: ' + err.message)
@@ -44,6 +51,17 @@ export default function Signup() {
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
+               <div>
+                 <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                 <Input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                    maxLength={30}
+                 />
+               </div>
                 <div>
                    <label className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
                    <Input 

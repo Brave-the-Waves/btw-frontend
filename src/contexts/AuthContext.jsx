@@ -7,7 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset,
-  reauthenticateWithCredential, EmailAuthProvider, updatePassword
+  reauthenticateWithCredential, EmailAuthProvider, updatePassword, updateProfile
 } from 'firebase/auth'
 import { auth } from '../firebase'
 import { API_BASE_URL } from '../config'
@@ -127,8 +127,8 @@ export default function AuthProvider({ children }) {
     return unsubscribe
   }, [])
 
-  const syncUserWithBackend = async (firebaseUser) => {
-    const token = await firebaseUser.getIdToken()
+  const syncUserWithBackend = async (firebaseUser, forceRefreshToken = false) => {
+    const token = await firebaseUser.getIdToken(forceRefreshToken)
     const res = await fetch(`${API_BASE_URL}/api/users/sync`, {
       method: 'POST',
       headers: {
@@ -146,10 +146,15 @@ export default function AuthProvider({ children }) {
     setUser(prev => ({ ...prev, ...backendData }))
   }
 
-  const signup = async (email, password) => {
+  const signup = async (email, password, name = '') => {
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password)
-      await syncUserWithBackend(result.user)
+
+      if (name?.trim()) {
+        await updateProfile(result.user, { displayName: name.trim() })
+      }
+
+      await syncUserWithBackend(result.user, true)
       return result
     } catch (error) {
       console.error('Signup error:', error)
