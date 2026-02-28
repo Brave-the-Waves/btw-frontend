@@ -386,7 +386,7 @@ export default function TeamDetails() {
                 
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-gradient-to-br from-[#fc87a7]/10 to-[#fc87a7]/5 p-6 rounded-2xl border border-[#fc87a7]/20">
                   <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-2">Total Raised</p>
-                  <p className="text-4xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent mb-3">\${team.raised.toLocaleString()}</p>
+                  <p className="text-4xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent mb-3">${team.raised.toLocaleString()}</p>
                   <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden mb-3">
                     <motion.div 
                       initial={{ width: 0 }}
@@ -395,7 +395,7 @@ export default function TeamDetails() {
                       className="bg-gradient-to-r from-[#fc87a7] to-[#c14a75] h-full rounded-full" 
                     />
                   </div>
-                  <p className="text-xs text-slate-600">of \${team.goal.toLocaleString()} goal</p>
+                  <p className="text-xs text-slate-600">of ${team.goal.toLocaleString()} goal</p>
                 </motion.div>
               </div>
 
