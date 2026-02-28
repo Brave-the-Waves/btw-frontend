@@ -98,7 +98,7 @@ export default function RegisterSelect() {
 
 function SportsCard() {
   const navigate = useNavigate()
-  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth()
+  const { isAuthenticated, isLoading, getAccessTokenSilently, refreshUser } = useAuth()
   const [showInput, setShowInput] = useState(false)
   const [code, setCode] = useState('')
   const [isVerifying, setIsVerifying] = useState(false)
@@ -149,6 +149,7 @@ function SportsCard() {
         console.warn('Unable to set sessionStorage flag for registration success', e)
       }
 
+      await refreshUser()
       navigate('/registration=success')
     } catch (err) {
       console.error('Selection verify error', err)
