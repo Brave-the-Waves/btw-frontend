@@ -206,7 +206,7 @@ export default function Teams() {
               <div className="relative z-10 flex justify-between items-start mb-4">
                 <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                   team.division === 'Corporate' ? 'bg-blue-100 text-blue-700' :
-                  team.division === 'Survivor' ? 'bg-pink-100 text-[#fc87a7]' :
+                  team.division === 'Sports' ? 'bg-purple-100 text-purple-700' :
                   'bg-emerald-100 text-emerald-700'
                 }`}>
                   {team.division}

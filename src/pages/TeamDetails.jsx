@@ -211,7 +211,7 @@ export default function TeamDetails() {
                           onChange={(e) => setEditForm(prev => ({ ...prev, division: e.target.value }))}
                           className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-2 focus:ring-slate-200 outline-none transition-all"
                         >
-                          {['Student', 'Corporate', 'Survivor', 'Community'].map(div => (
+                          {['Sports', 'Corporate', 'Community'].map(div => (
                             <option key={div} value={div}>{div}</option>
                           ))}
                         </select>
