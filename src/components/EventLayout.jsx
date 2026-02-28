@@ -52,7 +52,7 @@ export default function EventLayout() {
           <div className="mb-6 px-3">
             <p className="mt-5 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Event</p>
             <h2 className="text-lg font-bold text-slate-900 leading-tight truncate">
-              {eventName?.replace(/([A-Z])/g, ' $1').trim() || 'Event'}
+              {eventName?.replace(/([A-Z])/g, ' $1').replace(/(\D)(\d)/g, '$1 $2').trim() || 'Event'}
             </h2>
           </div>
 
