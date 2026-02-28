@@ -22,7 +22,7 @@ export default function Participants() {
         const data = await response.json()
         setParticipants(data.map(u => ({
           id: u._id,
-          name: u.name,
+          name: u.name || 'Unknown',
           team: u.team?.name || 'No Team',
           amountRaised: Number(u.amountRaised) || 0,
           role: u.team?.captain === u._id ? 'Captain' : 'Paddler'
@@ -37,8 +37,8 @@ export default function Participants() {
   }, [])
 
   const filteredParticipants = participants.filter(p => 
-    p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.team.toLowerCase().includes(searchTerm.toLowerCase())
+    (p.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (p.team || '').toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const displayedParticipants = filteredParticipants.slice(0, itemsToShow)

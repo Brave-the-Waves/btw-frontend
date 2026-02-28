@@ -112,7 +112,7 @@ export default function TeamDetails() {
           throw new Error('Failed to fetch team members')
         }
         const membersData = await response.json()
-        setMembers(membersData)
+        setMembers(membersData.map(u => ({ ...u, name: u.name || 'Unknown' })))
       } catch (error) {
         console.error('Error fetching team members:', error)
       }
