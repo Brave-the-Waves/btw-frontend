@@ -22,6 +22,7 @@ import RegisterSelect from './pages/RegisterSelect'
 import CorporateRegister from './pages/CorporateRegister'
 import Crew from './pages/Crew'
 import Event from './pages/Event'
+import WaiverReminderBanner from './components/users/WaiverReminderBanner'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -33,6 +34,7 @@ export default function App() {
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
+      <WaiverReminderBanner />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/crew" element={<Crew />} />

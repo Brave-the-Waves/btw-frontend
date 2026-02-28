@@ -86,6 +86,25 @@ export default function AuthProvider({ children }) {
         } catch (err) {
           console.error('Failed to fetch registration status:', err)
         }
+
+        // Fetch waiver status if registered
+        const userId = backendUser.id || backendUser._id
+        if (backendUser.isRegistered && userId) {
+          try {
+            const waiverRes = await fetch(`${API_BASE_URL}/api/waivers/${userId}/status`, {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              }
+            })
+            if (waiverRes.ok) {
+              const waiverData = await waiverRes.json()
+              backendUser.hasSignedWaiver = waiverData.completed === true
+            }
+          } catch (err) {
+            console.error('Failed to fetch waiver status:', err)
+          }
+        }
         
         return backendUser
       }
