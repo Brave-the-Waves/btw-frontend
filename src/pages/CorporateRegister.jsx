@@ -122,7 +122,7 @@ export default function CorporateRegister() {
               <p className="text-slate-600 mb-4">We received your corporate registration. You will hear back from us soon.</p>
               <p className="text-sm text-slate-500">Note: The team captain will receive all competition information by e-mail and is responsible for relaying it to the team.</p>
               <div className="mt-6">
-                <Button onClick={() => navigate('/')} className="bg-slate-800 hover:bg-slate-900 text-white px-8 py-2.5 rounded-lg shadow-lg shadow-slate-800/30 font-semibold transition-all hover:shadow-xl">Return Home</Button>
+                <Button onClick={() => navigate('/')} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2.5 rounded-lg shadow-lg shadow-blue-500/30 font-semibold transition-all hover:shadow-xl">Return Home</Button>
               </div>
             </div>
           </div>
@@ -180,7 +180,7 @@ export default function CorporateRegister() {
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button type="submit" disabled={isSubmitting} className="bg-slate-800 hover:bg-slate-900 text-white px-8 py-2.5 rounded-lg shadow-lg shadow-slate-800/30 font-semibold transition-all hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+            <Button type="submit" disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2.5 rounded-lg shadow-lg shadow-blue-500/30 font-semibold transition-all hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
               {isSubmitting ? (<><Loader2 className="w-4 h-4 animate-spin mr-2 inline"/>Submitting</>) : 'Submit Registration'}
             </Button>
           </div>

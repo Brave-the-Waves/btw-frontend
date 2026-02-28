@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { API_BASE_URL } from '@/config'
 import { motion } from 'framer-motion'
+import { Sailboat, Building2, Users } from 'lucide-react'
 
 export default function RegisterSelect() {
   const navigate = useNavigate()
@@ -12,8 +13,8 @@ export default function RegisterSelect() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <Navbar />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-[#fc87a7] bg-clip-text text-transparent mb-2 text-center">Register: Choose a Category</h1>
+        <div className="pt-32 pb-20 px-6 max-w-5xl mx-auto">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2 text-center">Register: Choose a Category</h1>
           <p className="text-slate-600 text-center mb-8 max-w-lg mx-auto">
             Select the category that best fits you. Pricing and requirements may differ per category.
           </p>
@@ -24,12 +25,15 @@ export default function RegisterSelect() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="rounded-2xl p-8 border border-slate-100 bg-gradient-to-br from-white to-slate-50 shadow-sm hover:shadow-md transition-shadow"
+              className="rounded-2xl p-8 border border-slate-200 bg-white shadow-sm flex flex-col gap-4"
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-[#fc87a7] to-[#c14a75] rounded-full flex items-center justify-center mb-6 shadow-lg shadow-[#fc87a7]/30">
-                <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"></path><path d="M6 20v-1a4 4 0 014-4h4a4 4 0 014 4v1"></path></svg>
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+                <Sailboat className="w-5 h-5 text-emerald-600" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">The Community Division</h3>
+              <div>
+                <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wide mb-1">Community</p>
+                <h3 className="text-lg font-bold text-slate-900">Community Division</h3>
+              </div>
             <p className="text-slate-500 text-sm mb-6">
             The Community Division is open to everyone and brings together friends, students, families and community groups who want to paddle for a meaningful cause. No experience required!<br/><br/>
             </p>
@@ -37,14 +41,14 @@ export default function RegisterSelect() {
               <div className="flex flex-col gap-3">
                 <button
                   onClick={() => navigate('/register/details?student=true')}
-                  className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white py-3 rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-[#fc87a7]/30 cursor-pointer"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-emerald-500/30 cursor-pointer"
                 >
                   I am a student
                 </button>
 
                 <button
                   onClick={() => navigate('/register/details?student=false')}
-                  className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-lg border border-slate-200 font-medium transition-all hover:shadow-sm cursor-pointer"
+                  className="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 py-3 rounded-lg border border-emerald-200 font-medium transition-all hover:shadow-sm cursor-pointer"
                 >
                   I am not a student
                 </button>
@@ -60,12 +64,15 @@ export default function RegisterSelect() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="rounded-2xl p-8 border border-slate-100 bg-gradient-to-br from-white to-slate-50 shadow-sm hover:shadow-md transition-shadow"
+              className="rounded-2xl p-8 border border-slate-200 bg-white shadow-sm flex flex-col gap-4"
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-slate-700 to-slate-900 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-slate-400/30">
-                <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7h18"></path><path d="M3 12h18"></path><path d="M3 17h18"></path></svg>
+              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-blue-600" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">The Corporate Division</h3>
+              <div>
+                <p className="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-1">Corporate</p>
+                <h3 className="text-lg font-bold text-slate-900">Corporate Division</h3>
+              </div>
             <p className="text-slate-500 text-sm mb-6">
               The Corporate Division highlights organizations that give back to their community through an ardent commitment to an important cause.<br/> <br/> 
             </p>
@@ -73,7 +80,7 @@ export default function RegisterSelect() {
               <div className="flex flex-col gap-3">
                 <button
                   onClick={() => navigate('/register/corporate')}
-                  className="w-full bg-slate-800 hover:bg-slate-900 text-white py-3 rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-slate-400/30 cursor-pointer"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-blue-500/30 cursor-pointer"
                 >
                   Corporate Registration
                 </button>
@@ -156,25 +163,28 @@ function SportsCard() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="rounded-2xl p-8 border border-slate-100 bg-gradient-to-br from-white to-slate-50 shadow-sm hover:shadow-md transition-shadow"
+      className="rounded-2xl p-8 border border-slate-200 bg-white shadow-sm flex flex-col gap-4"
     >
-      <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/30">
-        <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20l9-12H3z"></path></svg>
+      <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
+        <Users className="w-5 h-5 text-purple-600" />
       </div>
-      <h3 className="text-xl font-bold text-slate-900 mb-2">The Sports Division</h3>
+      <div>
+        <p className="text-xs font-semibold text-purple-600 uppercase tracking-wide mb-1">Sports</p>
+        <h3 className="text-lg font-bold text-slate-900">Sports Division</h3>
+      </div>
       <p className="text-slate-500 text-sm mb-6">The sports division is for those who want to particpate competitely while supporting a good cause. For those who train with DBZ, DOD, CDBC or CsBUM, your captains will contact you if you have been selected to partake in this competitive roster.</p>
 
       {!showInput ? (
         <div className="flex flex-col gap-3">
-          <button onClick={() => setShowInput(true)} className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-3 rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-emerald-500/30 cursor-pointer">I have been selected!</button>
+          <button onClick={() => setShowInput(true)} className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-purple-500/30 cursor-pointer">I have been selected!</button>
           <p className="text-xs text-slate-500 mt-2">You will be asked to provide a selection code issued by your captain.</p>
         </div>
       ) : (
         <div className="space-y-3">
-          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Enter selection code" className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Enter selection code" className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none transition-all" />
           {error && <div className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg border border-red-200">{error}</div>}
           <div className="flex gap-3">
-            <button onClick={handleVerify} disabled={isVerifying} className="px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-emerald-500/30 cursor-pointer disabled:opacity-50">{isVerifying ? 'Verifying...' : 'Confirm'}</button>
+            <button onClick={handleVerify} disabled={isVerifying} className="px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-purple-500/30 cursor-pointer disabled:opacity-50">{isVerifying ? 'Verifying...' : 'Confirm'}</button>
             <button onClick={() => { setShowInput(false); setCode(''); setError(null) }} className="px-4 py-3 bg-slate-100 hover:bg-slate-200 rounded-lg font-medium transition-all cursor-pointer">Cancel</button>
           </div>
         </div>

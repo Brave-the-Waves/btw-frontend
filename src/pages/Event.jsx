@@ -237,7 +237,7 @@ export default function Event() {
               </div>
               <div>
                 <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wide mb-1">Community</p>
-                <h3 className="text-lg font-bold text-slate-900">Community Teams</h3>
+                <h3 className="text-lg font-bold text-slate-900">Community Division</h3>
               </div>
               <p className="text-sm text-slate-600 leading-relaxed flex-1">
                 Open to everyone in the community. Groups are limited to a maximum of 10 members — teams of 20 to 30 paddlers will be formed by the Executive Rostering Committee to ensure balanced and fair competition.
@@ -260,7 +260,7 @@ export default function Event() {
               </div>
               <div>
                 <p className="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-1">Corporate</p>
-                <h3 className="text-lg font-bold text-slate-900">Corporate Teams</h3>
+                <h3 className="text-lg font-bold text-slate-900">Corporate Division</h3>
               </div>
               <p className="text-sm text-slate-600 leading-relaxed flex-1">
                 Bring your company together for a memorable team-building experience on the water. Full boat allocation is included for your organization.

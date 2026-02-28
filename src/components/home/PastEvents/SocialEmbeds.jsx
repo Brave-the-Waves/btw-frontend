@@ -4,7 +4,7 @@ export default function SocialEmbeds({ instagramUrl, facebookUrl, instagramPostU
   const postBase = instagramPostUrl ? instagramPostUrl.split('?')[0].replace(/\/?$/, '') : null
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20 items-start">
       <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
         <h4 className="text-lg font-semibold text-white mb-4">Instagram</h4>
         <p className="text-sm text-slate-400 mb-4">Latest post from our Instagram.</p>

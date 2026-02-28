@@ -147,7 +147,7 @@ export default function Register() {
       <Navbar />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-[#fc87a7] bg-clip-text text-transparent mb-2 text-center">Event Registration</h1>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2 text-center">Event Registration</h1>
                 <p className="text-slate-600 text-center mb-4 max-w-lg mx-auto">
                     Choose how you would like to register. You can register just for yourself or bundle register for your whole team.
                 </p>
