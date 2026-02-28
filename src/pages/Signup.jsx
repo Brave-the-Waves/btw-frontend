@@ -4,6 +4,9 @@ import { useAuth } from '../contexts/AuthContext'
 import Button from '../components/ui/button'
 import { Input } from '../components/ui/input'
 
+const NAME_REGEX = /^[A-Za-z0-9 .'-]+$/
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export default function Signup() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -11,26 +14,70 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [touched, setTouched] = useState({
+    name: false,
+    email: false,
+    password: false,
+    confirmPassword: false
+  })
   const { signup } = useAuth()
   const navigate = useNavigate()
+
+  const normalizedName = name.replace(/\s+/g, ' ').trim()
+  const normalizedEmail = email.trim().toLowerCase()
+
+  const getNameError = () => {
+    if (!normalizedName) return 'Name is required'
+    if (normalizedName.length < 2 || normalizedName.length > 30) return 'Name must be 2–30 characters'
+    if (!NAME_REGEX.test(normalizedName)) return "Use letters, numbers, spaces, hyphen, apostrophe, or period only"
+    return ''
+  }
+
+  const getEmailError = () => {
+    if (!normalizedEmail) return 'Email is required'
+    if (!EMAIL_REGEX.test(normalizedEmail)) return 'Enter a valid email address'
+    return ''
+  }
+
+  const getPasswordError = () => {
+    if (!password) return 'Password is required'
+    if (password.length < 8) return 'Password must be at least 8 characters'
+    if (!/[A-Z]/.test(password)) return 'Password must include at least 1 uppercase letter, 1 lowercase letter, and 1 number'
+    if (!/[a-z]/.test(password)) return 'Password must include at least 1 uppercase letter, 1 lowercase letter, and 1 number'
+    if (!/\d/.test(password)) return 'Password must include at least 1 uppercase letter, 1 lowercase letter, and 1 number'
+    return ''
+  }
+
+  const getConfirmPasswordError = () => {
+    if (!confirmPassword) return 'Please confirm your password'
+    if (password !== confirmPassword) return 'Passwords do not match'
+    return ''
+  }
+
+  const nameError = getNameError()
+  const emailError = getEmailError()
+  const passwordError = getPasswordError()
+  const confirmPasswordError = getConfirmPasswordError()
+
+  const isFormValid = !nameError && !emailError && !passwordError && !confirmPasswordError
+
+  const markTouched = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const trimmedName = name.trim()
+    setTouched({ name: true, email: true, password: true, confirmPassword: true })
 
-    if (!trimmedName) {
-      return setError('Please enter your name')
-    }
-
-    if (password !== confirmPassword) {
-      return setError('Passwords do not match')
+    if (!isFormValid) {
+      return setError('Please fix the highlighted fields')
     }
 
     try {
       setError('')
       setLoading(true)
-      await signup(email, password, trimmedName)
+      await signup(normalizedEmail, password, normalizedName)
       navigate('/')
     } catch (err) {
       setError('Failed to create an account: ' + err.message)
@@ -58,9 +105,14 @@ export default function Signup() {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    onBlur={() => markTouched('name')}
                     placeholder="Your name"
                     maxLength={30}
+                    aria-invalid={touched.name && !!nameError}
                  />
+                 {touched.name && nameError && (
+                   <p className="mt-1 text-xs text-red-600">{nameError}</p>
+                 )}
                </div>
                 <div>
                    <label className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
@@ -69,8 +121,13 @@ export default function Signup() {
                         required 
                         value={email} 
                         onChange={(e) => setEmail(e.target.value)}
+                        onBlur={() => markTouched('email')}
                         placeholder="you@example.com"
+                        aria-invalid={touched.email && !!emailError}
                    />
+                   {touched.email && emailError && (
+                     <p className="mt-1 text-xs text-red-600">{emailError}</p>
+                   )}
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
@@ -79,9 +136,14 @@ export default function Signup() {
                         required 
                         value={password} 
                         onChange={(e) => setPassword(e.target.value)}
+                        onBlur={() => markTouched('password')}
                         placeholder="••••••••"
-                        minLength={6}
+                        minLength={8}
+                        aria-invalid={touched.password && !!passwordError}
                     />
+                    {touched.password && passwordError && (
+                      <p className="mt-1 text-xs text-red-600">{passwordError}</p>
+                    )}
                 </div>
                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
@@ -90,13 +152,18 @@ export default function Signup() {
                         required 
                         value={confirmPassword} 
                         onChange={(e) => setConfirmPassword(e.target.value)}
+                        onBlur={() => markTouched('confirmPassword')}
                         placeholder="••••••••"
-                        minLength={6}
+                        minLength={8}
+                        aria-invalid={touched.confirmPassword && !!confirmPasswordError}
                     />
+                    {touched.confirmPassword && confirmPasswordError && (
+                      <p className="mt-1 text-xs text-red-600">{confirmPasswordError}</p>
+                    )}
                 </div>
             </div>
 
-            <Button type="submit" className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-lg" disabled={loading}>
+            <Button type="submit" className="w-full bg-[#fc87a7] hover:bg-[#c14a75] text-white rounded-lg" disabled={loading || !isFormValid}>
                 {loading ? 'Creating Account...' : 'Sign Up'}
             </Button>
         </form>
