@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Button from './ui/button'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { Menu, X, User, Waves, Heart, ChevronDown } from 'lucide-react'
+import { Menu, X, User, Waves, Heart, ChevronDown, LogOut } from 'lucide-react'
 
 const homeSections = [
   { label: 'Home', href: 'home' },
@@ -21,7 +21,7 @@ export default function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
   const { eventName } = useParams()
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated, logout } = useAuth()
 
   const [isEventsDropdownOpen, setIsEventsDropdownOpen] = useState(false)
 
@@ -253,6 +253,17 @@ export default function Navbar() {
                     )}
                     <span>{user.name}</span>
                   </button>
+                  <button 
+                    onClick={() => logout()}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-all cursor-pointer ${
+                      isScrolled 
+                        ? 'text-slate-600 hover:text-white hover:bg-[#fc87a7]' 
+                        : 'text-white hover:bg-white/20'
+                    }`}
+                    title="Log out"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
                 </div>
               ) : (
                 <Button 
@@ -360,6 +371,10 @@ export default function Navbar() {
                           <User className="w-5 h-5" />
                         )}
                         My Profile
+                      </button>
+                      <button onClick={() => { logout(); setIsOpen(false); }} className="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium text-slate-700 hover:bg-red-50 hover:text-red-700 cursor-pointer transition-colors">
+                        <LogOut className="w-5 h-5" />
+                        Log Out
                       </button>
                     </>
                   ) : (
