@@ -86,8 +86,11 @@ export default function ParticipantProfile() {
           </div>
 
           <div className="flex flex-col md:flex-row gap-8 items-start">
-            <div className="w-40 h-40 rounded-full border-4 border-[#fc87a7]/20 bg-gradient-to-br from-[#fc87a7]/10 to-[#fc87a7]/5 flex items-center justify-center text-[#fc87a7] font-bold text-5xl flex-shrink-0">
-              {userData.name.charAt(0).toUpperCase()}
+            <div className="w-40 h-40 rounded-full border-4 border-[#fc87a7]/20 bg-gradient-to-br from-[#fc87a7]/10 to-[#fc87a7]/5 flex items-center justify-center text-[#fc87a7] font-bold text-5xl flex-shrink-0 overflow-hidden">
+              {userData.picture
+                ? <img src={userData.picture} alt={userData.name || 'User'} className="w-full h-full object-cover" />
+                : (userData.name || '?').charAt(0).toUpperCase()
+              }
             </div>
             
             <div className="flex-1 w-full">

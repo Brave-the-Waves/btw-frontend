@@ -45,7 +45,6 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
           method: 'GET',
           headers: headers
         })
-        console.log('Fetch donations response:', response)
         if (!response.ok) throw new Error('Failed to fetch donations')
         
         const data = await response.json()
@@ -56,12 +55,9 @@ export default function RecentDonations({ context, targetId, itemsPerPage = 5, t
         // Fetch user names for target users
         const donationsWithNames = donationsArray.map( (donation) => {
           if (donation.targetUser) {
-            console.log("The targetUser: ", donation.targetUser)
             const name = typeof donation.targetUser === 'object'
               ? donation.targetUser.name
               : null
-
-            console.log("name: ", name)
             return { ...donation, targetUserName: name }
             }
             return { ...donation, targetUserName: 'Brave the Waves' }

@@ -8,7 +8,6 @@ export default function UserProfileCard({
   userData, 
   showEmail = false, 
   showDonationId = true,
-  pictureUrl,
   showDonateButton = true
 }) {
   const [copySuccess, setCopySuccess] = React.useState(false)

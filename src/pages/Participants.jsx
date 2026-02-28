@@ -25,7 +25,8 @@ export default function Participants() {
           name: u.name || 'Unknown',
           team: u.team?.name || 'No Team',
           amountRaised: Number(u.amountRaised) || 0,
-          role: u.team?.captain === u._id ? 'Captain' : 'Paddler'
+          role: u.team?.captain === u._id ? 'Captain' : 'Paddler',
+          picture: u.picture || null
         })))
       } catch (error) {
         console.error('Error fetching participants:', error)
@@ -82,8 +83,11 @@ export default function Participants() {
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#fc87a7]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="relative z-10 flex items-center gap-4 mb-4">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#fc87a7] to-[#c14a75] flex items-center justify-center text-lg font-bold text-white group-hover:scale-110 transition-transform">
-                    {p.name.charAt(0).toUpperCase()}
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#fc87a7] to-[#c14a75] flex items-center justify-center text-lg font-bold text-white group-hover:scale-110 transition-transform overflow-hidden flex-shrink-0">
+                    {p.picture
+                      ? <img src={p.picture} alt={p.name} className="w-full h-full object-cover" />
+                      : p.name.charAt(0).toUpperCase()
+                    }
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-slate-900 group-hover:text-[#fc87a7] transition-colors">{p.name}</h3>

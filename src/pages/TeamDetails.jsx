@@ -159,7 +159,6 @@ export default function TeamDetails() {
 
   useEffect(() => {
     const fetchTeamDetails = async () => {
-      console.log('Fetching team details for:', teamName)
       try {
         const headers = {
           'Content-Type': 'application/json' 

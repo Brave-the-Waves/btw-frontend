@@ -115,8 +115,6 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
         const isValid = userData.some(u => 
           u.donationId && u.donationId.trim() === safeDonationID 
         )
-
-        console.log('Paddler ID valid:', isValid)
         
         if (!isValid) {
             throw new Error('Invalid Paddler ID')

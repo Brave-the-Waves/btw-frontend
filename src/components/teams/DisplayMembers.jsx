@@ -35,8 +35,11 @@ export default function DisplayMembers({ team, members, setMembers, onMemberChan
                         className="flex items-center gap-3 flex-1 cursor-pointer group"
                         onClick={() => navigate(`/profile/${member._id}`)}
                       >
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#fc87a7] to-[#c14a75] flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform">
-                            {member.name.charAt(0).toUpperCase()}
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#fc87a7] to-[#c14a75] flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform overflow-hidden flex-shrink-0">
+                            {member.picture
+                              ? <img src={member.picture} alt={member.name} className="w-full h-full object-cover" />
+                              : (member.name || '?').charAt(0).toUpperCase()
+                            }
                         </div>
                         <div>
                             <p className="font-semibold text-slate-900 group-hover:text-[#fc87a7] transition-colors">{member.name}</p>

@@ -27,7 +27,8 @@ export default function Leaderboard() {
         const individuals = participantJson.map(u => ({
           name: u.name,
           team: u.team?.name ?? '',
-          raised: Number(u.amountRaised) || 0
+          raised: Number(u.amountRaised) || 0,
+          picture: u.picture || null
         }))
 
         const teams = teamsJson.map(t => ({
@@ -114,6 +115,15 @@ export default function Leaderboard() {
                   {index > 2 && (index + 1)}
                 </div>
               </div>
+
+              {index < 5 && (
+                <div className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-[#fc87a7] to-[#c14a75] flex items-center justify-center text-white font-bold text-lg overflow-hidden flex-shrink-0">
+                  {item.picture
+                    ? <img src={item.picture} alt={item.name} className="w-full h-full object-cover" />
+                    : (item.name || '?').charAt(0).toUpperCase()
+                  }
+                </div>
+              )}
               
               <div className="flex-1 relative z-10">
                 <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#fc87a7] transition-colors">{item.name}</h3>
