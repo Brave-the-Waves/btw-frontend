@@ -30,6 +30,7 @@ export default function UserProfileCard({
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
       className="space-y-6"
     >
       <div>
@@ -38,7 +39,7 @@ export default function UserProfileCard({
         {userData.team && (
           <button
             onClick={() => navigate(`/teams/${userData.team.name}`)}
-            className="text-pink-600 font-medium mt-1 hover:text-pink-700 transition-colors cursor-pointer"
+            className="text-[#fc87a7] font-semibold mt-1 hover:text-[#c14a75] transition-colors cursor-pointer text-sm"
           >
             Team: {userData.team.name}
           </button>
@@ -56,17 +57,17 @@ export default function UserProfileCard({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-          <h3 className="font-medium text-slate-900 mb-2">Amount Raised</h3>
-          <p className="text-3xl font-bold text-[#f94f85]">
+        <div className="bg-gradient-to-br from-[#fc87a7]/5 to-white p-6 rounded-2xl border border-[#fc87a7]/20 shadow-sm">
+          <h3 className="font-semibold text-[#fc87a7] mb-3 text-sm uppercase tracking-wide">Amount Raised</h3>
+          <p className="text-3xl font-bold text-[#fc87a7]">
             ${userData.amountRaised?.toLocaleString() || '0'}
           </p>
         </div>
         {showDonationId && (
-          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h3 className="font-medium text-slate-900 mb-2">Donation ID</h3>
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h3 className="font-semibold text-slate-900 mb-3 text-sm uppercase tracking-wide">Donation ID</h3>
             <div className="flex items-center gap-3">
-              <p className="text-lg font-mono text-slate-600 bg-white px-3 py-1 rounded border border-slate-200 inline-block">
+              <p className="text-base font-mono text-slate-700 bg-white px-3 py-1.5 rounded-lg border border-slate-300 inline-block">
                 {userData.donationId || 'N/A'}
               </p>
               {userData.donationId && (
@@ -74,7 +75,7 @@ export default function UserProfileCard({
                   type="button"
                   onClick={handleCopyDonationId}
                   aria-label="Copy donation ID"
-                  className="text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+                  className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-[#fc87a7] transition-colors cursor-pointer"
                 >
                   {copySuccess ? (
                     <Check className="w-4 h-4 text-green-500" />
@@ -84,13 +85,13 @@ export default function UserProfileCard({
                 </button>
               )}
             </div>
-            <p className="text-xs text-slate-500 mt-2">Share this ID to get credit for donations!</p>
+            <p className="text-xs text-slate-500 mt-3">Share this ID to get credit for donations!</p>
           </div>
         )}
       </div>
 
-      <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-        <h3 className="font-medium text-slate-900 mb-2">About</h3>
+      <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <h3 className="font-semibold text-slate-900 mb-3 text-sm uppercase tracking-wide">About</h3>
         <p className="text-slate-600 whitespace-pre-wrap leading-relaxed">
           {userData.bio || "No bio yet."}
         </p>

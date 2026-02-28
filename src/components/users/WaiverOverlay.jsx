@@ -331,7 +331,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
     return (
       <div className={className}>
         <label className="block text-xs font-semibold text-slate-600 mb-1">
-          {label}{required && <span className="text-pink-500 ml-0.5">*</span>}
+          {label}{required && <span className="text-[#fc87a7] ml-0.5">*</span>}
         </label>
         <input
           type={type}
@@ -339,7 +339,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
           onChange={(e) => { setField(field, e.target.value); markTouched(field) }}
           onBlur={() => markTouched(field)}
           placeholder={placeholder}
-          className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${
+          className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all ${
             error ? 'border-red-400 bg-red-50' : 'border-slate-200'
           }`}
         />
@@ -355,7 +355,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
     return (
       <OverlayShell onClose={onClose} canClose={true} title="Waiver" step={null}>
         <div className="flex flex-col items-center justify-center py-16 gap-4">
-          <Loader2 className="w-8 h-8 animate-spin text-pink-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#fc87a7]" />
           <p className="text-slate-500 text-sm">Loading waiver…</p>
         </div>
       </OverlayShell>
@@ -370,7 +370,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
       <OverlayShell onClose={onClose} canClose={true} title="Waiver" step={null}>
         <div className="flex flex-col items-center justify-center py-16 gap-4 text-center px-4">
           <p className="text-red-600 text-sm">{statusError}</p>
-          <button onClick={onClose} className="px-5 py-2 rounded-full bg-slate-900 text-white text-sm">Close</button>
+          <button onClick={onClose} className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium shadow-sm transition-all cursor-pointer">Close</button>
         </div>
       </OverlayShell>
     )
@@ -391,7 +391,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
           <p className="text-slate-500 text-sm">
             Your waiver was signed on <span className="font-medium text-slate-700">{signedDate}</span>.
           </p>
-          <button onClick={onClose} className="mt-2 px-5 py-2 rounded-full bg-slate-900 text-white text-sm">Close</button>
+          <button onClick={onClose} className="mt-2 px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium shadow-sm transition-all cursor-pointer">Close</button>
         </div>
       </OverlayShell>
     )
@@ -407,7 +407,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
           <p className="text-red-600 text-sm font-medium">
             Your waiver record was not found. Please contact support.
           </p>
-          <button onClick={onClose} className="px-5 py-2 rounded-full bg-slate-900 text-white text-sm">Close</button>
+          <button onClick={onClose} className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium shadow-sm transition-all cursor-pointer">Close</button>
         </div>
       </OverlayShell>
     )
@@ -432,29 +432,29 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[{ label: 'First Name', field: 'firstName' }, { label: 'Last Name', field: 'lastName' }].map(({ label, field }) => (
                 <div key={field}>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">{label}<span className="text-pink-500 ml-0.5">*</span></label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">{label}<span className="text-[#fc87a7] ml-0.5">*</span></label>
                   <input type="text" value={formData[field]} onChange={(e) => { setField(field, e.target.value); markTouched(field) }} onBlur={() => markTouched(field)}
-                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError(field) ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all ${getFieldError(field) ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
                   {getFieldError(field) && <p className="mt-1 text-xs text-red-500">{getFieldError(field)}</p>}
                 </div>
               ))}
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Email<span className="text-pink-500 ml-0.5">*</span></label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Email<span className="text-[#fc87a7] ml-0.5">*</span></label>
                 <input type="email" value={formData.email} onChange={(e) => { setField('email', e.target.value); markTouched('email') }} onBlur={() => markTouched('email')}
-                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('email') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all ${getFieldError('email') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
                 {getFieldError('email') && <p className="mt-1 text-xs text-red-500">{getFieldError('email')}</p>}
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Phone Number<span className="text-pink-500 ml-0.5">*</span></label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Phone Number<span className="text-[#fc87a7] ml-0.5">*</span></label>
                 <input type="tel" value={formData.phone} onChange={(e) => { setField('phone', e.target.value); markTouched('phone') }} onBlur={() => markTouched('phone')}
                   placeholder="e.g. 6041234567"
-                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('phone') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all ${getFieldError('phone') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
                 {getFieldError('phone') && <p className="mt-1 text-xs text-red-500">{getFieldError('phone')}</p>}
               </div>
               <div className="sm:col-span-2">
                 <label className="block text-xs font-semibold text-slate-600 mb-1">Date of Birth</label>
                 <input type="date" value={formData.dateOfBirth} onChange={(e) => setField('dateOfBirth', e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white" />
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all" />
                 {isMinor && (
                   <p className="mt-1.5 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed">
                     <strong>Minor participant:</strong> As a minor, a parent or legal guardian must complete and sign this waiver on your behalf.
@@ -470,21 +470,21 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
               <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">Parent / Guardian</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">Parent/Guardian Full Name<span className="text-pink-500 ml-0.5">*</span></label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Parent/Guardian Full Name<span className="text-[#fc87a7] ml-0.5">*</span></label>
                   <input type="text" value={formData.parentGuardianName} onChange={(e) => { setField('parentGuardianName', e.target.value); markTouched('parentGuardianName') }} onBlur={() => markTouched('parentGuardianName')}
-                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('parentGuardianName') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all ${getFieldError('parentGuardianName') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
                   {getFieldError('parentGuardianName') && <p className="mt-1 text-xs text-red-500">{getFieldError('parentGuardianName')}</p>}
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">Parent/Guardian Phone<span className="text-pink-500 ml-0.5">*</span></label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Parent/Guardian Phone<span className="text-[#fc87a7] ml-0.5">*</span></label>
                   <input type="tel" value={formData.parentGuardianPhone} onChange={(e) => { setField('parentGuardianPhone', e.target.value); markTouched('parentGuardianPhone') }} onBlur={() => markTouched('parentGuardianPhone')}
-                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('parentGuardianPhone') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all ${getFieldError('parentGuardianPhone') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
                   {getFieldError('parentGuardianPhone') && <p className="mt-1 text-xs text-red-500">{getFieldError('parentGuardianPhone')}</p>}
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">Parent/Guardian Email<span className="text-pink-500 ml-0.5">*</span></label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Parent/Guardian Email<span className="text-[#fc87a7] ml-0.5">*</span></label>
                   <input type="email" value={formData.parentGuardianEmail} onChange={(e) => { setField('parentGuardianEmail', e.target.value); markTouched('parentGuardianEmail') }} onBlur={() => markTouched('parentGuardianEmail')}
-                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('parentGuardianEmail') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                    className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all ${getFieldError('parentGuardianEmail') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
                   {getFieldError('parentGuardianEmail') && <p className="mt-1 text-xs text-red-500">{getFieldError('parentGuardianEmail')}</p>}
                 </div>
               </div>
@@ -496,15 +496,15 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
             <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">Emergency Contact</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Emergency Contact Name<span className="text-pink-500 ml-0.5">*</span></label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Emergency Contact Name<span className="text-[#fc87a7] ml-0.5">*</span></label>
                 <input type="text" value={formData.emergencyContactName} onChange={(e) => { setField('emergencyContactName', e.target.value); markTouched('emergencyContactName') }} onBlur={() => markTouched('emergencyContactName')}
-                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('emergencyContactName') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all ${getFieldError('emergencyContactName') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
                 {getFieldError('emergencyContactName') && <p className="mt-1 text-xs text-red-500">{getFieldError('emergencyContactName')}</p>}
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Emergency Contact Phone<span className="text-pink-500 ml-0.5">*</span></label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Emergency Contact Phone<span className="text-[#fc87a7] ml-0.5">*</span></label>
                 <input type="tel" value={formData.emergencyContactPhone} onChange={(e) => { setField('emergencyContactPhone', e.target.value); markTouched('emergencyContactPhone') }} onBlur={() => markTouched('emergencyContactPhone')}
-                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white ${getFieldError('emergencyContactPhone') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
+                  className={`w-full px-3 py-2 rounded-xl border focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all ${getFieldError('emergencyContactPhone') ? 'border-red-400 bg-red-50' : 'border-slate-200'}`} />
                 {getFieldError('emergencyContactPhone') && <p className="mt-1 text-xs text-red-500">{getFieldError('emergencyContactPhone')}</p>}
               </div>
             </div>
@@ -529,7 +529,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
             {/* Preferred side */}
             <div className="mb-4">
               <label className="block text-xs font-semibold text-slate-600 mb-2">
-                Preferred Paddling Side<span className="text-pink-500 ml-0.5">*</span>
+                Preferred Paddling Side<span className="text-[#fc87a7] ml-0.5">*</span>
               </label>
               <div className="flex gap-2 flex-wrap">
                 {['left', 'right', 'ambidextrous', 'unknown'].map((side) => (
@@ -537,10 +537,10 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
                     key={side}
                     type="button"
                     onClick={() => setField('paddlingSide', side)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors capitalize ${
+                    className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all capitalize cursor-pointer ${
                       formData.paddlingSide === side
-                        ? 'bg-pink-600 text-white border-pink-600'
-                        : 'bg-white text-slate-600 border-slate-200 hover:border-pink-300'
+                        ? 'bg-gradient-to-r from-[#fc87a7] to-[#c14a75] text-white border-transparent shadow-lg shadow-[#fc87a7]/30'
+                        : 'bg-white text-slate-600 border-slate-200 hover:border-[#fc87a7]/50 hover:bg-[#fc87a7]/5'
                     }`}
                   >
                     {side === 'unknown' ? "I don't know" : side}
@@ -552,7 +552,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
             {/* Experienced paddler */}
             <div className="mb-4">
               <label className="block text-xs font-semibold text-slate-600 mb-2">
-                Experienced Paddler?<span className="text-pink-500 ml-0.5">*</span>
+                Experienced Paddler?<span className="text-[#fc87a7] ml-0.5">*</span>
               </label>
               <div className="flex gap-2">
                 {[{ label: 'Yes', value: true }, { label: 'No', value: false }].map(({ label, value }) => (
@@ -563,10 +563,10 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
                       setField('isExperienced', value)
                       if (!value) setField('yearsOfExperience', '')
                     }}
-                    className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
+                    className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
                       formData.isExperienced === value
-                        ? 'bg-pink-600 text-white border-pink-600'
-                        : 'bg-white text-slate-600 border-slate-200 hover:border-pink-300'
+                        ? 'bg-gradient-to-r from-[#fc87a7] to-[#c14a75] text-white border-transparent shadow-lg shadow-[#fc87a7]/30'
+                        : 'bg-white text-slate-600 border-slate-200 hover:border-[#fc87a7]/50 hover:bg-[#fc87a7]/5'
                     }`}
                   >
                     {label}
@@ -579,14 +579,14 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
             {formData.isExperienced === true && (
               <div className="mt-3">
                 <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Years of Experience<span className="text-pink-500 ml-0.5">*</span>
+                  Years of Experience<span className="text-[#fc87a7] ml-0.5">*</span>
                 </label>
                 <input
                   type="number"
                   min={1}
                   value={formData.yearsOfExperience}
                   onChange={(e) => setField('yearsOfExperience', e.target.value)}
-                  className="w-32 px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white"
+                  className="w-32 px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white transition-all"
                 />
               </div>
             )}
@@ -605,7 +605,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
                 onChange={(e) => setField('medicalConditions', e.target.value)}
                 rows={3}
                 placeholder="List any relevant medical conditions, medications, or allergies the event organizers should be aware of. Leave blank if none."
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white resize-none"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#fc87a7] focus:border-transparent outline-none text-sm bg-white resize-none transition-all"
               />
             </div>
           </section>
@@ -629,10 +629,10 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
                 key={lang}
                 type="button"
                 onClick={() => setLanguage(lang)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                   language === lang
-                    ? 'bg-slate-900 text-white border-slate-900'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400 hover:bg-slate-50'
                 }`}
               >
                 {lang === 'en' ? 'English' : 'Français'}
@@ -653,7 +653,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
               type="checkbox"
               checked={hasReadWaiver}
               onChange={(e) => setHasReadWaiver(e.target.checked)}
-              className="mt-0.5 w-4 h-4 accent-pink-600 flex-shrink-0 cursor-pointer"
+              className="mt-0.5 w-4 h-4 accent-[#fc87a7] flex-shrink-0 cursor-pointer"
             />
             <span className="text-sm text-slate-700 leading-snug">
               {isMinor ? (
@@ -689,7 +689,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
           <section>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
               {isMinor ? 'Minor Participant Signature' : 'Participant Signature'}
-              <span className="text-pink-500 ml-0.5">*</span>
+              <span className="text-[#fc87a7] ml-0.5">*</span>
             </label>
             <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
               <SignatureCanvas
@@ -712,7 +712,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
           {isMinor && (
             <section>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Parent / Guardian Signature<span className="text-pink-500 ml-0.5">*</span>
+                Parent / Guardian Signature<span className="text-[#fc87a7] ml-0.5">*</span>
               </label>
               <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
                 <SignatureCanvas
@@ -745,7 +745,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
               type="button"
               onClick={() => { setStep(3); setApiError(null) }}
               disabled={isSubmitting}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 disabled:opacity-40 transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 disabled:opacity-40 transition-all cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
               Back
@@ -754,7 +754,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting || !isStep4CanSubmit()}
-              className="flex items-center gap-2 px-6 py-2 rounded-full text-sm font-semibold bg-pink-600 text-white hover:bg-pink-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors ml-auto"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-none transition-all ml-auto cursor-pointer"
             >
               {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
               {isSubmitting ? 'Submitting…' : 'Submit Waiver'}
@@ -784,16 +784,16 @@ function OverlayShell({ children, onClose, canClose, title, step }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
         onClick={canClose ? onClose : undefined}
       />
 
       {/* Panel */}
       <div className="relative z-10 w-full max-w-xl max-h-[90vh] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-slate-100 flex-shrink-0">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-slate-100 flex-shrink-0 bg-gradient-to-br from-[#fc87a7]/5 to-white">
           <div>
-            <p className="text-xs font-semibold text-pink-500 uppercase tracking-wide">Waiver</p>
+            <p className="text-xs font-semibold text-[#fc87a7] uppercase tracking-wide">Waiver</p>
             <h2 className="text-lg font-bold text-slate-900 leading-tight">{title}</h2>
           </div>
           <button
@@ -815,7 +815,7 @@ function OverlayShell({ children, onClose, canClose, title, step }) {
                 <React.Fragment key={s}>
                   <div
                     className={`h-1.5 flex-1 rounded-full transition-colors ${
-                      s <= step ? 'bg-pink-500' : 'bg-slate-200'
+                      s <= step ? 'bg-gradient-to-r from-[#fc87a7] to-[#c14a75]' : 'bg-slate-200'
                     }`}
                   />
                 </React.Fragment>
@@ -841,7 +841,7 @@ function StepFooter({ canNext, onNext, onBack, showBack = true }) {
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 transition-colors"
+          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4" />
           Back
@@ -851,7 +851,7 @@ function StepFooter({ canNext, onNext, onBack, showBack = true }) {
         type="button"
         onClick={onNext}
         disabled={!canNext}
-        className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold bg-pink-600 text-white hover:bg-pink-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors ml-auto"
+        className="flex items-center gap-1.5 px-6 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-none transition-all ml-auto cursor-pointer"
       >
         Next
         <ChevronRight className="w-4 h-4" />

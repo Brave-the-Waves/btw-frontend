@@ -46,19 +46,23 @@ export default function ParticipantOverlay({ participantId, onClose }) {
   if (!participantId) return null
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm p-4 sm:p-6">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm p-4 sm:p-6">
       <div className="flex min-h-full items-center justify-center">
         <div className="flex w-full max-w-6xl gap-6 items-start flex-col lg:flex-row">
           <div className="w-full lg:flex-1 flex justify-center lg:justify-end">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden max-h-none lg:max-h-[90vh] lg:overflow-y-auto"
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-none lg:max-h-[90vh] lg:overflow-y-auto"
             >
-              <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h2 className="text-xl font-bold text-slate-900">Paddler Profile</h2>
-                <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
-                  <X className="w-6 h-6" />
+              <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-gradient-to-br from-[#fc87a7]/5 to-white">
+                <div>
+                  <p className="text-xs font-semibold text-[#fc87a7] uppercase tracking-wide">Profile</p>
+                  <h2 className="text-xl font-bold text-slate-900">Paddler Profile</h2>
+                </div>
+                <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-100 transition-colors cursor-pointer">
+                  <X className="w-5 h-5 text-slate-500" />
                 </button>
               </div>
     
@@ -69,9 +73,9 @@ export default function ParticipantOverlay({ participantId, onClose }) {
                   <div className="flex flex-col md:flex-row gap-8 items-center md:items-start text-center md:text-left">
                     <div className="flex-shrink-0">
                       {profile.picture ? (
-                          <img src={profile.picture} alt={profile.name} className="w-32 h-32 rounded-full border-4 border-pink-100 object-cover mx-auto md:mx-0" />
+                          <img src={profile.picture} alt={profile.name} className="w-32 h-32 rounded-full border-4 border-[#fc87a7]/20 shadow-lg shadow-[#fc87a7]/10 object-cover mx-auto md:mx-0" />
                       ) : (
-                          <div className="w-32 h-32 rounded-full bg-slate-100 flex items-center justify-center text-4xl font-bold text-slate-300 border-4 border-slate-50 mx-auto md:mx-0">
+                          <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#fc87a7]/10 to-[#fc87a7]/5 flex items-center justify-center text-4xl font-bold text-[#fc87a7] border-4 border-[#fc87a7]/20 shadow-lg shadow-[#fc87a7]/10 mx-auto md:mx-0">
                               {profile.name?.charAt(0)}
                           </div>
                       )}
@@ -89,27 +93,27 @@ export default function ParticipantOverlay({ participantId, onClose }) {
                           />
                         </div>
                         {profile.team && (
-                          <p className="text-pink-600 font-medium mt-1">Team: {profile.team.name}</p>
+                          <p className="text-[#fc87a7] font-semibold mt-1 text-sm">Team: {profile.team.name}</p>
                         )}
                       </div>
     
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                          <div className="flex items-center justify-center md:justify-start gap-2 mb-2 text-slate-600">
-                              <Trophy className="w-4 h-4" />
-                              <h3 className="font-medium text-sm">Amount Raised</h3>
+                        <div className="bg-gradient-to-br from-[#fc87a7]/5 to-white p-6 rounded-2xl border border-[#fc87a7]/20 shadow-sm">
+                          <div className="flex items-center justify-center md:justify-start gap-2 mb-2 text-[#fc87a7]">
+                              <Trophy className="w-5 h-5" />
+                              <h3 className="font-semibold text-sm uppercase tracking-wide">Amount Raised</h3>
                           </div>
-                          <p className="text-2xl font-bold text-[#fa6090]">
+                          <p className="text-3xl font-bold text-[#fc87a7]">
                             ${profile.amountRaised?.toLocaleString() || '0'}
                           </p>
                         </div>
-                        <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                        <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm">
                           <div className="flex items-center justify-center md:justify-start gap-2 mb-2 text-slate-600">
-                              <Target className="w-4 h-4" />
-                              <h3 className="font-medium text-sm">Donation ID</h3>
+                              <Target className="w-5 h-5" />
+                              <h3 className="font-semibold text-sm uppercase tracking-wide">Donation ID</h3>
                           </div>
                           <div className="flex items-center justify-center md:justify-start gap-3">
-                            <p className="text-lg font-mono text-slate-700 bg-white px-2 py-1 rounded border border-slate-200 inline-block">
+                            <p className="text-base font-mono text-slate-700 bg-white px-3 py-1.5 rounded-lg border border-slate-300 inline-block">
                               {profile.donationId || 'N/A'}
                             </p>
                             {profile.donationId && (
@@ -117,7 +121,7 @@ export default function ParticipantOverlay({ participantId, onClose }) {
                                 type="button"
                                 onClick={handleCopyDonationId}
                                 aria-label="Copy donation ID"
-                                className="text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+                                className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-[#fc87a7] transition-colors cursor-pointer"
                               >
                                 {copySuccess ? (
                                   <Check className="w-4 h-4 text-green-500" />
@@ -130,8 +134,8 @@ export default function ParticipantOverlay({ participantId, onClose }) {
                         </div>
                       </div>
     
-                      <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 text-left">
-                        <h3 className="font-medium text-slate-900 mb-2">About Me</h3>
+                      <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm text-left">
+                        <h3 className="font-semibold text-slate-900 mb-3 text-sm uppercase tracking-wide">About Me</h3>
                         <p className="text-slate-600 whitespace-pre-wrap leading-relaxed">
                           {profile.bio || "This paddler hasn't written a bio yet."}
                         </p>
