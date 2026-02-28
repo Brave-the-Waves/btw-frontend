@@ -208,8 +208,8 @@ export default function TeamDetails() {
                         <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Division</label>
                         <select
                           value={editForm.division}
-                          onChange={(e) => setEditForm(prev => ({ ...prev, division: e.target.value }))}
-                          className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-2 focus:ring-slate-200 outline-none transition-all"
+                          disabled
+                          className="w-full px-4 py-2 bg-slate-100 border border-slate-200 rounded-xl outline-none transition-all cursor-not-allowed opacity-60"
                         >
                           {['Sports', 'Corporate', 'Community'].map(div => (
                             <option key={div} value={div}>{div}</option>
@@ -277,16 +277,17 @@ export default function TeamDetails() {
                       <h1 className="text-5xl font-bold text-slate-900 mb-4">{team.name}</h1>
                       {
                         team.inviteCode && (
-                          <motion.h2 
+                          <motion.div 
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             onClick={copyInviteCode}
-                            className="flex items-center gap-2 text-slate-700 mb-4 cursor-pointer hover:text-[#fc87a7] transition-colors font-mono text-sm bg-slate-50 px-4 py-2 rounded-lg border border-slate-200 hover:border-[#fc87a7]/30 w-fit group"
+                            className="flex items-center gap-2 text-slate-700 mb-4 cursor-pointer hover:text-[#fc87a7] transition-colors text-sm bg-slate-50 px-4 py-2 rounded-lg border border-slate-200 hover:border-[#fc87a7]/30 w-fit group"
                             title="Click to copy invite code"
                           >
-                            {team.inviteCode}
+                            <span className="font-semibold text-xs uppercase tracking-wider text-slate-500">Invite Code:</span>
+                            <span className="font-mono">{team.inviteCode}</span>
                             {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-slate-400 group-hover:text-[#fc87a7]" />}
-                          </motion.h2>
+                          </motion.div>
                         )
                       }
                       <p className="text-slate-600 max-w-2xl text-lg mb-6">{team.description}</p>
