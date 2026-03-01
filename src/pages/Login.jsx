@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '../components/ui/button'
 import { Input } from '../components/ui/input'
@@ -44,7 +45,17 @@ export default function Login() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center container mx-auto px-4 py-20">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+      <div className="max-w-md w-full">
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer mb-3"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back
+        </button>
+
+        <div className="space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
         <div className="text-center">
             <h2 className="mt-6 text-3xl font-bold text-gray-900">Welcome Back</h2>
             <p className="mt-2 text-gray-600">Please sign in to your account</p>
@@ -111,6 +122,7 @@ export default function Login() {
         <Link to="/forgot-password" className="text-[#fc87a7] hover:underline">Forgot your password?</Link>
       </div>
       </div>
+        </div>
       </div>
     </div>
   )
