@@ -7,7 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail, verifyPasswordResetCode, confirmPasswordReset,
-  reauthenticateWithCredential, EmailAuthProvider, updatePassword, updateProfile
+  reauthenticateWithCredential, EmailAuthProvider, updatePassword, updateProfile, deleteUser
 } from 'firebase/auth'
 import { auth } from '../firebase'
 import { API_BASE_URL } from '../config'
@@ -236,6 +236,40 @@ export default function AuthProvider({ children }) {
     }
   }
 
+  const deleteAccount = async (currentPassword) => {
+    if (!auth.currentUser || !auth.currentUser.email) {
+      throw new Error('No authenticated user')
+    }
+
+    try {
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, currentPassword)
+      await reauthenticateWithCredential(auth.currentUser, credential)
+
+      const token = await auth.currentUser.getIdToken()
+      const backendDeleteRes = await fetch(`${API_BASE_URL}/api/users/me`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      if (!backendDeleteRes.ok) {
+        const errorText = await backendDeleteRes.text()
+        throw new Error(errorText || 'Failed to delete user data from backend')
+      }
+
+      await deleteUser(auth.currentUser)
+      setUser(null)
+      setIsAuthenticated(false)
+
+      return { success: true }
+    } catch (error) {
+      console.error('deleteAccount error:', error)
+      throw error
+    }
+  }
+
   // Deprecated: use loginWithGoogle
   const loginWithRedirect = loginWithGoogle
 
@@ -328,6 +362,7 @@ export default function AuthProvider({ children }) {
     sendPasswordReset,
     resetPassword,
     changePassword,
+    deleteAccount,
     logout,
     getAccessTokenSilently,
     initiateRegistrationPayment,

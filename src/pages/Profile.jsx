@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import RecentDonations from '@/components/users/RecentDonations'
 import DonateButton from '@/components/users/DonateButton'
+import DeleteAccountButton from '@/components/users/DeleteAccountButton'
 import { API_BASE_URL } from '@/config'
 import { storage } from '@/firebase'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
@@ -316,6 +317,11 @@ export default function Profile() {
                     >
                       Change password
                     </button>
+                  </div>
+
+                  <div className="mt-6 pt-6 border-t border-slate-200">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Danger Zone</p>
+                    <DeleteAccountButton />
                   </div>
                 </form>
               )}
