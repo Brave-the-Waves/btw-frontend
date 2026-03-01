@@ -95,15 +95,15 @@ export default function EventLayout() {
         </aside>
 
         {/* ── Mobile sidebar (horizontal tabs) ── */}
-        <div className="lg:hidden fixed top-[110px] left-0 right-0 z-30 bg-white border-b border-slate-200 overflow-x-auto">
-          <div className="flex items-center gap-1 px-4 py-2 min-w-max">
+        <div className="lg:hidden fixed top-[72px] left-0 right-0 z-30 bg-white border-b border-slate-200 overflow-x-auto">
+          <div className="flex items-center gap-1 px-4 py-4 min-w-max">
             {sidebarItems.map((item) => {
               const active = isActive(item)
               return (
                 <button
                   key={item.label}
                   onClick={() => handleSidebarClick(item)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-3 py-3 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                     active
                       ? 'bg-[#fc87a7]/10 text-[#fc87a7]'
                       : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'
@@ -122,7 +122,7 @@ export default function EventLayout() {
                   navigate('/login', { state: { from: '/register' } })
                 }
               }}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap bg-[#fc87a7] text-white cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-3 rounded-lg text-xs font-medium whitespace-nowrap bg-[#fc87a7] text-white cursor-pointer"
             >
               <ClipboardList className="w-3.5 h-3.5" />
               Register
@@ -133,7 +133,7 @@ export default function EventLayout() {
         {/* ── Main content ── */}
         <main className="flex-1 lg:ml-64 min-h-screen">
           {/* Extra top padding on mobile for the tab bar */}
-          <div className="pt-10 lg:pt-0">
+          <div className="pt-14 lg:pt-0">
             <Outlet />
           </div>
         </main>

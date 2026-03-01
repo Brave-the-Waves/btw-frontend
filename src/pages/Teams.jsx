@@ -152,14 +152,14 @@ export default function Teams() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <div className="pt-32 px-6 max-w-7xl mx-auto pb-20">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
           <div>
             <h1 className="text-5xl font-bold text-slate-900 mb-4">All Teams</h1>
             <p className="text-slate-600 max-w-2xl text-lg">Find a team to join or support. Together we are making waves for women's health.</p>
           </div>
           
-          <div className="flex gap-4 w-full md:w-auto">
-             <div className="relative flex-1 md:w-80">
+          <div className="flex flex-col gap-3 w-full md:w-auto md:flex-row md:gap-4">
+             <div className="relative w-full md:w-80">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               <input 
                 type="text" 
@@ -169,11 +169,11 @@ export default function Teams() {
                 className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#fc87a7] focus:border-[#fc87a7] outline-none bg-white"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-col md:flex-row">
               {user?.team?.name ? (
                 <Button
                   onClick={() => navigate(`/event/${eventName}/teams/${encodeURIComponent(user.team.name)}`)}
-                  className="bg-[#fc87a7] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 shadow-md rounded-lg cursor-pointer font-semibold transition-all"
+                  className="w-full md:w-auto bg-[#fc87a7] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 shadow-md rounded-lg cursor-pointer font-semibold transition-all"
                 >
                   <Users className="w-4 h-4 mr-2" />
                   My Team
@@ -183,7 +183,7 @@ export default function Teams() {
                   <Button 
                     onClick={handleCreateClick} 
                     disabled={isLoading || !isAuthenticated}
-                    className="bg-[#fc87a7] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer rounded-lg font-semibold transition-all"
+                    className="w-full md:w-auto bg-[#fc87a7] text-white hover:shadow-lg hover:shadow-[#fc87a7]/30 shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer rounded-lg font-semibold transition-all"
                     title={
                       !isAuthenticated ? "Log in first to create a team" :
                       !user?.isRegistered ? "Complete registration first to create a team" :
@@ -196,7 +196,7 @@ export default function Teams() {
                   <Button 
                     onClick={handleJoinClick} 
                     disabled={isLoading || !isAuthenticated}
-                    className="bg-white text-slate-900 hover:bg-slate-50 shadow-md disabled:opacity-50 disabled:cursor-not-allowed rounded-lg cursor-pointer border-2 border-slate-200 font-semibold transition-all hover:border-[#fc87a7]/30"
+                    className="w-full md:w-auto bg-white text-slate-900 hover:bg-slate-50 shadow-md disabled:opacity-50 disabled:cursor-not-allowed rounded-lg cursor-pointer border-2 border-slate-200 font-semibold transition-all hover:border-[#fc87a7]/30"
                     title={
                       !isAuthenticated ? "Log in first to join a team" :
                       !user?.isRegistered ? "Complete registration first to join a team" :
