@@ -3,8 +3,8 @@ import Button from '../ui/button'
 import { ChevronDown, Heart, Users } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-const HERO_VIDEO_DESKTOP = 'https://firebasestorage.googleapis.com/v0/b/brave-the-waves-backend.firebasestorage.app/o/videos%2Fbtw%20banner%208.mp4?alt=media&token=3d76b115-7a03-4c40-8fdf-5961a1f831c1'
-const HERO_VIDEO_MOBILE = 'https://firebasestorage.googleapis.com/v0/b/brave-the-waves-backend.firebasestorage.app/o/videos%2Fbtw%20banner%208%20(mobile)%20(1).mp4?alt=media&token=b57a1051-8162-44a7-b205-422e37980310'
+const HERO_VIDEO_DESKTOP = 'https://firebasestorage.googleapis.com/v0/b/brave-the-waves-backend.firebasestorage.app/o/videos%2Fbtw%20banner%208%20(2).webm?alt=media&token=8eb4aefe-c2de-4635-bae2-d06bb9cc12b2'
+const HERO_VIDEO_MOBILE = 'https://firebasestorage.googleapis.com/v0/b/brave-the-waves-backend.firebasestorage.app/o/videos%2Fbtw%20banner%208%20(mobile)%20(2).webm?alt=media&token=64d76036-50f5-41c5-ad6e-0184206ae2ec'
 export default function Hero() {
   const videoRef = useRef(null)
   const scrollToSection = (id) => {
@@ -24,7 +24,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section id="home" className="relative overflow-hidden bg-[#fcf2f5] h-[60vh] min-h-[320px] sm:h-[75vh] md:h-screen">
+    <section id="home" className="relative overflow-hidden bg-[#fcf2f5] h-screen md:h-screen">
       {/* 
         Responsive video behaviour:
         - Large screens (≥1280px): container is 100vw × 100vh, video covers and scales up to fill
