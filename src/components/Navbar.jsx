@@ -126,12 +126,12 @@ export default function Navbar() {
         className={navBarClasses}
       >
         <div className="max-w-[95%] mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
+          <div className="flex items-center justify-between h-10 xl:h-20">
             <button onClick={() => navigate('/')} className="flex items-center gap-3 group cursor-pointer">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors bg-[#fc87a7] hover:bg-[#c14a75]">
                 <Waves className="w-5 h-5 text-white" />
               </div>
-              <span className={`text-lg font-bold transition-colors ${isScrolled ? 'text-slate-900' : 'text-slate-600'}`}>
+              <span className={`text-lg font-bold transition-colors ${isScrolled ? 'text-slate-900' : 'opacity-0 pointer-events-none'}`}>
                 Brave the Waves
               </span>
             </button>
@@ -290,7 +290,7 @@ export default function Navbar() {
               </Button> */}
             </div>
 
-            <button onClick={() => setIsOpen(!isOpen)} className={`xl:hidden p-2 rounded-xl transition-colors cursor-pointer ${isScrolled ? 'text-slate-900 hover:bg-slate-100' : 'text-slate-600 hover:bg-black/10'}`}>
+            <button onClick={() => setIsOpen(!isOpen)} className={`xl:hidden p-2 rounded-xl transition-colors cursor-pointer ${isScrolled ? 'text-slate-900 hover:bg-slate-100' : 'text-white hover:bg-white/20'}`}>
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>

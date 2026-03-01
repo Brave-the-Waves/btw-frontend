@@ -3,7 +3,8 @@ import Button from '../ui/button'
 import { ChevronDown, Heart, Users } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-const HERO_VIDEO_URL = 'https://firebasestorage.googleapis.com/v0/b/brave-the-waves-backend.firebasestorage.app/o/videos%2Fbanner7.mp4?alt=media&token=4eccac12-6b43-4f28-b510-6a2ba4e8a52c'
+const HERO_VIDEO_DESKTOP = 'https://firebasestorage.googleapis.com/v0/b/brave-the-waves-backend.firebasestorage.app/o/videos%2Fbtw%20banner%208.mp4?alt=media&token=3d76b115-7a03-4c40-8fdf-5961a1f831c1'
+const HERO_VIDEO_MOBILE = 'https://firebasestorage.googleapis.com/v0/b/brave-the-waves-backend.firebasestorage.app/o/videos%2Fbtw%20banner%208%20(mobile)%20(1).mp4?alt=media&token=b57a1051-8162-44a7-b205-422e37980310'
 export default function Hero() {
   const videoRef = useRef(null)
   const scrollToSection = (id) => {
@@ -32,15 +33,26 @@ export default function Hero() {
         - Tiny screens (<480px): container drops to 60vh so the video actually shrinks
       */}
       <div className="absolute inset-0">
+        {/* Mobile video — shown below md breakpoint only */}
         <video
           ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover block md:hidden"
         >
-          <source src={HERO_VIDEO_URL} type="video/mp4" />
+          <source src={HERO_VIDEO_MOBILE} type="video/mp4" />
+        </video>
+        {/* Desktop video — shown at md and above only */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover hidden md:block"
+        >
+          <source src={HERO_VIDEO_DESKTOP} type="video/mp4" />
         </video>
         {/* Optional dark overlay for text readability */}
         <div className="absolute inset-0 bg-black/20" />
