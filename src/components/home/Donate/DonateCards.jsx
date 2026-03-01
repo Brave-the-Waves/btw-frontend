@@ -558,7 +558,7 @@ export default function DonateCards({ preFillDonationId, preFillName, eventPage 
             onClick={() => navigate('/event/BraveTheWaves2026')}
           >
             <Users className="w-5 h-5 mr-2" />
-            {isAuthenticated ? 'Register for the Event' : 'Create an Account and Register'}
+            More Details about the Event
           </Button>
         </div>
       </motion.div>
