@@ -5,6 +5,8 @@ import Button from '@/components/ui/button'
 
 export default function DonateButton({ donationId, userName, variant = "default", size = "default", className = "" }) {
   const navigate = useNavigate()
+  const firstName = userName ? userName.split(' ')[0] : 'Paddler'
+  const compactName = firstName.length > 14 ? `${firstName.slice(0, 14)}…` : firstName
 
   const handleDonateClick = () => {
     if (!donationId) return
@@ -28,10 +30,11 @@ export default function DonateButton({ donationId, userName, variant = "default"
       onClick={handleDonateClick}
       variant={variant}
       size={size}
-      className={`bg-[#fc87a7] hover:bg-[#c14a75] text-white px-4 py-2 cursor-pointer font-semibold transition-all hover:shadow-lg hover:shadow-[#fc87a7]/30 ${className}`}
+      className={`w-full sm:w-auto inline-flex items-center justify-center bg-[#fc87a7] hover:bg-[#c14a75] text-white px-3 sm:px-4 py-2.5 text-sm sm:text-base cursor-pointer font-semibold transition-all hover:shadow-lg hover:shadow-[#fc87a7]/30 ${className}`}
     >
-      <Heart className="w-4 h-4 mr-2" />
-      Donate to {userName ? userName.split(' ')[0] : 'Paddler'}
+      <Heart className="w-4 h-4 mr-2 flex-shrink-0" />
+      <span className="sm:hidden">Donate</span>
+      <span className="hidden sm:inline truncate">Donate to {compactName}</span>
     </Button>
   )
 }
