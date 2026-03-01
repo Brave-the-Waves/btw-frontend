@@ -13,7 +13,7 @@ export default function RegisterSelect() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <Navbar />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <div className="pt-32 pb-20 px-6 max-w-5xl mx-auto">
+        <div className="pt-24 xl:pt-32 pb-20 px-6 max-w-5xl mx-auto">
           <h1 className="text-3xl font-bold text-slate-900 mb-2 text-center">Register: Choose a Category</h1>
           <p className="text-slate-600 text-center mb-8 max-w-lg mx-auto">
             Select the category that best fits you. Pricing and requirements may differ per category.

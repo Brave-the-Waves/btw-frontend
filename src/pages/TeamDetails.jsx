@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Users, Trophy, Calendar, Copy, Pencil, Check, X } from 'lucide-react'
+import { Users, Trophy, Calendar, Copy, Pencil, Check, X, ArrowLeft } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import JoinTeamOverlay from '../components/teams/JoinTeamOverlay'
 import DisplayMembers from '@/components/teams/DisplayMembers'
@@ -306,6 +306,15 @@ export default function TeamDetails() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <div className="pt-32 px-6 max-w-7xl mx-auto pb-20">
+        <button
+          type="button"
+          onClick={() => navigate(`/event/${eventName}/teams`)}
+          className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors mb-4 cursor-pointer"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back
+        </button>
+
         <div className="grid lg:grid-cols-10 gap-6 pb-20">
           {/* Main content area - 70% on large screens */}
           <div className="lg:col-span-7">

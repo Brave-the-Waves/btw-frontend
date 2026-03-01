@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import Navbar from '@/components/Navbar'
 import Button from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { AlertCircle, Loader2 } from 'lucide-react'
+import { AlertCircle, Loader2, ArrowLeft } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import emailjs from '@emailjs/browser'
@@ -135,7 +135,16 @@ export default function CorporateRegister() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <Navbar />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
+        <div className="pt-24 xl:pt-32 pb-20 px-6 max-w-4xl mx-auto">
+          <button
+            type="button"
+            onClick={() => navigate('/register')}
+            className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors mb-4 cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </button>
+
           <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-6 text-center">Corporate Registration</h1>
           <p className="text-slate-600 text-center mb-8 max-w-lg mx-auto">Please fill the form below. A minimum of 16 paddlers is required.</p>
 

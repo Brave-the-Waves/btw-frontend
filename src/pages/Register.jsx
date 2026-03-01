@@ -6,6 +6,7 @@ import Button from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
 import { API_BASE_URL } from '@/config'
 
 export default function Register() {
@@ -146,7 +147,15 @@ export default function Register() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
       <Navbar />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
+                <div className="pt-24 xl:pt-32 pb-20 px-6 max-w-4xl mx-auto">
+                    <button
+                        type="button"
+                        onClick={() => navigate('/register')}
+                        className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors mb-4 cursor-pointer"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                        Back
+                    </button>
           <h1 className="text-3xl font-bold text-slate-900 mb-2 text-center">Event Registration</h1>
                 <p className="text-slate-600 text-center mb-4 max-w-lg mx-auto">
                     Choose how you would like to register. You can register just for yourself or bundle register for your whole team.
@@ -373,6 +382,10 @@ export default function Register() {
                                     />
                                 </div>
                             ))}
+                        </div>
+
+                        <div className="mb-6 p-3 rounded-lg border border-blue-100 bg-blue-50/50 text-sm text-blue-700">
+                            All participants must have a Brave the Waves account before payment.
                         </div>
 
                         {validationError && (

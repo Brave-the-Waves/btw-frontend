@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Loader2, AlertCircle } from 'lucide-react'
+import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Button from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -72,9 +72,20 @@ export default function ChangePassword() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center container mx-auto px-4 py-20">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+      <div className="max-w-md w-full">
+        <button
+          type="button"
+          onClick={() => navigate('/profile')}
+          className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors cursor-pointer mb-3"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back
+        </button>
+
+        <div className="space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+
         <div className="text-center">
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">Change Password</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Change Password</h2>
           <p className="mt-2 text-gray-600">Update your password for this account</p>
         </div>
 
@@ -110,6 +121,7 @@ export default function ChangePassword() {
             {loading ? 'Saving...' : 'Change Password'}
           </Button>
         </form>
+        </div>
       </div>
     </div>
   )

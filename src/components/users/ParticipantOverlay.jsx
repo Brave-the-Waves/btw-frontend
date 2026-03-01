@@ -82,7 +82,7 @@ export default function ParticipantOverlay({ participantId, onClose }) {
                     </div>
                     
                     <div className="flex-1 w-full space-y-6">
-                      <div>
+                      <div className="space-y-2.5">
                         <h2 className="text-2xl font-bold text-slate-900">{profile.name}</h2>
                         <div className="flex justify-center md:justify-start">
                           <DonateButton 
@@ -93,7 +93,10 @@ export default function ParticipantOverlay({ participantId, onClose }) {
                           />
                         </div>
                         {profile.team && (
-                          <p className="text-[#fc87a7] font-semibold mt-1 text-sm">Team: {profile.team.name}</p>
+                          <div className="mt-2 inline-flex items-center justify-center md:justify-start gap-2 px-3 py-1.5 rounded-full bg-[#fc87a7]/10 border border-[#fc87a7]/20 text-[#c14a75] text-sm font-semibold">
+                            <span className="text-xs uppercase tracking-wide">Team</span>
+                            <span className="text-[#fc87a7]">{profile.team.name}</span>
+                          </div>
                         )}
                       </div>
     
