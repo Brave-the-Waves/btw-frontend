@@ -17,10 +17,10 @@ export default function Register() {
         const earlyIndividualPrice = isStudent ? 25 : 45
         const discountRate = 0.20
     const regularIndividualPrice = isStudent ? 30 : 50
-        const individualPrice = regularIndividualPrice
-        const discountedPerPerson = Math.round(individualPrice * (1 - discountRate))
     const regularDiscountedPerPerson = Math.round(regularIndividualPrice * (1 - discountRate))
     const lateIndividualPrice = isStudent ? 35 : 55
+        const individualPrice = lateIndividualPrice
+        const discountedPerPerson = Math.round(individualPrice * (1 - discountRate))
     const lateDiscountedPerPerson = Math.round(lateIndividualPrice * (1 - discountRate))
   
   const [selectedMode, setSelectedMode] = useState(null) // 'individual' | 'group'
@@ -161,7 +161,7 @@ export default function Register() {
                     Choose how you would like to register. You can register just for yourself or bundle register for your whole team.
                 </p>
                 <p className="text-sm text-slate-500 text-center mb-8">
-                    Regular registration is now open — Late registration opens <strong>April 1</strong>.
+                    Late registration is now open — Deadline: <strong>May 31</strong>.
                 </p>
 
         {/* Loading Overlay */}
@@ -195,11 +195,29 @@ export default function Register() {
                 </div>
             </motion.div>
 
-            {/* Individual - Regular */}
+            {/* Individual - Regular (disabled) */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
+                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            >
+                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
+                    <User className="w-8 h-8 text-slate-400" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration (Regular)</h3>
+                <p className="text-slate-500 text-sm mb-6">Regular registration closed on <strong>March 31</strong>.</p>
+                <div className="flex items-end gap-1">
+                    <span className="text-3xl font-bold text-slate-700">{'$'}{regularIndividualPrice}</span>
+                    <span className="text-slate-500 mb-1">CAD</span>
+                </div>
+            </motion.div>
+
+            {/* Individual - Late */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
                 onClick={() => setSelectedMode('individual')}
                 className={`cursor-pointer rounded-2xl p-8 border transition-all relative overflow-hidden group ${
                     selectedMode === 'individual' 
@@ -215,28 +233,10 @@ export default function Register() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#fc87a7] to-[#c14a75] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-[#fc87a7]/30">
                     <User className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration (Regular)</h3>
-                <p className="text-slate-500 text-sm mb-6">Regular registration is now open.</p>
-                <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent">{'$'}{regularIndividualPrice}</span>
-                    <span className="text-slate-500 mb-1">CAD</span>
-                </div>
-            </motion.div>
-
-            {/* Individual - Late (disabled) */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
-            >
-                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
-                    <User className="w-8 h-8 text-slate-400" />
-                </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration<br/>(Late)</h3>
-                <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>April 1</strong>.</p>
+                <p className="text-slate-500 text-sm mb-6">Late registration is now open.</p>
                 <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-700">{'$'}{lateIndividualPrice}</span>
+                    <span className="text-3xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent">{'$'}{lateIndividualPrice}</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
             </motion.div>
@@ -265,11 +265,33 @@ export default function Register() {
                 </div>
             </motion.div>
 
-            {/* Group - Regular */}
+            {/* Group - Regular (disabled) */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
+                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            >
+                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
+                    <Users className="w-8 h-8 text-slate-400" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Regular)</h3>
+                <p className="text-slate-500 text-sm mb-6">Regular registration closed on <strong>March 31</strong>.</p>
+                <div className="flex flex-col gap-1">
+                    <div className="text-sm text-slate-400 line-through">{'$'}{regularIndividualPrice} CAD</div>
+                    <div className="flex items-end gap-1">
+                        <span className="text-3xl font-bold text-slate-700">{'$'}{regularDiscountedPerPerson}</span>
+                        <span className="text-slate-500 mb-1">CAD / person</span>
+                    </div>
+                    <div className="text-xs text-slate-500">20% off</div>
+                </div>
+            </motion.div>
+
+            {/* Group - Late */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
                 onClick={() => setSelectedMode('group')}
                 className={`cursor-pointer rounded-2xl p-8 border transition-all relative overflow-hidden group ${
                     selectedMode === 'group' 
@@ -285,37 +307,15 @@ export default function Register() {
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/30">
                     <Users className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Regular)</h3>
-                <p className="text-slate-500 text-sm mb-6">Regular registration is now open.</p>
-                <div className="flex flex-col gap-1">
-                    <div className="text-sm text-slate-400 line-through">{'$'}{regularIndividualPrice} CAD</div>
-                    <div className="flex items-end gap-1">
-                        <span className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">{'$'}{regularDiscountedPerPerson}</span>
-                        <span className="text-slate-500 mb-1">CAD / person</span>
-                    </div>
-                    <div className="text-xs text-blue-600 font-semibold">20% off</div>
-                </div>
-            </motion.div>
-
-            {/* Group - Late (disabled) */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
-            >
-                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
-                    <Users className="w-8 h-8 text-slate-400" />
-                </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Late)</h3>
-                <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>April 1</strong>.</p>
+                <p className="text-slate-500 text-sm mb-6">Late registration is now open.</p>
                 <div className="flex flex-col gap-1">
                     <div className="text-sm text-slate-400 line-through">{'$'}{lateIndividualPrice} CAD</div>
                     <div className="flex items-end gap-1">
-                        <span className="text-3xl font-bold text-slate-700">{'$'}{lateDiscountedPerPerson}</span>
+                        <span className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">{'$'}{lateDiscountedPerPerson}</span>
                         <span className="text-slate-500 mb-1">CAD / person</span>
                     </div>
-                    <div className="text-xs text-slate-500">20% off</div>
+                    <div className="text-xs text-blue-600 font-semibold">20% off</div>
                 </div>
             </motion.div>
         </div>
