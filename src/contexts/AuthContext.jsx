@@ -105,7 +105,10 @@ export default function AuthProvider({ children }) {
             console.error('Failed to fetch waiver status:', err)
           }
         }
-        
+
+        // Extract admin permission from backend
+        backendUser.isAdmin = backendUser?.permissions?.includes('admin') || false
+
         return backendUser
       }
     } catch (error) {
