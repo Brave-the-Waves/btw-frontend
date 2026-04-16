@@ -26,6 +26,11 @@ export default function Register() {
   const [selectedMode, setSelectedMode] = useState(null) // 'individual' | 'group'
   const [groupSize, setGroupSize] = useState(4)
   const [emails, setEmails] = useState(Array(4).fill(''))
+    const [participantStatuses, setParticipantStatuses] = useState(() => [isStudent, false, false, false, false])
+    const totalParticipants = groupSize + 1
+    const getLateIndividualPrice = (participantIsStudent) => (participantIsStudent ? 35 : 55)
+    const getBundlePricePerPerson = (participantIsStudent) =>
+        Math.round(getLateIndividualPrice(participantIsStudent) * (1 - discountRate))
   
   // Validation State
   const [isValidating, setIsValidating] = useState(false)
@@ -52,7 +57,29 @@ export default function Register() {
       newEmails.length = additionalEmails
     }
     setEmails(newEmails)
+
+        setParticipantStatuses(prev => {
+            const nextStatuses = [...prev]
+
+            if (totalParticipants > nextStatuses.length) {
+                for (let i = nextStatuses.length; i < totalParticipants; i++) {
+                    nextStatuses.push(false)
+                }
+            } else {
+                nextStatuses.length = totalParticipants
+            }
+
+            return nextStatuses
+        })
   }
+
+    const handleParticipantStatusChange = (index, checked) => {
+        setParticipantStatuses(prev => {
+            const nextStatuses = [...prev]
+            nextStatuses[index] = checked
+            return nextStatuses
+        })
+    }
 
   const handleEmailChange = (index, value) => {
     const newEmails = [...emails]
@@ -126,13 +153,17 @@ export default function Register() {
         }
 
         // 3. Initiate Logic
-        const totalAmount = discountedPerPerson * (groupSize + 1)
+        const activeParticipantStatuses = participantStatuses.slice(0, totalParticipants)
+        const participantPrices = activeParticipantStatuses.map(getBundlePricePerPerson)
+        const totalAmount = participantPrices.reduce((sum, price) => sum + price, 0)
         initiateRegistrationPayment({
             emails: filledEmails,
             registrationType: 'bundle',
-            isStudent,
+            isStudent: activeParticipantStatuses[0] ?? isStudent,
             amount: totalAmount,
-            groupPricePer: discountedPerPerson
+            participantStatuses: activeParticipantStatuses,
+            participantPrices,
+            groupTotalParticipants: totalParticipants
         })
 
     } catch (error) {
@@ -368,20 +399,47 @@ export default function Register() {
 
                         <div className="space-y-4 mb-8">
                             <label className="block text-sm font-medium text-slate-700">
-                                Participant Emails
+                                Participant Details
                             </label>
-                            {emails.map((email, index) => (
-                                <div key={index} className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                    <Input 
-                                        type="email" 
-                                        placeholder={`Paddler ${index + 1} Email`}
-                                        value={email}
-                                        onChange={(e) => handleEmailChange(index, e.target.value)}
-                                        className={`pl-9 focus:ring-2 focus:ring-blue-500 ${invalidEmails.includes(email) ? 'border-red-300 bg-red-50' : ''}`}
-                                    />
-                                </div>
-                            ))}
+                            {emails.map((email, index) => {
+                                const participantNumber = index + 2
+                                const participantIsStudent = participantStatuses[index + 1] ?? false
+                                const participantPrice = getBundlePricePerPerson(participantIsStudent)
+
+                                return (
+                                    <div key={index} className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div>
+                                                <p className="text-sm font-semibold text-slate-800">
+                                                    Paddler {participantNumber}
+                                                </p>
+                                                <p className="text-xs text-slate-500">
+                                                    {participantIsStudent ? 'Student rate' : 'Non-student rate'} · {'$'}{participantPrice} CAD
+                                                </p>
+                                            </div>
+                                            <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={participantIsStudent}
+                                                    onChange={(e) => handleParticipantStatusChange(index + 1, e.target.checked)}
+                                                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                                />
+                                                Student
+                                            </label>
+                                        </div>
+                                        <div className="relative">
+                                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                            <Input 
+                                                type="email" 
+                                                placeholder={`Paddler ${participantNumber} Email`}
+                                                value={email}
+                                                onChange={(e) => handleEmailChange(index, e.target.value)}
+                                                className={`pl-9 focus:ring-2 focus:ring-blue-500 ${invalidEmails.includes(email) ? 'border-red-300 bg-red-50' : ''}`}
+                                            />
+                                        </div>
+                                    </div>
+                                )
+                            })}
                         </div>
 
                         <div className="mb-6 p-3 rounded-lg border border-blue-100 bg-blue-50/50 text-sm text-blue-700">
@@ -407,7 +465,7 @@ export default function Register() {
                             <div className="flex justify-between items-center p-4 bg-gradient-to-r from-slate-50 to-blue-50/30 rounded-xl border border-slate-200">
                                 <span className="text-slate-600 font-semibold">Total Amount</span>
                                 <span className="text-xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
-                                    {'$'}{discountedPerPerson * (groupSize + 1)} CAD
+                                    {'$'}{participantStatuses.slice(0, totalParticipants).reduce((sum, status) => sum + getBundlePricePerPerson(status), 0)} CAD
                                 </span>
                             </div>
                             <Button 
