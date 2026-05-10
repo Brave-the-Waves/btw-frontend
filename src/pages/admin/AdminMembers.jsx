@@ -19,6 +19,41 @@ function formatDate(value) {
 	})
 }
 
+function formatRegistrationData(registration) {
+    if (!registration) return null
+    return {
+        hasPaid: registration.hasPaid ? 'Yes' : 'No',
+        amountPaid: registration.amountPaid ? `$${registration.amountPaid.toFixed(2)}` : '$0.00',
+        currency: registration.currency || 'CAD',
+        transactionId: registration.transactionId || 'N/A',
+        bundleEmails: registration.bundleEmails?.length > 0 ? registration.bundleEmails.join(', ') : 'None',
+        paidBy: registration.paidBy || 'Self',
+        createdAt: formatDate(registration.createdAt)
+    }
+}
+
+function formatWaiverData(waiver) {
+    if (!waiver) return null
+    return {
+        completed: waiver.completed ? 'Completed' : 'Incomplete',
+        signedAt: formatDate(waiver.signedAt),
+        firstName: waiver.firstName || 'N/A',
+        lastName: waiver.lastName || 'N/A',
+        email: waiver.email || 'N/A',
+        phone: waiver.phone || 'N/A',
+        dateOfBirth: formatDate(waiver.dateOfBirth),
+        paddlingSide: waiver.paddlingSide || 'N/A',
+        isExperienced: waiver.isExperienced ? 'Yes' : 'No',
+        yearsOfExperience: waiver.yearsOfExperience || 'N/A',
+        medicalConditions: waiver.medicalConditions || 'None',
+        isMinor: waiver.isMinor ? 'Yes' : 'No',
+        emergencyContactName: waiver.emergencyContactName || 'N/A',
+        emergencyContactPhone: waiver.emergencyContactPhone || 'N/A',
+        parentGuardianName: waiver.isMinor ? (waiver.parentGuardianName || 'N/A') : 'N/A',
+        parentGuardianPhone: waiver.isMinor ? (waiver.parentGuardianPhone || 'N/A') : 'N/A'
+    }
+}
+
 function normalizeMembersResponse(payload) {
 	if (Array.isArray(payload)) return payload
 	if (Array.isArray(payload?.members)) return payload.members
@@ -120,19 +155,117 @@ function MemberDetailsModal({ isOpen, member, onClose }) {
 					<p className="mt-2 text-sm text-slate-900 whitespace-pre-wrap">{member?.bio || 'No bio added.'}</p>
 				</div>
 
-				<div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
-					<p className="text-xs uppercase tracking-wide text-slate-500">Registration data</p>
-					<pre className="mt-2 overflow-auto rounded-lg bg-white p-3 text-xs text-slate-800">
-						{JSON.stringify(member?.registrationData || member?.registration || {}, null, 2)}
-					</pre>
-				</div>
+				{/* Registration Data Section */}
+                <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-xs uppercase tracking-wide text-slate-500">Registration</p>
+                    {formatRegistrationData(member?.registration) ? (
+                        <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                            <div>
+                                <p className="text-xs text-slate-500">Payment Status</p>
+                                <p className="text-sm font-medium text-slate-900">{formatRegistrationData(member?.registration).hasPaid}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-slate-500">Amount Paid</p>
+                                <p className="text-sm font-medium text-slate-900">{formatRegistrationData(member?.registration).amountPaid}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-slate-500">Transaction ID</p>
+                                <p className="text-xs font-mono text-slate-600">{formatRegistrationData(member?.registration).transactionId}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-slate-500">Date</p>
+                                <p className="text-sm text-slate-900">{formatRegistrationData(member?.registration).createdAt}</p>
+                            </div>
+                            {formatRegistrationData(member?.registration).bundleEmails !== 'None' && (
+                                <div className="col-span-full">
+                                    <p className="text-xs text-slate-500">Bundle Emails</p>
+                                    <p className="text-xs text-slate-600">{formatRegistrationData(member?.registration).bundleEmails}</p>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <p className="mt-2 text-sm text-slate-600">No registration data available.</p>
+                    )}
+                </div>
 
-				<div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
-					<p className="text-xs uppercase tracking-wide text-slate-500">Waiver data</p>
-					<pre className="mt-2 overflow-auto rounded-lg bg-white p-3 text-xs text-slate-800">
-						{JSON.stringify(member?.waiverData || member?.waiver || {}, null, 2)}
-					</pre>
-				</div>
+                {/* Waiver Data Section */}
+                <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-xs uppercase tracking-wide text-slate-500">Waiver Details</p>
+                    {formatWaiverData(member?.waiver) ? (
+                        <div className="mt-2 space-y-3">
+                            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                <div>
+                                    <p className="text-xs text-slate-500">Status</p>
+                                    <p className="text-sm font-medium text-slate-900">{formatWaiverData(member?.waiver).completed}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">Signed Date</p>
+                                    <p className="text-sm text-slate-900">{formatWaiverData(member?.waiver).signedAt}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">Name</p>
+                                    <p className="text-sm text-slate-900">{formatWaiverData(member?.waiver).firstName} {formatWaiverData(member?.waiver).lastName}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">Email</p>
+                                    <p className="text-sm text-slate-900">{formatWaiverData(member?.waiver).email}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">Phone</p>
+                                    <p className="text-sm text-slate-900">{formatWaiverData(member?.waiver).phone}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">Date of Birth</p>
+                                    <p className="text-sm text-slate-900">{formatWaiverData(member?.waiver).dateOfBirth}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">Paddling Side</p>
+                                    <p className="text-sm text-slate-900 capitalize">{formatWaiverData(member?.waiver).paddlingSide}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">Experience</p>
+                                    <p className="text-sm text-slate-900">{formatWaiverData(member?.waiver).isExperienced ? `${formatWaiverData(member?.waiver).yearsOfExperience} years` : 'No'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500">Minor</p>
+                                    <p className="text-sm text-slate-900">{formatWaiverData(member?.waiver).isMinor}</p>
+                                </div>
+                            </div>
+                            
+                            {formatWaiverData(member?.waiver).medicalConditions !== 'None' && (
+                                <div className="border-t border-slate-200 pt-2">
+                                    <p className="text-xs text-slate-500">Medical Conditions</p>
+                                    <p className="mt-1 text-sm text-slate-900">{formatWaiverData(member?.waiver).medicalConditions}</p>
+                                </div>
+                            )}
+
+                            {formatWaiverData(member?.waiver).isMinor === 'Yes' && (
+                                <div className="border-t border-slate-200 pt-2">
+                                    <p className="text-xs font-semibold text-slate-700">Parent/Guardian Info</p>
+                                    <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                        <div>
+                                            <p className="text-xs text-slate-500">Name</p>
+                                            <p className="text-sm text-slate-900">{formatWaiverData(member?.waiver).parentGuardianName}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-xs text-slate-500">Phone</p>
+                                            <p className="text-sm text-slate-900">{formatWaiverData(member?.waiver).parentGuardianPhone}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="border-t border-slate-200 pt-2">
+                                <p className="text-xs text-slate-500">Emergency Contact</p>
+                                <div className="mt-1 text-sm text-slate-900">
+                                    <p>{formatWaiverData(member?.waiver).emergencyContactName} - {formatWaiverData(member?.waiver).emergencyContactPhone}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <p className="mt-2 text-sm text-slate-600">No waiver data available.</p>
+                    )}
+                </div>
 			</div>
 		</div>
 	)
@@ -200,6 +333,16 @@ export default function AdminMembers() {
 	const [bioMember, setBioMember] = useState(null)
 	const [bioValue, setBioValue] = useState('')
 
+	const currency = useMemo(
+		() =>
+			new Intl.NumberFormat('en-CA', {
+				style: 'currency',
+				currency: 'CAD',
+				maximumFractionDigits: 2
+			}),
+		[]
+	)
+
 	const fetchMembers = async () => {
 		setLoading(true)
 		setError('')
@@ -244,8 +387,7 @@ export default function AdminMembers() {
 			const statusOk = statusFilter === 'all' || memberStatus === statusFilter
 			const searchOk =
 				!needle ||
-				(member?.name || '').toLowerCase().includes(needle) ||
-				(member?.email || '').toLowerCase().includes(needle)
+				(member?.name || '').toLowerCase().includes(needle)
 			return statusOk && searchOk
 		})
 	}, [members, search, statusFilter])
@@ -302,10 +444,26 @@ export default function AdminMembers() {
 		}
 	}
 
+	const handleReactivate = async (member) => {
+		const id = memberId(member)
+		if (!id) return
+		setBusyActionId(id)
+		setError('')
+		try {
+			await requestWithToken(`${API_BASE_URL}/api/admin/members/${id}/reactivate`, 'PATCH')
+			await fetchMembers()
+			closeConfirm()
+		} catch (err) {
+			console.error('Reactivate error:', err)
+			setError(err?.message || 'Failed to reactivate member')
+		} finally {
+			setBusyActionId('')
+		}
+	}
+
 	const handleDelete = async (member) => {
 		const id = memberId(member)
 		if (!id) return
-
 		setBusyActionId(id)
 		setError('')
 		try {
@@ -327,7 +485,6 @@ export default function AdminMembers() {
 	const openDetails = async (member) => {
 		const id = memberId(member)
 		if (!id) return
-
 		setBusyActionId(id)
 		setError('')
 		try {
@@ -354,7 +511,6 @@ export default function AdminMembers() {
 		const member = bioMember
 		const id = memberId(member)
 		if (!id) return
-
 		setBusyActionId(id)
 		setError('')
 		try {
@@ -394,12 +550,6 @@ export default function AdminMembers() {
 					<h2 className="text-2xl font-bold text-slate-900">Members</h2>
 					<p className="text-sm text-slate-500">Manage membership, profile data, and account actions.</p>
 				</div>
-				<button
-					onClick={fetchMembers}
-					className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-				>
-					Refresh
-				</button>
 			</div>
 
 			{error ? (
@@ -411,12 +561,12 @@ export default function AdminMembers() {
 			<div className="rounded-2xl border border-slate-200 bg-white p-4">
 				<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
 					<div className="md:col-span-2">
-						<label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Search by name or email</label>
+						<label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Search by name</label>
 						<input
 							type="text"
 							value={search}
 							onChange={(event) => setSearch(event.target.value)}
-							placeholder="Type a member name or email..."
+							placeholder="Type a name"
 							className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-500"
 						/>
 					</div>
@@ -442,7 +592,7 @@ export default function AdminMembers() {
 								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
 								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Email</th>
 								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Team</th>
-								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Join date</th>
+								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Amount raised</th>
 								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Status</th>
 								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Waiver</th>
 								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
@@ -466,7 +616,7 @@ export default function AdminMembers() {
 											<td className="border-b border-slate-100 px-3 py-3 text-sm text-slate-900">{member?.name || 'N/A'}</td>
 											<td className="border-b border-slate-100 px-3 py-3 text-sm text-slate-700">{member?.email || 'N/A'}</td>
 											<td className="border-b border-slate-100 px-3 py-3 text-sm text-slate-700">{getTeamName(member)}</td>
-											<td className="border-b border-slate-100 px-3 py-3 text-sm text-slate-700">{formatDate(member?.createdAt)}</td>
+											<td className="border-b border-slate-100 px-3 py-3 text-sm text-slate-700">{currency.format(Number(member?.amountRaised || 0))}</td>
 											<td className="border-b border-slate-100 px-3 py-3 text-sm">
 												<span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${registered ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
 													{registered ? 'Registered' : 'Non-registered'}
@@ -497,11 +647,11 @@ export default function AdminMembers() {
 													</button>
 													<button
 														type="button"
-														onClick={() => openConfirm('deactivate', member)}
-														disabled={disabled || memberBusy}
-														className="rounded-md bg-amber-100 px-2.5 py-1.5 text-xs font-medium text-amber-800 hover:bg-amber-200 disabled:cursor-not-allowed disabled:opacity-60"
+														onClick={() => openConfirm(disabled ? 'reactivate' : 'deactivate', member)}
+														disabled={memberBusy}
+														className={`rounded-md px-2.5 py-1.5 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-60 ${disabled ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-amber-100 text-amber-800 hover:bg-amber-200'}`}
 													>
-														{disabled ? 'Deactivated' : 'Deactivate'}
+														{disabled ? 'Reactivate' : 'Deactivate'}
 													</button>
 													<button
 														type="button"
@@ -549,18 +699,36 @@ export default function AdminMembers() {
 
 			<ConfirmModal
 				isOpen={confirmState.open}
-				title={confirmState.type === 'delete' ? 'Delete member' : 'Deactivate member'}
+				title={
+					confirmState.type === 'delete'
+						? 'Delete member'
+						: confirmState.type === 'reactivate'
+							? 'Reactivate member'
+							: 'Deactivate member'
+				}
 				body={
 					confirmState.type === 'delete'
 						? `Delete ${confirmState.member?.name || 'this member'}? This action cannot be undone.`
-						: `Deactivate ${confirmState.member?.name || 'this member'}? They will lose access until reactivated.`
+						: confirmState.type === 'reactivate'
+							? `Reactivate ${confirmState.member?.name || 'this member'}? They will regain account access.`
+							: `Deactivate ${confirmState.member?.name || 'this member'}? They will lose access until reactivated.`
 				}
-				confirmText={confirmState.type === 'delete' ? 'Delete user' : 'Deactivate account'}
+				confirmText={
+					confirmState.type === 'delete'
+						? 'Delete user'
+						: confirmState.type === 'reactivate'
+							? 'Reactivate account'
+							: 'Deactivate account'
+				}
 				onCancel={closeConfirm}
 				onConfirm={() => {
 					if (!confirmState.member) return
 					if (confirmState.type === 'delete') {
 						handleDelete(confirmState.member)
+						return
+					}
+					if (confirmState.type === 'reactivate') {
+						handleReactivate(confirmState.member)
 						return
 					}
 					handleDeactivate(confirmState.member)

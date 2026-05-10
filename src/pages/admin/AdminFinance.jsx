@@ -2,95 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { API_BASE_URL } from '@/config'
 import { useAuth } from '@/contexts/AuthContext'
 
-const isLocalPreviewMode =
-	typeof window !== 'undefined' &&
-	['localhost', '127.0.0.1'].includes(window.location.hostname) &&
-	import.meta.env.VITE_ADMIN_PREVIEW_MODE === 'true'
 
 const TABS = [
 	{ key: 'registrations', label: 'Registrations' },
 	{ key: 'donations', label: 'Donations' },
 	{ key: 'receipts', label: 'Tax Receipts' }
 ]
-
-const PREVIEW_FINANCE_DATA = {
-	registrations: [
-		{
-			id: 'reg-1',
-			name: 'Maya Chen',
-			email: 'maya.chen@example.com',
-			amountPaid: 25,
-			transactionId: 'pi_3previewA1',
-			registrationDate: '2026-03-18T14:24:00Z',
-			status: 'completed'
-		},
-		{
-			id: 'reg-2',
-			name: 'Jordan Patel',
-			email: 'jordan.patel@example.com',
-			amountPaid: 25,
-			transactionId: 'pi_3previewA2',
-			registrationDate: '2026-03-20T09:10:00Z',
-			status: 'pending'
-		},
-		{
-			id: 'reg-3',
-			name: 'Avery Thompson',
-			email: 'avery.thompson@example.com',
-			amountPaid: 50,
-			transactionId: 'cs_previewA3',
-			registrationDate: '2026-03-24T18:42:00Z',
-			status: 'failed'
-		}
-	],
-	donations: [
-		{
-			id: 'don-1',
-			donorName: 'Samantha Lee',
-			amount: 100,
-			donationDate: '2026-03-19T11:15:00Z',
-			paddler: 'Team Harbor Lights',
-			message: 'Cheering you on for the event weekend.',
-			status: 'completed'
-		},
-		{
-			id: 'don-2',
-			donorName: 'North Shore Dental',
-			amount: 250,
-			donationDate: '2026-03-21T15:35:00Z',
-			paddler: 'Team Wave Makers',
-			message: 'Corporate sponsorship contribution.',
-			status: 'pending'
-		},
-		{
-			id: 'don-3',
-			donorName: 'Emily Carter',
-			amount: 75,
-			donationDate: '2026-03-25T08:12:00Z',
-			paddler: 'Team Pink Current',
-			message: 'In memory of my sister.',
-			status: 'completed'
-		}
-	],
-	receipts: [
-		{
-			id: 'rcpt-1',
-			receiptNumber: 'TR-2026-001',
-			donor: 'Samantha Lee',
-			amount: 100,
-			issuedDate: '2026-03-19T11:20:00Z',
-			status: 'issued'
-		},
-		{
-			id: 'rcpt-2',
-			receiptNumber: 'TR-2026-002',
-			donor: 'North Shore Dental',
-			amount: 250,
-			issuedDate: '2026-03-21T15:40:00Z',
-			status: 'pending'
-		}
-	]
-}
 
 const REGISTRATION_STATUSES = ['all', 'completed', 'pending', 'failed']
 const DONATION_STATUSES = ['all', 'completed', 'pending']
@@ -304,15 +221,6 @@ export default function AdminFinance() {
 
 	const fetchRegistrations = async (force = false) => {
 		if (registrationsLoaded && !force) return
-		if (isLocalPreviewMode) {
-			setError('')
-			setLoading(true)
-			setRegistrations(PREVIEW_FINANCE_DATA.registrations)
-			setRegistrationsLoaded(true)
-			setLoading(false)
-			return
-		}
-
 		setLoading(true)
 		setError('')
 		try {
@@ -330,15 +238,6 @@ export default function AdminFinance() {
 
 	const fetchDonations = async (force = false) => {
 		if (donationsLoaded && !force) return
-		if (isLocalPreviewMode) {
-			setError('')
-			setLoading(true)
-			setDonations(PREVIEW_FINANCE_DATA.donations)
-			setDonationsLoaded(true)
-			setLoading(false)
-			return
-		}
-
 		setLoading(true)
 		setError('')
 		try {
@@ -356,14 +255,6 @@ export default function AdminFinance() {
 
 	const fetchReceipts = async (force = false) => {
 		if (receiptsLoaded && !force) return
-		if (isLocalPreviewMode) {
-			setError('')
-			setLoading(true)
-			setReceipts(PREVIEW_FINANCE_DATA.receipts)
-			setReceiptsLoaded(true)
-			setLoading(false)
-			return
-		}
 
 		setLoading(true)
 		setError('')
@@ -432,12 +323,6 @@ export default function AdminFinance() {
 		}
 	}, [filteredReceipts])
 
-	const handleRefresh = async () => {
-		if (activeTab === 'registrations') await fetchRegistrations(true)
-		if (activeTab === 'donations') await fetchDonations(true)
-		if (activeTab === 'receipts') await fetchReceipts(true)
-	}
-
 	const clearDateFilters = () => {
 		setFromDate('')
 		setToDate('')
@@ -445,25 +330,11 @@ export default function AdminFinance() {
 
 	return (
 		<section className="space-y-5">
-			{isLocalPreviewMode ? (
-				<div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-					Preview mode is on. This page is showing realistic sample data so you can inspect the final layout without an admin account.
-				</div>
-			) : null}
-
 			<div className="flex flex-wrap items-center justify-between gap-3">
 				<div>
 					<h2 className="text-2xl font-bold text-slate-900">Finance</h2>
 					<p className="text-sm text-slate-500">Registrations, donations, and tax receipt tracking.</p>
 				</div>
-
-				<button
-					type="button"
-					onClick={handleRefresh}
-					className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
-				>
-					Refresh current tab
-				</button>
 			</div>
 
 			<div className="rounded-2xl border border-slate-200 bg-white p-2">

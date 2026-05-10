@@ -88,7 +88,7 @@ export default function AdminDashboard() {
     
     if (loading) {
         return (
-            <section className="-mx-4 -my-5 min-h-screen space-y-5 bg-[#fc87a7]/10 p-6 md:-mx-6 md:-my-6 md:p-8">
+            <section className="-mx-4 -my-5 min-h-screen space-y-5 bg-slate-50 p-6 md:-mx-6 md:-my-6 md:p-8">
                 <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
                     <p className="text-slate-600">Loading dashboard metrics...</p>
                 </div>
@@ -97,18 +97,12 @@ export default function AdminDashboard() {
     }
 
     return (
-        <section className="-mx-4 -my-5 min-h-screen space-y-5 bg-[#fc87a7]/10 p-6 md:-mx-6 md:-my-6 md:p-8">
+        <section className="-mx-4 -my-5 min-h-screen space-y-5 bg-slate-50 p-6 md:-mx-6 md:-my-6 md:p-8">
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900">Admin Dashboard</h2>
                     <p className="text-sm text-slate-500">Overview of members, teams, and revenue.</p>
                 </div>
-                <button
-                    onClick={fetchStats}
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-                >
-                    Refresh
-                </button>
             </div>
 
             {error ? (

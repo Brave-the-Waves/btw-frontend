@@ -107,7 +107,7 @@ export default function AuthProvider({ children }) {
         }
 
         // Extract admin permission from backend
-        backendUser.isAdmin = backendUser?.permissions?.includes('admin') || false
+        backendUser.isAdmin = backendUser?.isAdmin || false
 
         return backendUser
       }

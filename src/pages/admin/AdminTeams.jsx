@@ -6,7 +6,6 @@ import { useAuth } from '@/contexts/AuthContext'
 const ACTION_MODES = [
 	{ value: 'overview', label: 'Overview' },
 	{ value: 'manage', label: 'Manage Team' },
-	{ value: 'members', label: 'Manage Members' }
 ]
 
 const initialTeamForm = {
@@ -37,7 +36,7 @@ function getCaptain(team) {
 	if (team.captain && typeof team.captain === 'object') {
 		return {
 			id: getUserId(team.captain),
-			name: team.captain.name || team.captain.email || 'Unknown leader',
+			name: team.captain.name || team.captain.email || 'Unknown captain',
 			email: team.captain.email || ''
 		}
 	}
@@ -45,7 +44,7 @@ function getCaptain(team) {
 	const captainId = team?.captain || team?.captainId || ''
 	return {
 		id: captainId,
-		name: team?.captainName || 'Unassigned leader',
+		name: team?.captainName || 'Unassigned captain',
 		email: team?.captainEmail || ''
 	}
 }
@@ -70,6 +69,7 @@ function normalizeTeam(team) {
 	return {
 		id: getTeamId(team),
 		name: team?.name || 'Untitled Team',
+		division: team?.division || 'Community',
 		description: team?.description || 'No description added yet.',
 		totalDonations:
 			Number(team?.totalDonations) ||
@@ -82,6 +82,13 @@ function normalizeTeam(team) {
 		members,
 		raw: team
 	}
+}
+
+function getDivisionBadgeClass(division) {
+    const value = (division || '').toLowerCase()
+    if (value === 'corporate') return 'bg-blue-100 text-blue-700'
+    if (value === 'sports') return 'bg-purple-100 text-purple-700'
+    return 'bg-emerald-100 text-emerald-700'
 }
 
 function ModalFrame({ title, subtitle, onClose, children, maxWidth = 'max-w-3xl' }) {
@@ -150,7 +157,7 @@ function TeamFormModal({
 
 	const isEdit = mode === 'edit'
 	const title = isEdit ? 'Edit team' : 'Create new team'
-	const subtitle = isEdit ? 'Update team name, description, and leader.' : 'Create a new team and optionally select a leader.'
+	const subtitle = isEdit ? 'Update team name, description, and captain.' : 'Create a new team and optionally select a captain.'
 
 	return (
 		<ModalFrame title={title} subtitle={subtitle} onClose={onClose}>
@@ -181,13 +188,13 @@ function TeamFormModal({
 				</div>
 
 				<div className="md:col-span-2">
-					<label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Team leader</label>
+					<label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Team captain</label>
 					<select
 						value={form.captainId}
 						onChange={(event) => setForm((prev) => ({ ...prev, captainId: event.target.value }))}
 						className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-500"
 					>
-						<option value="">No leader assigned</option>
+						<option value="">No captain assigned</option>
 						{allRegisteredMembers.map((member) => (
 							<option key={member.id} value={member.id}>
 								{member.name} {member.email ? `(${member.email})` : ''}
@@ -251,14 +258,13 @@ function TeamMembersModal({
 	return (
 		<ModalFrame
 			title={`Manage Members - ${team.name}`}
-			subtitle="View members, add/remove paddlers, or move members between teams."
+			subtitle="Add and remove paddlers, or move members between teams."
 			onClose={onClose}
 			maxWidth="max-w-5xl"
 		>
 			<div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
 				<div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
 					<h4 className="text-sm font-semibold text-slate-900">Current team members</h4>
-					<p className="mt-1 text-xs text-slate-500">Leader can also be updated in Manage Team mode.</p>
 
 					<div className="mt-3 space-y-2">
 						{team.members.length === 0 ? (
@@ -387,11 +393,20 @@ export default function AdminTeams() {
 	const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
 	const [deleteTeam, setDeleteTeam] = useState(null)
 
+	const [confirmRemoveMemberOpen, setConfirmRemoveMemberOpen] = useState(false)
+	const [memberToRemove, setMemberToRemove] = useState(null)
+
 	const [membersModalOpen, setMembersModalOpen] = useState(false)
 	const [membersTeam, setMembersTeam] = useState(null)
 	const [selectedAddMemberId, setSelectedAddMemberId] = useState('')
 	const [targetTeamId, setTargetTeamId] = useState('')
 	const [moveWithDonations, setMoveWithDonations] = useState(true)
+
+	const unassignedCaptain = {
+		id: '',
+		name: 'Unassigned captain',
+		email: ''
+	}
 
 	const requestWithToken = async (url, method = 'GET', body) => {
 		const token = await getAccessTokenSilently()
@@ -474,9 +489,7 @@ export default function AdminTeams() {
 		return teams.filter((team) => {
 			if (!needle) return true
 			return (
-				team.name.toLowerCase().includes(needle) ||
-				team.description.toLowerCase().includes(needle) ||
-				(team.captain?.name || '').toLowerCase().includes(needle)
+				team.name.toLowerCase().includes(needle)
 			)
 		})
 	}, [teams, search])
@@ -595,6 +608,18 @@ export default function AdminTeams() {
 		}
 	}
 
+	const openRemoveMemberConfirm = (member) => {
+    	setMemberToRemove(member)
+    	setConfirmRemoveMemberOpen(true)
+	}
+
+	const confirmRemoveMember = async () => {
+    	if (!memberToRemove) return
+    	await removeMemberFromTeam(memberToRemove)
+    	setConfirmRemoveMemberOpen(false)
+    	setMemberToRemove(null)
+	}
+
 	const removeMemberFromTeam = async (member) => {
 		if (!membersTeam?.id || !member?.id) return
 
@@ -654,18 +679,11 @@ export default function AdminTeams() {
 				<div>
 					<h2 className="text-2xl font-bold text-slate-900">Teams</h2>
 					<p className="text-sm text-slate-500">
-						Manage teams, leaders, and registered member assignments.
+						Manage teams, captains, and registered member assignments.
 					</p>
 				</div>
 
 				<div className="flex flex-wrap gap-2">
-					<button
-						type="button"
-						onClick={bootstrap}
-						className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-					>
-						Refresh
-					</button>
 					<button
 						type="button"
 						onClick={openCreateForm}
@@ -693,7 +711,7 @@ export default function AdminTeams() {
 								type="text"
 								value={search}
 								onChange={(event) => setSearch(event.target.value)}
-								placeholder="Search by name, description, or leader"
+								placeholder="Search by team name"
 								className="w-full rounded-lg border border-slate-300 py-2 pl-9 pr-3 text-sm text-slate-900 outline-none focus:border-slate-500"
 							/>
 						</div>
@@ -741,20 +759,20 @@ export default function AdminTeams() {
 											<h3 className="text-lg font-bold text-slate-900">{team.name}</h3>
 											<p className="mt-1 text-sm text-slate-600 line-clamp-3">{team.description}</p>
 										</div>
-										<span className="inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
-											{team.memberCount} member{team.memberCount === 1 ? '' : 's'}
+										<span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${getDivisionBadgeClass(team.division)}`}>
+											{team.division}
 										</span>
 									</div>
 
 									<div className="mt-4 rounded-xl border border-slate-200 bg-white p-3">
-										<p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Team leader</p>
-										<p className="mt-1 text-sm font-semibold text-slate-900">{team.captain?.name || 'Unassigned leader'}</p>
+										<p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Team captain</p>
+										<p className="mt-1 text-sm font-semibold text-slate-900">{team.captain?.name || 'Unassigned captain'}</p>
 										<p className="text-xs text-slate-500">{team.captain?.email || 'No email available'}</p>
 									</div>
 
 									<div className="mt-4 flex items-center gap-2 text-xs text-slate-500">
 										<Users className="h-3.5 w-3.5" />
-										<span>{team.members.length} loaded members in payload</span>
+										<span>{team.memberCount} members</span>
 									</div>
 									<div className="mt-1 text-xs text-slate-500">Total donations: {team.totalDonations.toLocaleString()}</div>
 
@@ -778,18 +796,6 @@ export default function AdminTeams() {
 											>
 												<UserCog className="h-3.5 w-3.5" />
 												Edit team
-											</button>
-										)}
-
-										{mode === 'members' && (
-											<button
-												type="button"
-												onClick={() => openMembersModal(team)}
-												disabled={isBusy}
-												className="inline-flex items-center gap-1.5 rounded-md bg-sky-100 px-2.5 py-1.5 text-xs font-medium text-sky-700 hover:bg-sky-200 disabled:cursor-not-allowed disabled:opacity-60"
-											>
-												<ArrowRightLeft className="h-3.5 w-3.5" />
-												Add / Remove / Move
 											</button>
 										)}
 
@@ -843,6 +849,22 @@ export default function AdminTeams() {
 				onConfirm={deleteSelectedTeam}
 			/>
 
+			<div className="relative z-[60]">
+				<ConfirmModal
+					isOpen={confirmRemoveMemberOpen}
+					title="Remove member from team"
+					body={`Remove ${memberToRemove?.name || 'this member'} from ${membersTeam?.name || 'this team'}?`}
+	    			confirmText="Remove member"
+	    			busy={busyId === membersTeam?.id}
+	    			onCancel={() => {
+	        			if (busyId) return
+	        			setConfirmRemoveMemberOpen(false)
+	        			setMemberToRemove(null)
+	    			}}
+	    			onConfirm={confirmRemoveMember}
+				/>
+			</div>
+
 			<TeamMembersModal
 				open={membersModalOpen}
 				team={membersTeam}
@@ -861,7 +883,7 @@ export default function AdminTeams() {
 					setMembersTeam(null)
 				}}
 				onAddMember={addMemberToTeam}
-				onRemoveMember={removeMemberFromTeam}
+				onRemoveMember={openRemoveMemberConfirm}
 				onMoveMember={moveMemberBetweenTeams}
 			/>
 		</section>
