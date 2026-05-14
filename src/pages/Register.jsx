@@ -14,18 +14,23 @@ export default function Register() {
     const isStudent = searchParams.get('student') === 'true'
   const { isAuthenticated, isLoading, initiateRegistrationPayment, isPaymentLoading, getAccessTokenSilently } = useAuth()
   const navigate = useNavigate()
-    const individualPrice = isStudent ? 25 : 45
-    const discountRate = 0.20
-    const discountedPerPerson = Math.round(individualPrice * (1 - discountRate))
-    const discountAmount = Math.round(individualPrice * discountRate)
+        const earlyIndividualPrice = isStudent ? 25 : 45
+        const discountRate = 0.20
     const regularIndividualPrice = isStudent ? 30 : 50
     const regularDiscountedPerPerson = Math.round(regularIndividualPrice * (1 - discountRate))
     const lateIndividualPrice = isStudent ? 35 : 55
+        const individualPrice = lateIndividualPrice
+        const discountedPerPerson = Math.round(individualPrice * (1 - discountRate))
     const lateDiscountedPerPerson = Math.round(lateIndividualPrice * (1 - discountRate))
   
   const [selectedMode, setSelectedMode] = useState(null) // 'individual' | 'group'
   const [groupSize, setGroupSize] = useState(4)
   const [emails, setEmails] = useState(Array(4).fill(''))
+    const [participantStatuses, setParticipantStatuses] = useState(() => [isStudent, false, false, false, false])
+    const totalParticipants = groupSize + 1
+    const getLateIndividualPrice = (participantIsStudent) => (participantIsStudent ? 35 : 55)
+    const getBundlePricePerPerson = (participantIsStudent) =>
+        Math.round(getLateIndividualPrice(participantIsStudent) * (1 - discountRate))
   
   // Validation State
   const [isValidating, setIsValidating] = useState(false)
@@ -52,7 +57,29 @@ export default function Register() {
       newEmails.length = additionalEmails
     }
     setEmails(newEmails)
+
+        setParticipantStatuses(prev => {
+            const nextStatuses = [...prev]
+
+            if (totalParticipants > nextStatuses.length) {
+                for (let i = nextStatuses.length; i < totalParticipants; i++) {
+                    nextStatuses.push(false)
+                }
+            } else {
+                nextStatuses.length = totalParticipants
+            }
+
+            return nextStatuses
+        })
   }
+
+    const handleParticipantStatusChange = (index, checked) => {
+        setParticipantStatuses(prev => {
+            const nextStatuses = [...prev]
+            nextStatuses[index] = checked
+            return nextStatuses
+        })
+    }
 
   const handleEmailChange = (index, value) => {
     const newEmails = [...emails]
@@ -126,13 +153,17 @@ export default function Register() {
         }
 
         // 3. Initiate Logic
-        const totalAmount = discountedPerPerson * (groupSize + 1)
+        const activeParticipantStatuses = participantStatuses.slice(0, totalParticipants)
+        const participantPrices = activeParticipantStatuses.map(getBundlePricePerPerson)
+        const totalAmount = participantPrices.reduce((sum, price) => sum + price, 0)
         initiateRegistrationPayment({
             emails: filledEmails,
             registrationType: 'bundle',
-            isStudent,
+            isStudent: activeParticipantStatuses[0] ?? isStudent,
             amount: totalAmount,
-            groupPricePer: discountedPerPerson
+            participantStatuses: activeParticipantStatuses,
+            participantPrices,
+            groupTotalParticipants: totalParticipants
         })
 
     } catch (error) {
@@ -161,7 +192,7 @@ export default function Register() {
                     Choose how you would like to register. You can register just for yourself or bundle register for your whole team.
                 </p>
                 <p className="text-sm text-slate-500 text-center mb-8">
-                    Early registration is open — Early registration deadline: <strong>March 15</strong>.
+                    Late registration is now open — Deadline: <strong>May 31</strong>.
                 </p>
 
         {/* Loading Overlay */}
@@ -175,32 +206,22 @@ export default function Register() {
         )}
 
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-            {/* Individual Card */}
+            {/* Individual - Early (disabled) */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                onClick={() => setSelectedMode('individual')}
-                className={`cursor-pointer rounded-2xl p-8 border transition-all relative overflow-hidden group ${
-                    selectedMode === 'individual' 
-                    ? 'border-[#fc87a7] bg-gradient-to-br from-white to-slate-50 shadow-xl scale-[1.02]' 
-                    : 'border-slate-200 bg-gradient-to-br from-white to-slate-50 hover:border-[#fc87a7]/30 hover:shadow-lg'
-                }`}
+                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
             >
-                {selectedMode === 'individual' && (
-                    <div className="absolute top-4 right-4 bg-[#fc87a7] text-white p-1.5 rounded-full shadow-lg">
-                        <Check className="w-4 h-4" />
-                    </div>
-                )}
-                <div className="w-16 h-16 bg-gradient-to-br from-[#fc87a7] to-[#c14a75] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-[#fc87a7]/30">
-                    <User className="w-8 h-8 text-white" />
+                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
+                    <User className="w-8 h-8 text-slate-400" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">Individual Registration<br/>(Early)</h3>
                 <p className="text-slate-500 text-sm mb-6">
-                    Register just for yourself. You will be able to join a team or create one after payment.
+                    Early registration closed on <strong>March 15</strong>.
                 </p>
                 <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent">{'$'}{individualPrice}</span>
+                    <span className="text-3xl font-bold text-slate-700">{'$'}{earlyIndividualPrice}</span>
                     <span className="text-slate-500 mb-1 font-medium">CAD</span>
                 </div>
             </motion.div>
@@ -216,36 +237,92 @@ export default function Register() {
                     <User className="w-8 h-8 text-slate-400" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration (Regular)</h3>
-                <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>March 15</strong>.</p>
+                <p className="text-slate-500 text-sm mb-6">Regular registration closed on <strong>March 31</strong>.</p>
                 <div className="flex items-end gap-1">
                     <span className="text-3xl font-bold text-slate-700">{'$'}{regularIndividualPrice}</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
             </motion.div>
 
-            {/* Individual - Late (disabled) */}
+            {/* Individual - Late */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+                onClick={() => setSelectedMode('individual')}
+                className={`cursor-pointer rounded-2xl p-8 border transition-all relative overflow-hidden group ${
+                    selectedMode === 'individual' 
+                    ? 'border-[#fc87a7] bg-gradient-to-br from-white to-slate-50 shadow-xl scale-[1.02]' 
+                    : 'border-slate-200 bg-gradient-to-br from-white to-slate-50 hover:border-[#fc87a7]/30 hover:shadow-lg'
+                }`}
             >
-                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
-                    <User className="w-8 h-8 text-slate-400" />
+                {selectedMode === 'individual' && (
+                    <div className="absolute top-4 right-4 bg-[#fc87a7] text-white p-1.5 rounded-full shadow-lg">
+                        <Check className="w-4 h-4" />
+                    </div>
+                )}
+                <div className="w-16 h-16 bg-gradient-to-br from-[#fc87a7] to-[#c14a75] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-[#fc87a7]/30">
+                    <User className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Individual Registration<br/>(Late)</h3>
-                <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>March 31</strong>.</p>
+                <p className="text-slate-500 text-sm mb-6">Late registration is now open.</p>
                 <div className="flex items-end gap-1">
-                    <span className="text-3xl font-bold text-slate-700">{'$'}{lateIndividualPrice}</span>
+                    <span className="text-3xl font-bold bg-gradient-to-r from-[#fc87a7] to-[#c14a75] bg-clip-text text-transparent">{'$'}{lateIndividualPrice}</span>
                     <span className="text-slate-500 mb-1">CAD</span>
                 </div>
             </motion.div>
 
-            {/* Group Card */}
+            {/* Group - Early (disabled) */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
+                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            >
+                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
+                    <Users className="w-8 h-8 text-slate-400" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Group Registration (Early)</h3>
+                <p className="text-slate-500 text-sm mb-6">
+                    Early registration closed on <strong>March 15</strong>.
+                </p>
+                <div className="flex flex-col gap-1">
+                    <div className="text-sm text-slate-400 line-through">{'$'}{earlyIndividualPrice} CAD</div>
+                    <div className="flex items-end gap-1">
+                        <span className="text-3xl font-bold text-slate-700">{'$'}{Math.round(earlyIndividualPrice * (1 - discountRate))}</span>
+                        <span className="text-slate-500 mb-1 font-medium">CAD / person</span>
+                    </div>
+                    <div className="text-xs text-slate-500">20% off</div>
+                </div>
+            </motion.div>
+
+            {/* Group - Regular (disabled) */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
+            >
+                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
+                    <Users className="w-8 h-8 text-slate-400" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Regular)</h3>
+                <p className="text-slate-500 text-sm mb-6">Regular registration closed on <strong>March 31</strong>.</p>
+                <div className="flex flex-col gap-1">
+                    <div className="text-sm text-slate-400 line-through">{'$'}{regularIndividualPrice} CAD</div>
+                    <div className="flex items-end gap-1">
+                        <span className="text-3xl font-bold text-slate-700">{'$'}{regularDiscountedPerPerson}</span>
+                        <span className="text-slate-500 mb-1">CAD / person</span>
+                    </div>
+                    <div className="text-xs text-slate-500">20% off</div>
+                </div>
+            </motion.div>
+
+            {/* Group - Late */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
                 onClick={() => setSelectedMode('group')}
                 className={`cursor-pointer rounded-2xl p-8 border transition-all relative overflow-hidden group ${
                     selectedMode === 'group' 
@@ -261,61 +338,15 @@ export default function Register() {
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/30">
                     <Users className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">Group Registration (Early)</h3>
-                <p className="text-slate-500 text-sm mb-6">
-                    Pay for multiple participants at once. Perfect to get your friends onboard at a reduced cost.
-                </p>
-                <div className="flex flex-col gap-1">
-                    <div className="text-sm text-slate-400 line-through">{'$'}{individualPrice} CAD</div>
-                    <div className="flex items-end gap-1">
-                        <span className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">{'$'}{discountedPerPerson}</span>
-                        <span className="text-slate-500 mb-1 font-medium">CAD / person</span>
-                    </div>
-                    <div className="text-xs text-blue-600 font-semibold">20% off</div>
-                </div>
-            </motion.div>
-
-            {/* Group - Regular (disabled) */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
-            >
-                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
-                    <Users className="w-8 h-8 text-slate-400" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Regular)</h3>
-                <p className="text-slate-500 text-sm mb-6">Regular registration is not open yet. Opens: <strong>March 15</strong>.</p>
-                <div className="flex flex-col gap-1">
-                    <div className="text-sm text-slate-400 line-through">{'$'}{regularIndividualPrice} CAD</div>
-                    <div className="flex items-end gap-1">
-                        <span className="text-3xl font-bold text-slate-700">{'$'}{regularDiscountedPerPerson}</span>
-                        <span className="text-slate-500 mb-1">CAD / person</span>
-                    </div>
-                    <div className="text-xs text-slate-500">20% off</div>
-                </div>
-            </motion.div>
-
-            {/* Group - Late (disabled) */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className={`rounded-2xl p-8 border transition-all relative overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-slate-400 pointer-events-none opacity-80`}
-            >
-                <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-6">
-                    <Users className="w-8 h-8 text-slate-400" />
-                </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-2">Group Registration (Late)</h3>
-                <p className="text-slate-500 text-sm mb-6">Late registration is not open yet. Opens: <strong>March 31</strong>.</p>
+                <p className="text-slate-500 text-sm mb-6">Late registration is now open.</p>
                 <div className="flex flex-col gap-1">
                     <div className="text-sm text-slate-400 line-through">{'$'}{lateIndividualPrice} CAD</div>
                     <div className="flex items-end gap-1">
-                        <span className="text-3xl font-bold text-slate-700">{'$'}{lateDiscountedPerPerson}</span>
+                        <span className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">{'$'}{lateDiscountedPerPerson}</span>
                         <span className="text-slate-500 mb-1">CAD / person</span>
                     </div>
-                    <div className="text-xs text-slate-500">20% off</div>
+                    <div className="text-xs text-blue-600 font-semibold">20% off</div>
                 </div>
             </motion.div>
         </div>
@@ -368,20 +399,47 @@ export default function Register() {
 
                         <div className="space-y-4 mb-8">
                             <label className="block text-sm font-medium text-slate-700">
-                                Participant Emails
+                                Participant Details
                             </label>
-                            {emails.map((email, index) => (
-                                <div key={index} className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                    <Input 
-                                        type="email" 
-                                        placeholder={`Paddler ${index + 1} Email`}
-                                        value={email}
-                                        onChange={(e) => handleEmailChange(index, e.target.value)}
-                                        className={`pl-9 focus:ring-2 focus:ring-blue-500 ${invalidEmails.includes(email) ? 'border-red-300 bg-red-50' : ''}`}
-                                    />
-                                </div>
-                            ))}
+                            {emails.map((email, index) => {
+                                const participantNumber = index + 2
+                                const participantIsStudent = participantStatuses[index + 1] ?? false
+                                const participantPrice = getBundlePricePerPerson(participantIsStudent)
+
+                                return (
+                                    <div key={index} className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div>
+                                                <p className="text-sm font-semibold text-slate-800">
+                                                    Paddler {participantNumber}
+                                                </p>
+                                                <p className="text-xs text-slate-500">
+                                                    {participantIsStudent ? 'Student rate' : 'Non-student rate'} · {'$'}{participantPrice} CAD
+                                                </p>
+                                            </div>
+                                            <label className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 select-none">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={participantIsStudent}
+                                                    onChange={(e) => handleParticipantStatusChange(index + 1, e.target.checked)}
+                                                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                                />
+                                                Student
+                                            </label>
+                                        </div>
+                                        <div className="relative">
+                                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                            <Input 
+                                                type="email" 
+                                                placeholder={`Paddler ${participantNumber} Email`}
+                                                value={email}
+                                                onChange={(e) => handleEmailChange(index, e.target.value)}
+                                                className={`pl-9 focus:ring-2 focus:ring-blue-500 ${invalidEmails.includes(email) ? 'border-red-300 bg-red-50' : ''}`}
+                                            />
+                                        </div>
+                                    </div>
+                                )
+                            })}
                         </div>
 
                         <div className="mb-6 p-3 rounded-lg border border-blue-100 bg-blue-50/50 text-sm text-blue-700">
@@ -407,7 +465,7 @@ export default function Register() {
                             <div className="flex justify-between items-center p-4 bg-gradient-to-r from-slate-50 to-blue-50/30 rounded-xl border border-slate-200">
                                 <span className="text-slate-600 font-semibold">Total Amount</span>
                                 <span className="text-xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
-                                    {'$'}{discountedPerPerson * (groupSize + 1)} CAD
+                                    {'$'}{participantStatuses.slice(0, totalParticipants).reduce((sum, status) => sum + getBundlePricePerPerson(status), 0)} CAD
                                 </span>
                             </div>
                             <Button 

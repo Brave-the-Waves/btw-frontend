@@ -292,9 +292,14 @@ export default function AuthProvider({ children }) {
         url = `${API_BASE_URL}/api/create-bundle-registration-checkout`
         const emails = additionalData.emails || []
         const participants = 1 + (emails.length || 0)
-        // Prefer an explicit group price per person if provided, otherwise use student pricing when flagged.
+        // Prefer an explicit bundle amount, otherwise sum per-participant prices when provided.
+        const participantPrices = Array.isArray(additionalData.participantPrices) ? additionalData.participantPrices : []
         const perPerson = additionalData.groupPricePer ?? (additionalData.isStudent ? 15 : 20)
-        const bundleAmount = additionalData.amount ?? (perPerson * participants)
+        const bundleAmount =
+          additionalData.amount ??
+          (participantPrices.length > 0
+            ? participantPrices.reduce((sum, price) => sum + Number(price || 0), 0)
+            : perPerson * participants)
         body = {
           bundleEmails: emails,
           amount: bundleAmount,
