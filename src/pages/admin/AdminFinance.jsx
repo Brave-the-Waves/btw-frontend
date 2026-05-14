@@ -158,7 +158,9 @@ function normalizeReceipts(payload) {
 			donor: item?.donorName || getPersonName(donor),
 			amount: parseAmount(item?.amount),
 			issuedDate: item?.issuedDate || item?.createdAt || null,
-			status: normalizeReceiptStatus(item)
+			status: normalizeReceiptStatus(item),
+			donorPhone: item?.donorPhone || 'N/A',
+			donorAddress: item?.donorAddress || 'N/A'
 		}
 	})
 }
@@ -194,6 +196,7 @@ export default function AdminFinance() {
 	const [registrations, setRegistrations] = useState([])
 	const [donations, setDonations] = useState([])
 	const [receipts, setReceipts] = useState([])
+	const [expandedReceiptId, setExpandedReceiptId] = useState(null)
 
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState('')
@@ -561,11 +564,12 @@ export default function AdminFinance() {
 						<p className="text-xs uppercase tracking-wide text-slate-500">Tax receipt count</p>
 						<p className="mt-2 text-2xl font-bold text-slate-900">{receiptTotals.count.toLocaleString()}</p>
 					</div>
-
+			
 					<div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
 						<table className="min-w-full text-sm">
 							<thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
 								<tr>
+									<th className="w-8 px-4 py-3"></th>
 									<th className="px-4 py-3">Receipt Number</th>
 									<th className="px-4 py-3">Donor</th>
 									<th className="px-4 py-3">Amount</th>
@@ -576,21 +580,47 @@ export default function AdminFinance() {
 							<tbody className="divide-y divide-slate-100">
 								{loading ? (
 									<tr>
-										<td colSpan={5} className="px-4 py-6 text-center text-slate-500">Loading tax receipts...</td>
+										<td colSpan={6} className="px-4 py-6 text-center text-slate-500">Loading tax receipts...</td>
 									</tr>
 								) : filteredReceipts.length === 0 ? (
 									<tr>
-										<td colSpan={5} className="px-4 py-6 text-center text-slate-500">No tax receipts found.</td>
+										<td colSpan={6} className="px-4 py-6 text-center text-slate-500">No tax receipts found.</td>
 									</tr>
 								) : (
 									filteredReceipts.map((row) => (
-										<tr key={row.id} className="text-slate-700">
-											<td className="px-4 py-3 font-medium text-slate-900">{row.receiptNumber}</td>
-											<td className="px-4 py-3">{row.donor}</td>
-											<td className="px-4 py-3">{currencyFormatter.format(row.amount)}</td>
-											<td className="px-4 py-3">{formatDate(row.issuedDate)}</td>
-											<td className="px-4 py-3"><StatusBadge value={row.status} /></td>
-										</tr>
+										<React.Fragment key={row.id}>
+											<tr 
+												onClick={() => setExpandedReceiptId(expandedReceiptId === row.id ? null : row.id)}
+												className="cursor-pointer hover:bg-slate-50 text-slate-700"
+											>
+												<td className="px-4 py-3 text-center">
+													<span className="text-slate-400">
+														{expandedReceiptId === row.id ? '▼' : '▶'}
+													</span>
+												</td>
+												<td className="px-4 py-3 font-medium text-slate-900">{row.receiptNumber}</td>
+												<td className="px-4 py-3">{row.donor}</td>
+												<td className="px-4 py-3">{currencyFormatter.format(row.amount)}</td>
+												<td className="px-4 py-3">{formatDate(row.issuedDate)}</td>
+												<td className="px-4 py-3"><StatusBadge value={row.status} /></td>
+											</tr>
+											{expandedReceiptId === row.id && (
+												<tr className="bg-slate-50">
+													<td colSpan={6} className="px-4 py-4">
+														<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+															<div>
+																<p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">Phone</p>
+																<p className="mt-1 text-sm text-slate-900">{row.donorPhone}</p>
+															</div>
+															<div className="md:col-span-2">
+																<p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">Address</p>
+																<p className="mt-1 text-sm text-slate-900">{row.donorAddress}</p>
+															</div>
+														</div>
+													</td>
+												</tr>
+											)}
+										</React.Fragment>
 									))
 								)}
 							</tbody>
