@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Button from './ui/button'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { Menu, X, User, Waves, Heart, ChevronDown, LogOut } from 'lucide-react'
+import { Menu, X, User, Waves, Heart, ChevronDown, LogOut, LayoutDashboard } from 'lucide-react'
 
 const homeSections = [
   { label: 'Home', href: 'home' },
@@ -24,6 +24,11 @@ export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth()
 
   const [isEventsDropdownOpen, setIsEventsDropdownOpen] = useState(false)
+
+  useEffect(() => {
+    console.log('User object in Navbar:', user)
+    if (user) console.log('isAdmin:', user?.isAdmin, 'permissions:', user?.permissions)
+  }, [user])
 
   const events = [
     { label: 'Brave The Waves 2026', href: '/event/BraveTheWaves2026' },
@@ -245,6 +250,19 @@ export default function Navbar() {
             <div className="hidden xl:flex items-center gap-3 ml-6">
               {isAuthenticated ? (
                 <div className="flex items-center gap-3">
+                  {user?.isAdmin && !location.pathname.startsWith('/admin') && (
+                    <button 
+                      onClick={() => navigate('/admin/dashboard')}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-all cursor-pointer ${
+                        isScrolled 
+                          ? 'text-slate-600 hover:text-white hover:bg-[#fc87a7]' 
+                          : 'text-white hover:bg-white/20'
+                      }`}
+                      title="Go to admin dashboard"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                    </button>
+                  )}
                   <button onClick={() => navigate('/profile')} className={`flex items-center gap-2 text-sm font-medium cursor-pointer ${isScrolled ? 'text-slate-700 hover:text-[#fc87a7]' : 'text-white hover:text-[#fc87a7]/80'}`}>
                     {user.picture ? (
                       <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full border border-slate-200" />
@@ -364,6 +382,12 @@ export default function Navbar() {
                 <div className="mt-8 space-y-3">
                   {isAuthenticated ? (
                     <>
+                      {user?.isAdmin && !location.pathname.startsWith('/admin') && (
+                        <button onClick={() => { navigate('/admin/dashboard'); setIsOpen(false); }} className="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium text-slate-700 hover:bg-slate-100 cursor-pointer">
+                          <LayoutDashboard className="w-5 h-5" />
+                          Admin Panel
+                        </button>
+                      )}
                       <button onClick={() => { navigate('/profile'); setIsOpen(false); }} className="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium text-slate-700 hover:bg-slate-100 cursor-pointer">
                         {user.picture ? (
                           <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full" />

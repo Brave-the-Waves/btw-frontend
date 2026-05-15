@@ -23,6 +23,12 @@ import CorporateRegister from './pages/CorporateRegister'
 import Crew from './pages/Crew'
 import Event from './pages/Event'
 import WaiverReminderBanner from './components/users/WaiverReminderBanner'
+import ProtectedAdminRoute from './components/ProtectedAdminRoute'
+import AdminLayout from './components/AdminLayout'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminMembers from './pages/admin/AdminMembers'
+import AdminTeams from './pages/admin/AdminTeams'
+import AdminFinance from './pages/admin/AdminFinance'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -59,6 +65,12 @@ export default function App() {
         <Route path="/profile/:id" element={<ParticipantProfile />} />
         <Route path="/registration=success" element={<RegistrationSuccess />} />
         <Route path="/registration=cancel" element={<RegistrationCancel />} />
+        <Route path="/admin" element={<ProtectedAdminRoute><AdminLayout /></ProtectedAdminRoute>}>
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="members" element={<AdminMembers />} />
+          <Route path="teams" element={<AdminTeams />} />
+          <Route path="finance" element={<AdminFinance />} />
+        </Route>
       </Routes>
     </Router>
   )
