@@ -447,6 +447,7 @@ export default function Profile() {
       {showWaiverOverlay && userId && (
         <WaiverOverlay
           userId={userId}
+          firebaseUid={user?.uid}
           getToken={getAccessTokenSilently}
           userEmail={formData.email}
           onClose={() => setShowWaiverOverlay(false)}

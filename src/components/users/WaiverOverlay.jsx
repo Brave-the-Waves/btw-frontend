@@ -93,7 +93,7 @@ function computeAge(dateOfBirth) {
 // Component
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function WaiverOverlay({ userId, getToken, userEmail, onClose, onSigned }) {
+export default function WaiverOverlay({ userId, firebaseUid, getToken, userEmail, onClose, onSigned }) {
   const [step, setStep] = useState(1)
   const [statusLoading, setStatusLoading] = useState(true)
   const [waiverStatus, setWaiverStatus] = useState(null)
@@ -251,7 +251,8 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
     try {
       // 1. Upload participant signature
       const partSigData = participantSigRef.current.toDataURL('image/png')
-      const partStorageRef = ref(storage, `waivers/${userId}/signature.png`)
+      const storageId = firebaseUid || userId
+      const partStorageRef = ref(storage, `waivers/${storageId}/signature.png`)
       await uploadString(partStorageRef, partSigData, 'data_url')
       const signatureUrl = await getDownloadURL(partStorageRef)
 
@@ -259,7 +260,7 @@ export default function WaiverOverlay({ userId, getToken, userEmail, onClose, on
       let parentGuardianSignatureUrl = null
       if (isMinor) {
         const guardSigData = guardianSigRef.current.toDataURL('image/png')
-        const guardStorageRef = ref(storage, `waivers/${userId}/parent-signature.png`)
+        const guardStorageRef = ref(storage, `waivers/${storageId}/parent-signature.png`)
         await uploadString(guardStorageRef, guardSigData, 'data_url')
         parentGuardianSignatureUrl = await getDownloadURL(guardStorageRef)
       }
