@@ -23,7 +23,7 @@ const values = [
 
 export default function About() {
   return (
-    <section id="about" className="py-24 md:py-32 bg-white">
+    <section id="about" className="pt-8 pb-24 md:pt-12 md:pb-32 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <AboutHero />
 
