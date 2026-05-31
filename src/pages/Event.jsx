@@ -5,6 +5,7 @@ import EventDetails from '@/components/home/EventInfo/EventDetails'
 import Schedule from '@/components/home/EventInfo/Schedule'
 import Activities from '@/components/home/EventInfo/Activities'
 import LocationMap from '@/components/home/EventInfo/LocationMap'
+import DonationProgress from '@/components/home/Donate/DonationProgress'
 import Donate from '@/components/home/Donate/index'
 import { useAuth } from '../contexts/AuthContext'
 import { Users, ImagePlus, Heart, CheckCircle2, Building2, Sailboat, Info, Mail } from 'lucide-react'
@@ -128,8 +129,13 @@ export default function Event() {
         </div>
       </section>
 
+      {/* ── Donation Tracker ── */}
+      <div className="pt-12 bg-white">
+        <DonationProgress />
+      </div>
+
       {/* ── Event Details (date / time / location cards) ── */}
-      <section className="py-12 bg-white">
+      <section className="pt-8 pb-12 md:pt-12 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <EventDetails />
         </div>

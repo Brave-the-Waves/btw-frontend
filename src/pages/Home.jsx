@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/home/Hero'
+import DonationProgress from '@/components/home/Donate/DonationProgress'
 import About from '@/components/home/About/index'
 import PastEvents from '@/components/home/PastEvents/index'
 import Donate from '@/components/home/Donate/index'
@@ -29,6 +30,9 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <Navbar />  
       <Hero />
+      <div className="pt-12 bg-white">
+        <DonationProgress />
+      </div>
       <About />
       <Donate preFillDonationId={donationId} preFillName={userName} />
       <PastEvents />
@@ -37,3 +41,4 @@ export default function Home() {
     </div>
   )
 }
+
