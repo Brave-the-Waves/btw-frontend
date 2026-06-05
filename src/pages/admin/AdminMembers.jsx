@@ -320,6 +320,7 @@ export default function AdminMembers() {
 	const [search, setSearch] = useState('')
 	const [statusFilter, setStatusFilter] = useState('all')
 	const [busyActionId, setBusyActionId] = useState('')
+	const [sortConfig, setSortConfig] = useState({ field: 'name', direction: 'asc' })
 
 	const [confirmState, setConfirmState] = useState({
 		open: false,
@@ -391,6 +392,86 @@ export default function AdminMembers() {
 			return statusOk && searchOk
 		})
 	}, [members, search, statusFilter])
+
+	const handleSort = (field) => {
+		setSortConfig(prevConfig => ({
+			field,
+			direction: prevConfig.field === field && prevConfig.direction === 'asc' ? 'desc' : 'asc'
+		}))
+	}
+
+	const sortedMembers = useMemo(() => {
+		const sorted = [...filteredMembers].sort((a, b) => {
+			let aVal, bVal
+			let isNumeric = false
+
+			switch (sortConfig.field) {
+				case 'name':
+					aVal = (a?.name || '').toLowerCase()
+					bVal = (b?.name || '').toLowerCase()
+					break
+				case 'email':
+					aVal = (a?.email || '').toLowerCase()
+					bVal = (b?.email || '').toLowerCase()
+					break
+				case 'team':
+					aVal = getTeamName(a).toLowerCase()
+					bVal = getTeamName(b).toLowerCase()
+					break
+				case 'amountRaised':
+					aVal = Number(a?.amountRaised || 0)
+					bVal = Number(b?.amountRaised || 0)
+					isNumeric = true
+					break
+				case 'status':
+					aVal = registrationStatus(a)
+					bVal = registrationStatus(b)
+					break
+				case 'waiver':
+					aVal = a?.hasSignedWaiver ? 'signed' : 'not-signed'
+					bVal = b?.hasSignedWaiver ? 'signed' : 'not-signed'
+					break
+				default:
+					return 0
+			}
+
+			if (isNumeric) {
+				return sortConfig.direction === 'asc' ? aVal - bVal : bVal - aVal
+			}
+
+			if (sortConfig.field === 'status') {
+				if (sortConfig.direction === 'asc') {
+					if (aVal === 'registered' && bVal !== 'registered') return -1
+					if (aVal !== 'registered' && bVal === 'registered') return 1
+					return 0
+				} else {
+					if (aVal === 'registered' && bVal !== 'registered') return 1
+					if (aVal !== 'registered' && bVal === 'registered') return -1
+					return 0
+				}
+			}
+
+			if (sortConfig.field === 'waiver') {
+				if (sortConfig.direction === 'asc') {
+					if (aVal === 'signed' && bVal !== 'signed') return -1
+					if (aVal !== 'signed' && bVal === 'signed') return 1
+					return 0
+				} else {
+					if (aVal === 'signed' && bVal !== 'signed') return 1
+					if (aVal !== 'signed' && bVal === 'signed') return -1
+					return 0
+				}
+			}
+
+			if (sortConfig.direction === 'asc') {
+				return aVal < bVal ? -1 : aVal > bVal ? 1 : 0
+			} else {
+				return aVal > bVal ? -1 : aVal < bVal ? 1 : 0
+			}
+		})
+
+		return sorted
+	}, [filteredMembers, sortConfig])
 
 	const openConfirm = (type, member) => {
 		setConfirmState({ open: true, type, member })
@@ -589,22 +670,52 @@ export default function AdminMembers() {
 					<table className="min-w-full border-separate border-spacing-0">
 						<thead>
 							<tr>
-								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
-								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Email</th>
-								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Team</th>
-								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Amount raised</th>
-								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Status</th>
-								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Waiver</th>
+								<th 
+									onClick={() => handleSort('name')}
+									className="cursor-pointer border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 hover:bg-slate-50 select-none"
+								>
+									Name {sortConfig.field === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th 
+									onClick={() => handleSort('email')}
+									className="cursor-pointer border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 hover:bg-slate-50 select-none"
+								>
+									Email {sortConfig.field === 'email' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th 
+									onClick={() => handleSort('team')}
+									className="cursor-pointer border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 hover:bg-slate-50 select-none"
+								>
+									Team {sortConfig.field === 'team' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th 
+									onClick={() => handleSort('amountRaised')}
+									className="cursor-pointer border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 hover:bg-slate-50 select-none"
+								>
+									Amount raised {sortConfig.field === 'amountRaised' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th 
+									onClick={() => handleSort('status')}
+									className="cursor-pointer border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 hover:bg-slate-50 select-none"
+								>
+									Status {sortConfig.field === 'status' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th 
+									onClick={() => handleSort('waiver')}
+									className="cursor-pointer border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 hover:bg-slate-50 select-none"
+								>
+									Waiver {sortConfig.field === 'waiver' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+								</th>
 								<th className="border-b border-slate-200 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
-							{filteredMembers.length === 0 ? (
+							{sortedMembers.length === 0 ? (
 								<tr>
 									<td colSpan={7} className="px-3 py-8 text-center text-sm text-slate-500">No members match your filters.</td>
 								</tr>
 							) : (
-								filteredMembers.map((member) => {
+								sortedMembers.map((member) => {
 									const id = memberId(member)
 									const registered = member?.isRegistered
 									const hasWaiver = member?.hasSignedWaiver
