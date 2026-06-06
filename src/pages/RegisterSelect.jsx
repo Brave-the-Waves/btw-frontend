@@ -8,6 +8,7 @@ import { Sailboat, Building2, Users } from 'lucide-react'
 
 export default function RegisterSelect() {
   const navigate = useNavigate()
+  const communityNonStudentClosed = true
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#fc87a7]/5">
@@ -34,6 +35,9 @@ export default function RegisterSelect() {
                 <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wide mb-1">Community</p>
                 <h3 className="text-lg font-bold text-slate-900">Community Division</h3>
               </div>
+              <div className="inline-flex items-center self-start rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 border border-slate-200">
+                Registration is over
+              </div>
             <p className="text-slate-500 text-sm mb-6">
             The Community Division is open to everyone and brings together friends, students, families and community groups who want to paddle for a meaningful cause. No experience required!<br/><br/>
             </p>
@@ -47,14 +51,15 @@ export default function RegisterSelect() {
                 </button>
 
                 <button
-                  onClick={() => navigate('/register/details?student=false')}
-                  className="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 py-3 rounded-lg border border-emerald-200 font-medium transition-all hover:shadow-sm cursor-pointer"
+                  disabled={communityNonStudentClosed}
+                  onClick={() => !communityNonStudentClosed && navigate('/register/details?student=false')}
+                  className="w-full bg-emerald-50 text-emerald-700 py-3 rounded-lg border border-emerald-200 font-medium transition-all cursor-not-allowed opacity-50"
                 >
                   I am not a student
                 </button>
 
                 <p className="text-xs text-slate-500 mt-2">
-                  Proof of student status will be required during the event.
+                  Registration for the Community Division is now closed.
                 </p>
               </div>
             </motion.div>
