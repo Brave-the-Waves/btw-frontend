@@ -650,7 +650,7 @@ export default function AdminTeams() {
 		try {
 			await requestWithToken(`${API_BASE_URL}/api/admin/teams/${membersTeam.id}/members`, 'PATCH', {
 				action: 'move',
-				memberId: member.id,
+				memberIds: [member.id],
 				targetTeamId,
 				moveDonations: moveWithDonations
 			})
