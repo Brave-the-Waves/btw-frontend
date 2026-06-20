@@ -205,12 +205,23 @@ export default function AdminFinance() {
 	const [donationsLoaded, setDonationsLoaded] = useState(false)
 	const [receiptsLoaded, setReceiptsLoaded] = useState(false)
 
-	const requestWithToken = async (path) => {
+	const [showCashModal, setShowCashModal] = useState(false)
+	const [cashAmount, setCashAmount] = useState('')
+	const [cashDonorName, setCashDonorName] = useState('')
+	const [cashDonationId, setCashDonationId] = useState('')
+	const [cashMessage, setCashMessage] = useState('')
+	const [cashSubmitting, setCashSubmitting] = useState(false)
+	const [cashError, setCashError] = useState('')
+	const [successMsg, setSuccessMsg] = useState('')
+
+	const requestWithToken = async (path, options = {}) => {
 		const token = await getAccessTokenSilently()
 		const res = await fetch(`${API_BASE_URL}${path}`, {
+			...options,
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token}`
+				Authorization: `Bearer ${token}`,
+				...options.headers
 			}
 		})
 
@@ -271,6 +282,40 @@ export default function AdminFinance() {
 			setReceipts([])
 		} finally {
 			setLoading(false)
+		}
+	}
+
+	const handleCashSubmit = async (e) => {
+		e.preventDefault()
+		setCashError('')
+		setCashSubmitting(true)
+		try {
+			const body = {
+				amount: Number(cashAmount),
+				donorName: cashDonorName,
+				donationId: cashDonationId,
+				message: cashMessage
+			}
+
+			await requestWithToken('/api/admin/finance/donations/cash', {
+				method: 'POST',
+				body: JSON.stringify(body)
+			})
+
+			// Refresh donations list and close modal
+			setShowCashModal(false)
+			setCashAmount('')
+			setCashDonorName('')
+			setCashDonationId('')
+			setCashMessage('')
+			fetchDonations(true)
+			setSuccessMsg('Cash donation recorded successfully!')
+			setTimeout(() => setSuccessMsg(''), 5000)
+		} catch (err) {
+			console.error('Submit cash donation error:', err)
+			setCashError(err?.message || 'Failed to submit cash donation')
+		} finally {
+			setCashSubmitting(false)
 		}
 	}
 
@@ -454,6 +499,10 @@ export default function AdminFinance() {
 				<div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>
 			) : null}
 
+			{successMsg ? (
+				<div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{successMsg}</div>
+			) : null}
+
 			{activeTab === 'registrations' ? (
 				<>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -508,14 +557,24 @@ export default function AdminFinance() {
 
 			{activeTab === 'donations' ? (
 				<>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div className="rounded-2xl border border-slate-200 bg-white p-4">
-							<p className="text-xs uppercase tracking-wide text-slate-500">Total donation amount</p>
-							<p className="mt-2 text-2xl font-bold text-slate-900">{currencyFormatter.format(donationTotals.totalAmount)}</p>
+					<div className="flex items-center justify-between mb-4">
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-2 flex-grow">
+							<div className="rounded-2xl border border-slate-200 bg-white p-4">
+								<p className="text-xs uppercase tracking-wide text-slate-500">Total donation amount</p>
+								<p className="mt-2 text-2xl font-bold text-slate-900">{currencyFormatter.format(donationTotals.totalAmount)}</p>
+							</div>
+							<div className="rounded-2xl border border-slate-200 bg-white p-4">
+								<p className="text-xs uppercase tracking-wide text-slate-500">Donation count</p>
+								<p className="mt-2 text-2xl font-bold text-slate-900">{donationTotals.count.toLocaleString()}</p>
+							</div>
 						</div>
-						<div className="rounded-2xl border border-slate-200 bg-white p-4">
-							<p className="text-xs uppercase tracking-wide text-slate-500">Donation count</p>
-							<p className="mt-2 text-2xl font-bold text-slate-900">{donationTotals.count.toLocaleString()}</p>
+						<div className="ml-4">
+							<button
+								onClick={() => setShowCashModal(true)}
+								className="rounded-xl bg-[#fc87a7] px-4 py-2 font-semibold text-white hover:bg-[#e67595] transition-colors"
+							>
+								+ Cash Donation
+							</button>
 						</div>
 					</div>
 
@@ -628,6 +687,86 @@ export default function AdminFinance() {
 					</div>
 				</>
 			) : null}
+
+			{showCashModal && (
+				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+					<div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+						<h3 className="text-lg font-bold text-slate-900">Add Cash Donation</h3>
+						<p className="mt-1 text-sm text-slate-500">Record an offline cash donation. This instantly updates the paddler's totals.</p>
+						
+						{cashError && (
+							<div className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+								{cashError}
+							</div>
+						)}
+
+						<form onSubmit={handleCashSubmit} className="mt-4 space-y-4">
+							<div>
+								<label className="mb-1 block text-sm font-semibold text-slate-700">Amount (CAD) <span className="text-rose-500">*</span></label>
+								<input
+									type="number"
+									required
+									min="1"
+									step="0.01"
+									value={cashAmount}
+									onChange={(e) => setCashAmount(e.target.value)}
+									className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-500"
+									placeholder="50.00"
+								/>
+							</div>
+							<div>
+								<label className="mb-1 block text-sm font-semibold text-slate-700">Donor Name</label>
+								<input
+									type="text"
+									value={cashDonorName}
+									onChange={(e) => setCashDonorName(e.target.value)}
+									className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-500"
+									placeholder="John Doe"
+								/>
+							</div>
+							<div>
+								<label className="mb-1 block text-sm font-semibold text-slate-700">Paddler Donation ID</label>
+								<input
+									type="text"
+									value={cashDonationId}
+									onChange={(e) => setCashDonationId(e.target.value)}
+									className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-500"
+									placeholder="e.g. AbCdEf"
+								/>
+								<p className="mt-1 text-xs text-slate-500">Find this ID on the public donation page if attributing to a specific paddler.</p>
+							</div>
+							<div>
+								<label className="mb-1 block text-sm font-semibold text-slate-700">Message / Notes</label>
+								<textarea
+									value={cashMessage}
+									onChange={(e) => setCashMessage(e.target.value)}
+									className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-500"
+									placeholder="Cash dropped off at the desk"
+									rows="2"
+								/>
+							</div>
+
+							<div className="mt-6 flex justify-end gap-3">
+								<button
+									type="button"
+									onClick={() => setShowCashModal(false)}
+									className="rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100"
+									disabled={cashSubmitting}
+								>
+									Cancel
+								</button>
+								<button
+									type="submit"
+									className="rounded-lg bg-[#fc87a7] px-4 py-2 text-sm font-semibold text-white hover:bg-[#e67595] disabled:opacity-50"
+									disabled={cashSubmitting}
+								>
+									{cashSubmitting ? 'Recording...' : 'Record Cash Donation'}
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			)}
 		</section>
 	)
 }
