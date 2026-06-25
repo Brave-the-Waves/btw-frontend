@@ -193,6 +193,8 @@ export default function AdminFinance() {
 	const [donationStatusFilter, setDonationStatusFilter] = useState('all')
 	const [receiptStatusFilter, setReceiptStatusFilter] = useState('all')
 
+	const [nameSearch, setNameSearch] = useState('')
+
 	const [registrations, setRegistrations] = useState([])
 	const [donations, setDonations] = useState([])
 	const [receipts, setReceipts] = useState([])
@@ -320,34 +322,41 @@ export default function AdminFinance() {
 	}
 
 	useEffect(() => {
+		setNameSearch('')
 		if (activeTab === 'registrations') fetchRegistrations()
 		if (activeTab === 'donations') fetchDonations()
 		if (activeTab === 'receipts') fetchReceipts()
 	}, [activeTab])
 
 	const filteredRegistrations = useMemo(() => {
+		const q = nameSearch.trim().toLowerCase()
 		return registrations.filter((row) => {
 			const dateOk = dateWithinRange(row.registrationDate, fromDate, toDate)
 			const statusOk = registrationStatusFilter === 'all' || row.status === registrationStatusFilter
-			return dateOk && statusOk
+			const nameOk = !q || row.name.toLowerCase().includes(q)
+			return dateOk && statusOk && nameOk
 		})
-	}, [registrations, fromDate, toDate, registrationStatusFilter])
+	}, [registrations, fromDate, toDate, registrationStatusFilter, nameSearch])
 
 	const filteredDonations = useMemo(() => {
+		const q = nameSearch.trim().toLowerCase()
 		return donations.filter((row) => {
 			const dateOk = dateWithinRange(row.donationDate, fromDate, toDate)
 			const statusOk = donationStatusFilter === 'all' || row.status === donationStatusFilter
-			return dateOk && statusOk
+			const nameOk = !q || row.paddler.toLowerCase().includes(q)
+			return dateOk && statusOk && nameOk
 		})
-	}, [donations, fromDate, toDate, donationStatusFilter])
+	}, [donations, fromDate, toDate, donationStatusFilter, nameSearch])
 
 	const filteredReceipts = useMemo(() => {
+		const q = nameSearch.trim().toLowerCase()
 		return receipts.filter((row) => {
 			const dateOk = dateWithinRange(row.issuedDate, fromDate, toDate)
 			const statusOk = receiptStatusFilter === 'all' || row.status === receiptStatusFilter
-			return dateOk && statusOk
+			const nameOk = !q || row.donor.toLowerCase().includes(q)
+			return dateOk && statusOk && nameOk
 		})
-	}, [receipts, fromDate, toDate, receiptStatusFilter])
+	}, [receipts, fromDate, toDate, receiptStatusFilter, nameSearch])
 
 	const registrationTotals = useMemo(() => {
 		const totalAmount = filteredRegistrations.reduce((sum, row) => sum + row.amountPaid, 0)
@@ -374,6 +383,7 @@ export default function AdminFinance() {
 	const clearDateFilters = () => {
 		setFromDate('')
 		setToDate('')
+		setNameSearch('')
 	}
 
 	return (
@@ -405,7 +415,24 @@ export default function AdminFinance() {
 			</div>
 
 			<div className="rounded-2xl border border-slate-200 bg-white p-4">
-				<div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+				<div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-5">
+					<div>
+    					<label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+        					{activeTab === 'registrations' ? 'Name' : activeTab === 'donations' ? 'Paddler name' : 'Donor name'}
+    					</label>
+    					<input
+        					type="text"
+        					value={nameSearch}
+        					onChange={(e) => setNameSearch(e.target.value)}
+        					placeholder={
+            					activeTab === 'registrations' ? 'Search by name'
+            					: activeTab === 'donations' ? 'Search by paddler'
+            					: 'Search by donor'
+        					}
+        					className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-500"
+    					/>
+					</div>
+
 					<div>
 						<label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">From</label>
 						<input
