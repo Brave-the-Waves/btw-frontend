@@ -23,6 +23,7 @@ import CorporateRegister from './pages/CorporateRegister'
 import Crew from './pages/Crew'
 import Event from './pages/Event'
 import WaiverReminderBanner from './components/users/WaiverReminderBanner'
+import PowerUpPopup from './components/home/PowerUpPopup'
 import ProtectedAdminRoute from './components/ProtectedAdminRoute'
 import AdminLayout from './components/AdminLayout'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -40,6 +41,7 @@ export default function App() {
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
+      <PowerUpPopup />
       <WaiverReminderBanner />
       <Routes>
         <Route path="/" element={<Home />} />
