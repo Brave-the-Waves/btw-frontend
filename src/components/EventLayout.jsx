@@ -3,7 +3,7 @@ import { Outlet, useParams, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/Navbar'
 import { useAuth } from '../contexts/AuthContext'
-import { Trophy, Users, UserCheck, Heart, ClipboardList, Home } from 'lucide-react'
+import { Trophy, Users, UserCheck, Heart, ClipboardList, Home, BookOpenText } from 'lucide-react'
 
 export default function EventLayout() {
   const { eventName } = useParams()
@@ -17,6 +17,7 @@ export default function EventLayout() {
   const sidebarItems = [
     { label: 'Overview', href: basePath, icon: Home, exact: true },
     { label: 'Donate', href: '#donate', icon: Heart, isScroll: true },
+    { label: 'Race Day Resources', href: `${basePath}/resources`, icon: BookOpenText },
     { label: 'Teams', href: `${basePath}/teams`, icon: Users },
     { label: 'Participants', href: `${basePath}/participants`, icon: UserCheck },
     { label: 'Leaderboard', href: `${basePath}/leaderboard`, icon: Trophy },

@@ -22,6 +22,7 @@ import RegisterSelect from './pages/RegisterSelect'
 import CorporateRegister from './pages/CorporateRegister'
 import Crew from './pages/Crew'
 import Event from './pages/Event'
+import EventResources from './pages/EventResources'
 import WaiverReminderBanner from './components/users/WaiverReminderBanner'
 import PowerUpPopup from './components/home/PowerUpPopup'
 import ProtectedAdminRoute from './components/ProtectedAdminRoute'
@@ -58,6 +59,7 @@ export default function App() {
         <Route path="/cancel" element={<Cancel />} />
         <Route path="/event/:eventName" element={<EventLayout />}>
           <Route index element={<Event />} />
+          <Route path="resources" element={<EventResources />} />
           <Route path="teams" element={<Teams />} />
           <Route path="teams/:name" element={<TeamDetails />} />
           <Route path="leaderboard" element={<Leaderboard />} />
