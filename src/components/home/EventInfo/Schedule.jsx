@@ -48,6 +48,12 @@ const schedule = [
     description: 'Food vendors and live performances',
   },
   {
+    time: '1:00 PM',
+    event: 'Raffle Closes',
+    icon: Sparkles,
+    description: 'Stay tuned for the winner announcements at the closing ceremony!',
+  },
+  {
     time: '1:15-3:00 PM',
     event: 'BLOCK 2 Races',
     icon: Trophy,
