@@ -159,6 +159,7 @@ function normalizeReceipts(payload) {
 			amount: parseAmount(item?.amount),
 			issuedDate: item?.issuedDate || item?.createdAt || null,
 			status: normalizeReceiptStatus(item),
+			donorEmail: item?.donorEmail || 'N/A',
 			donorPhone: item?.donorPhone || 'N/A',
 			donorAddress: item?.donorAddress || 'N/A'
 		}
@@ -695,10 +696,14 @@ export default function AdminFinance() {
 													<td colSpan={6} className="px-4 py-4">
 														<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 															<div>
+																<p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">Email</p>
+																<p className="mt-1 text-sm text-slate-900">{row.donorEmail}</p>
+															</div>
+															<div>
 																<p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">Phone</p>
 																<p className="mt-1 text-sm text-slate-900">{row.donorPhone}</p>
 															</div>
-															<div className="md:col-span-2">
+															<div>
 																<p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">Address</p>
 																<p className="mt-1 text-sm text-slate-900">{row.donorAddress}</p>
 															</div>
