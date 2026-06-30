@@ -37,8 +37,8 @@ const schedule = [
       { time: '10:25 AM', label: '100 m Community ABCD' },
       { time: '10:45 AM', label: '100 m Community EFGH' },
       { time: '11:00 AM', label: '500 m Sports' },
-      { time: '11:15 AM', label: '200 m Community ACEG' },
-      { time: '11:35 AM', label: '200 m Community BDFH' },
+      { time: '11:20 AM', label: '200 m Community ACEG' },
+      { time: '11:40 AM', label: '200 m Community BDFH' },
     ],
   },
   {
