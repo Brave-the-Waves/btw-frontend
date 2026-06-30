@@ -1,16 +1,22 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FileText, PlayCircle, Waves, CalendarDays } from 'lucide-react'
+import { FileText, PlayCircle, Waves, CalendarDays, Users } from 'lucide-react'
 import Schedule from '@/components/home/EventInfo/Schedule'
 
 const HOW_TO_PADDLE_VIDEO = 'https://youtube.com/embed/tn4EiHVxUrI'
 const RAIN_AND_SAFETY_MANUAL = 'https://storage.googleapis.com/brave-the-waves-backend.firebasestorage.app/resources/Rain%20and%20Safety%20Manual%20(for%20Tech)%20Bilingual.pdf'
+const RACE_ROSTER_PDF = 'https://storage.googleapis.com/brave-the-waves-backend.firebasestorage.app/resources/Official%20Brave%20The%20Waves%202026%20Schedule%2C%20Lineups%20and%20Boats%20-%20Schedule.pdf'
 
 const tabs = [
   {
     id: 'schedule',
     label: 'Schedule',
     icon: CalendarDays,
+  },
+  {
+    id: 'roster',
+    label: 'Roster',
+    icon: Users,
   },
   {
     id: 'paddle',
@@ -88,6 +94,37 @@ export default function EventResources() {
                 transition={{ duration: 0.2 }}
               >
                 <Schedule />
+              </motion.div>
+            )}
+
+            {activeTab === 'roster' && (
+              <motion.div
+                key="roster"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.2 }}
+                className="flex flex-col gap-5"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-[#fc87a7]/10 flex items-center justify-center flex-shrink-0">
+                    <Users className="w-6 h-6 text-[#fc87a7]" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-2">Race Roster</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      The full race-by-race schedule, lineups, and lane assignments.
+                    </p>
+                  </div>
+                </div>
+                <div className="rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-lg shadow-slate-200/50">
+                  <iframe
+                    src={RACE_ROSTER_PDF}
+                    title="Race Roster"
+                    className="w-full h-[900px]"
+                    loading="lazy"
+                  />
+                </div>
               </motion.div>
             )}
 
